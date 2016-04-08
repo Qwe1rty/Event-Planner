@@ -6,7 +6,7 @@ public final class Settings
 	private static int numTables;
 	private static int tableSize;
 	private static double ticketCost;
-	private static DoublyLinkedList<String> mealOptions;
+	private static LinkedList<String> mealOptions;
 	private static int numStudents;
 	
 	private Settings(){}
@@ -54,12 +54,12 @@ public final class Settings
 		Settings.ticketCost = ticketCost;
 	}
 
-	public static DoublyLinkedList<String> getMealOptions()
+	public static LinkedList<String> getMealOptions()
 	{
 		return mealOptions;
 	}
 
-	public static void setMealOptions(DoublyLinkedList<String> mealOptions)
+	public static void setMealOptions(LinkedList<String> mealOptions)
 	{
 		Settings.mealOptions = mealOptions;
 	}
