@@ -1,0 +1,13 @@
+Requriements:
+
+Input:
+Student Number
+Student Name
+Who Paid for Ticket
+Food Choice
+Allergies
+Tables
+
+Output:
+A nice looking list of all the information
+Probably should use the system look and feel bc Java's one looks disgusting
