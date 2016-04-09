@@ -1,8 +1,15 @@
 package data;
 
+/**
+ * Allows for sorting of a list of students via a given parameter.
+ * Will not work for any other type of object, so it would be wise
+ * to avoid doing so.
+ * 
+ * @author Caleb Choi
+ */
 public class Sort {
 	
-	public static void sort(LinkedList ll, Parameter p, boolean ascending) {
+	public static LinkedList<Student> sort(LinkedList ll, Parameter p, boolean ascending) {
 		int length = ll.size();
 		for (int gap = length / 2; gap > 0; gap /= 2) {
 			for (int wall = gap; wall < length; wall++) {
@@ -62,6 +69,9 @@ public class Sort {
 				} catch (Exception e) {System.out.println("nope");}
 			}
 		}
+		
+		// Returns sorted list
+		return ll;
 	}
 
 }

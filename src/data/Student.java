@@ -72,7 +72,7 @@ public class Student {
 	// Setters
 	public void setStudentId(String studentId) throws InvalidStudentIDException {
 		if (studentId.length() != 9) throw new InvalidStudentIDException("Length of ID is not equal to 9");
-		else if (studentId.matches("[a-z]")) throw new InvalidStudentIDException("ID cannot contain characters");
+		else if (studentId.matches("\\D")) throw new InvalidStudentIDException("ID cannot contain characters");
 		else this.ID = studentId;
 	}
 	public void setLastname(String lastname) {this.lastname = lastname.trim();}
