@@ -20,7 +20,7 @@ import data.LinkedList;
 import data.Settings;
 
 //TODO: change the class to be able to be used to add and edit students
-public class AddStudentPanel extends JPanel
+public class StudentPanel extends JPanel
 {
     private static final String BACK_BUTTON_TEXT = "Back";
     private static final String FIRST_NAME_LABEL_TEXT = "First Name:";
@@ -76,17 +76,7 @@ public class AddStudentPanel extends JPanel
     private JButton cancelButton;
     private JButton confirmButton;
 
-    public static void main(String[] args)
-    {
-        JFrame frame = new JFrame();
-        AddStudentPanel panel = new AddStudentPanel();
-        frame.add(panel);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
-
-    public AddStudentPanel()
+    public StudentPanel()
     {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

@@ -14,6 +14,7 @@ public class Sort {
 		for (int gap = length / 2; gap > 0; gap /= 2) {
 			for (int wall = gap; wall < length; wall++) {
 				try {
+					// Feast your eyes upon the most disgusting code ever written by humankind
 					if (p == Parameter.STUDENT_ID) {
 						if (ascending) {
 							for (int index = wall; index >= gap && (((Student) ll.get(index)).getID().compareTo(((Student) ll.get(index - gap)).getID()) < 0); index -= gap) {
