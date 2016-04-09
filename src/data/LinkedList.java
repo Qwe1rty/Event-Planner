@@ -1,5 +1,5 @@
 package data;
-public class LinkedList<E extends Comparable> {
+public class LinkedList<E> {
 	
 	private Link<E> headLink;
 	
@@ -88,7 +88,7 @@ public class LinkedList<E extends Comparable> {
 		
 	}
 	
-	private class Link<E extends Comparable> {
+	private class Link<E> {
 		
 		private E item;
 		private Link<E> link;

@@ -3,7 +3,7 @@ package data;
 /**
  * Stores all necessary data for a student
  *
- * @param studentId Stores the YRDSB student ID
+ * @param ID Stores the YRDSB student ID
  * @param lastname Stores lastname
  * @param firstname Stores firstname
  * @param food Stores person's food option
@@ -18,7 +18,7 @@ package data;
 public class Student {
 
 	// Fields
-	private String studentId;
+	private String ID;
 	private String lastname;
 	private String firstname;
 	private String food;
@@ -29,22 +29,22 @@ public class Student {
 	
 	// Constructors
 	// Fully declared student
-	public Student(String studentId, String lastname, String firstname,
+	public Student(String ID, String lastname, String firstname,
 			String food, boolean paid, String paidBy, String allergies, int tableNum) throws InvalidStudentIDException {
-		this(studentId, lastname, firstname, food, paid, paidBy);
+		this(ID, lastname, firstname, food, paid, paidBy);
 		setAllergies(allergies);
 		setTableNum(tableNum);
 	}
 	// Student with undeclared allergies
-	public Student(String studentId, String lastname, String firstname,
+	public Student(String ID, String lastname, String firstname,
 			String food, boolean paid, String paidBy, int tableNum) throws InvalidStudentIDException {
-		this(studentId, lastname, firstname, food, paid, paidBy);
+		this(ID, lastname, firstname, food, paid, paidBy);
 		setTableNum(tableNum);
 	}
 	// Student with undeclared paidBy
-	public Student(String studentId, String lastname, String firstname,
+	public Student(String ID, String lastname, String firstname,
 			String food, boolean paid, String paidBy, String allergies) throws InvalidStudentIDException {
-		this(studentId, lastname, firstname, food, paid, paidBy);
+		this(ID, lastname, firstname, food, paid, paidBy);
 		setAllergies(allergies);
 	}
 	// Student with undeclared allergies or paidBy
@@ -61,7 +61,7 @@ public class Student {
 	public Student() {}
 
 	// Getters
-	public String getStudentId() {return studentId;}
+	public String getID() {return ID;}
 	public String getLastname() {return lastname;}
 	public String getFirstname() {return firstname;}
 	public String getFood() {return food;}
@@ -73,7 +73,7 @@ public class Student {
 	public void setStudentId(String studentId) throws InvalidStudentIDException {
 		if (studentId.length() != 9) throw new InvalidStudentIDException("Length of ID is not equal to 9");
 		else if (studentId.matches("[a-z]")) throw new InvalidStudentIDException("ID cannot contain characters");
-		else this.studentId = studentId;
+		else this.ID = studentId;
 	}
 	public void setLastname(String lastname) {this.lastname = lastname.trim();}
 	public void setFirstname(String firstname) {this.firstname = firstname.trim();}

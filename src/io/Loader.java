@@ -5,11 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import data.DoublyLinkedList;
+import data.LinkedList;
 import data.Settings;
+import data.Student;
 
 /**
  * A class that loads the data from the .event files saved by the program
+ * @author Caleb Choi 
  * @author Connor Murphy
  * @version 1.0
  *
@@ -26,7 +28,7 @@ public final class Loader
 	 * @return null if an error occurred while loading. If the load was
 	 *         successful, returns a linked list with the student data in it.
 	 */
-	public DoublyLinkedList<Student> load(String path)
+	public LinkedList<Student> load(String path)
 	{
 		try (BufferedReader reader = new BufferedReader(new FileReader(path)))
 		{
