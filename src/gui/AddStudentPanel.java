@@ -51,17 +51,30 @@ public class AddStudentPanel extends JPanel
     private JLabel tableNumLabel;
 
     private JPanel textAreaTitlesPanel;
+    private JPanel allergiesLabelPanel;
     private JLabel allergiesLabel;
+    private JPanel moreInfoLabelPanel;
     private JLabel moreInfoLabel;
 
     private JPanel textAreasPanel;
+    private JPanel allergiesTextAreaPanel;
     private JTextArea allergiesTextArea;
+    private JPanel moreInfoTextAreaPanel;
     private JTextArea moreInfoTextArea;
 
     private JPanel buttonsPanel;
     private JButton cancelButton;
     private JButton confirmButton;
 
+    public static void main(String[] args)
+    {
+        JFrame frame = new JFrame();
+        AddStudentPanel panel = new AddStudentPanel();
+        frame.add(panel);
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
 
     public AddStudentPanel()
     {
@@ -147,19 +160,29 @@ public class AddStudentPanel extends JPanel
 
         //Titles for the allergies and additional information text areas
         allergiesLabel = new JLabel(ALLERGIES_LABEL_TEXT);
-        moreInfoLabel = new JLabel(MORE_INFO_LABEL_TEXT);
+        allergiesLabelPanel = new JPanel(new FlowLayout());
+        allergiesLabelPanel.add(allergiesLabel);
 
-        textAreaTitlesPanel = new JPanel();
-        textAreaTitlesPanel.add(allergiesLabel);
-        textAreaTitlesPanel.add(moreInfoLabel);
+        moreInfoLabel = new JLabel(MORE_INFO_LABEL_TEXT);
+        moreInfoLabelPanel = new JPanel(new FlowLayout());
+        moreInfoLabelPanel.add(moreInfoLabel);
+
+        textAreaTitlesPanel = new JPanel(new GridLayout(1,1));
+        textAreaTitlesPanel.add(allergiesLabelPanel);
+        textAreaTitlesPanel.add(moreInfoLabelPanel);
 
         //The allergies and the additional information areas
         allergiesTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
-        moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
+        allergiesTextAreaPanel = new JPanel(new FlowLayout());
+        allergiesTextAreaPanel.add(allergiesTextArea);
 
-        textAreasPanel = new JPanel();
-        textAreasPanel.add(allergiesTextArea);
-        textAreasPanel.add(moreInfoTextArea);
+        moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
+        moreInfoTextAreaPanel = new JPanel(new FlowLayout());
+        moreInfoTextAreaPanel.add(moreInfoTextArea);
+
+        textAreasPanel = new JPanel(new GridLayout(1,1));
+        textAreasPanel.add(allergiesTextAreaPanel);
+        textAreasPanel.add(moreInfoTextAreaPanel);
 
         //The cancel and confirm buttons
         cancelButton = new JButton(CANCEL_BUTTON_TEXT);
