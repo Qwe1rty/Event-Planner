@@ -15,5 +15,17 @@ public class Food {
 	
 	// Checks whether food exists in list
 	public static boolean isValidFood(Food f) {return FOODLIST.indexOf(f) == -1;}
+	
+	// Gets stringname
+	public String toString() {return food;}
+
+	// Gets list of foods in string list form - needed for GUI
+	public static LinkedList<String> getMealOptions() {
+		LinkedList<String> foods = new LinkedList<String>();
+		for (int i = 0; i < FOODLIST.size(); i++) {
+			try {foods.append(FOODLIST.get(i).toString());} catch (Exception e) {}
+		}
+		return foods;
+	}
 
 }

@@ -1,9 +1,11 @@
 package gui;
 
+import data.Food;
 import data.LinkedList;
 import data.Settings;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -78,7 +80,7 @@ public class SettingsPanel extends JPanel {
 
         //Add the already defined foods
         String options = "";
-        LinkedList<String> food = Settings.getMealOptions();
+        LinkedList<String> food = Food.getMealOptions();
         if(food != null)
         {
             try {

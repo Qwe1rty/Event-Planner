@@ -1,13 +1,23 @@
 package gui;
 
 
-import data.LinkedList;
-import data.Settings;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import data.Food;
+import data.LinkedList;
+import data.Settings;
 
 //TODO: change the class to be able to be used to add and edit students
 public class AddStudentPanel extends JPanel
@@ -97,7 +107,7 @@ public class AddStudentPanel extends JPanel
         studentIdLabel = new JLabel(STUDENT_ID_LABEL_TEXT);
         studentIdTextField = new JTextField(TEXT_FIELD_ROWS);
 
-        LinkedList<String> foodChoices = Settings.getMealOptions();
+        LinkedList<String> foodChoices = Food.getMealOptions();
         String[] choices;
         if(foodChoices != null) {
             choices = new String[foodChoices.size()];

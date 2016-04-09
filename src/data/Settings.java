@@ -6,7 +6,6 @@ public final class Settings
 	private static int numTables;
 	private static int tableSize;
 	private static double ticketCost;
-	private static LinkedList<String> mealOptions;
 	private static int numStudents;
 	
 	private Settings(){}
@@ -52,21 +51,6 @@ public final class Settings
 	public static void setTicketCost(double ticketCost)
 	{
 		Settings.ticketCost = ticketCost;
-	}
-
-	public static LinkedList<String> getMealOptions()
-	{
-		return mealOptions;
-	}
-
-	public static void setMealOptions(LinkedList<String> mealOptions)
-	{
-		Settings.mealOptions = mealOptions;
-	}
-	
-	public static void addMealOption(String option)
-	{
-		
 	}
 
 	public static int getNumStudents()
