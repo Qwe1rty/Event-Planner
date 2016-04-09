@@ -21,7 +21,7 @@ public class Student {
 	private String ID;
 	private String lastname;
 	private String firstname;
-	private String food;
+	private Food food;
 	private boolean paid;
 	private String paidBy;
 	private String allergies;
@@ -30,26 +30,26 @@ public class Student {
 	// Constructors
 	// Fully declared student
 	public Student(String ID, String lastname, String firstname,
-			String food, boolean paid, String paidBy, String allergies, int tableNum) throws InvalidStudentIDException {
+			String food, boolean paid, String paidBy, String allergies, int tableNum) throws InvalidStudentIDException, InvalidFoodException {
 		this(ID, lastname, firstname, food, paid, paidBy);
 		setAllergies(allergies);
 		setTableNum(tableNum);
 	}
 	// Student with undeclared allergies
 	public Student(String ID, String lastname, String firstname,
-			String food, boolean paid, String paidBy, int tableNum) throws InvalidStudentIDException {
+			String food, boolean paid, String paidBy, int tableNum) throws InvalidStudentIDException, InvalidFoodException {
 		this(ID, lastname, firstname, food, paid, paidBy);
 		setTableNum(tableNum);
 	}
 	// Student with undeclared paidBy
 	public Student(String ID, String lastname, String firstname,
-			String food, boolean paid, String paidBy, String allergies) throws InvalidStudentIDException {
+			String food, boolean paid, String paidBy, String allergies) throws InvalidStudentIDException, InvalidFoodException {
 		this(ID, lastname, firstname, food, paid, paidBy);
 		setAllergies(allergies);
 	}
 	// Student with undeclared allergies or paidBy
 	public Student(String studentId, String lastname, String firstname,
-			String food, boolean paid, String paidBy) throws InvalidStudentIDException {
+			String food, boolean paid, String paidBy) throws InvalidStudentIDException, InvalidFoodException {
 		setStudentId(studentId);
 		setLastname(lastname);
 		setFirstname(firstname);
@@ -64,7 +64,7 @@ public class Student {
 	public String getID() {return ID;}
 	public String getLastname() {return lastname;}
 	public String getFirstname() {return firstname;}
-	public String getFood() {return food;}
+	public Food getFood() {return food;}
 	public boolean isPaid() {return paid;}
 	public String getPaidBy() {return paidBy;}
 	public int getTableNum() {return tableNum;}
@@ -77,7 +77,10 @@ public class Student {
 	}
 	public void setLastname(String lastname) {this.lastname = lastname.trim();}
 	public void setFirstname(String firstname) {this.firstname = firstname.trim();}
-	public void setFood(String food) {this.food = food.trim();}
+	public void setFood(String food) throws InvalidFoodException {
+		if (Food.isValidFood(new Food(food))) this.food = new Food(food.trim());
+		else throw new InvalidFoodException("That type of food does not exist");
+	}
 	public void setPaid(boolean paid) {this.paid = paid;}
 	public void setPaidBy(String paidBy) {this.paidBy = paidBy.trim();}
 	public void setAllergies(String allergies) {this.allergies = allergies.trim();}
@@ -85,6 +88,10 @@ public class Student {
 
 	public class InvalidStudentIDException extends Exception {
 		public InvalidStudentIDException(String message) {super(message);}
+	}
+	
+	public class InvalidFoodException extends Exception {
+		public InvalidFoodException(String message) {super(message);}
 	}
 	
 }
