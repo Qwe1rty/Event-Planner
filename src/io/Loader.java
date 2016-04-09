@@ -11,7 +11,7 @@ import data.Student;
 
 /**
  * A class that loads the data from the .event files saved by the program
- * @author Caleb Choi 
+ * @author Caleb Choi
  * @author Connor Murphy
  * @version 1.0
  *
@@ -37,19 +37,19 @@ public final class Loader
 			Settings.setNumTables(Integer.parseInt(reader.readLine()));
 			Settings.setTableSize(Integer.parseInt(reader.readLine()));
 			Settings.setTicketCost(Double.parseDouble(reader.readLine()));
-			
+
 			int numMealOptions = Integer.parseInt(reader.readLine());
 			for (int option = 0; option < numMealOptions; ++option)
 			{
 				Settings.addMealOption(reader.readLine());
 			}
-			
+
 			int numStudents = Integer.parseInt(reader.readLine());
 			Settings.setNumStudents(numStudents);
 			for(int student = 0; student < numStudents; ++student)
 			{
 			}
-			
+
 		}
 		catch (FileNotFoundException e)
 		{
@@ -59,5 +59,6 @@ public final class Loader
 		{
 			return null;
 		}
+		return null;
 	}
 }
