@@ -33,6 +33,14 @@ public class LinkedList<E> {
 			return true;
 		} else return headLink.remove(index);
 	}
+	public boolean remove(E e) {
+		if (headLink == null) return false;
+		else if (headLink.getItem() == e) {
+			if (headLink.getLink() == null) headLink = null;
+			else headLink = headLink.getLink();
+			return true;
+		} else return headLink.remove(e);
+	}
 	
 	public boolean insert(int index, E item) {
 		int size = size();
@@ -53,7 +61,10 @@ public class LinkedList<E> {
 		else return headLink.size(1);
 	}
 	
-	public void list() {if (headLink != null) headLink.print(0);}
+	public void list() {
+		if (headLink != null) headLink.print(0);
+		else System.out.println("empty");
+	}
 	
 	public void clear() {headLink = null;}
 	
@@ -130,6 +141,14 @@ public class LinkedList<E> {
 				else setLink(getLink().getLink());
 				return true;
 			} else return link.remove(index - 1); 
+		}
+		private boolean remove(E e) {
+			if (getLink() == null) return false;
+			else if (getLink().getItem() == e) {
+				if (link.getLink() == null) setLink(null);
+				else setLink(getLink().getLink());
+				return true;
+			} else return link.remove(e);
 		}
 		
 		private boolean insert(int index, E e) {
