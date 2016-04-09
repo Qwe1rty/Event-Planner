@@ -62,14 +62,6 @@ public class AddStudentPanel extends JPanel
     private JButton cancelButton;
     private JButton confirmButton;
 
-    public static void main(String[] args)
-    {
-        JFrame frame = new JFrame();
-        AddStudentPanel panel = new AddStudentPanel();
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
-    }
 
     public AddStudentPanel()
     {
