@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 public class HomePanel extends JPanel {
 
 	private Image background;
-	private ImageIcon students, tables, settings, exit;
+	private Image students, tables, settings, exit;
 
 	/**
 	 * Starts the frame, panel, and buttons
@@ -38,17 +38,24 @@ public class HomePanel extends JPanel {
 		c.insets = new Insets(10, 10, 10, 10);
 
 		// Get the images
-		students = new ImageIcon ("images/students.png");
-		tables = new ImageIcon("images/tables.png");
-		settings = new ImageIcon("images/settings.png");
-		exit = new ImageIcon("images/exit.png");
-		background = new ImageIcon("images/bg.png").getImage();
+		try {
+			students = ImageIO.read(getClass().getResource("/images/students.png"));
+			tables =  ImageIO.read(getClass().getResource("/images/tables.png"));
+			settings =  ImageIO.read(getClass().getResource("/images/settings.png"));
+			exit =  ImageIO.read(getClass().getResource("/images/exit.png"));
+
+			background = ImageIO.read(getClass().getResource("/images/bg.png"));
+		}
+		catch(IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
 
 		// Add the images to their buttons
-		JButton studentButton = new JButton (students);
-		JButton tableButton = new JButton (tables);
-		JButton settingsButton = new JButton (settings);
-		JButton exitButton = new JButton (exit);
+		JButton studentButton = new JButton (new ImageIcon(students));
+		JButton tableButton = new JButton (new ImageIcon(tables));
+		JButton settingsButton = new JButton (new ImageIcon(settings));
+		JButton exitButton = new JButton (new ImageIcon(exit));
 
 		// Set the size of button to match the image size
 		studentButton.setPreferredSize(new Dimension (295, 273));
