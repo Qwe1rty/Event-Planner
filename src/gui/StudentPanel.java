@@ -317,7 +317,7 @@ public class StudentPanel extends JPanel
     {
         public void actionPerformed(ActionEvent e)
         {
-
+ 		EventPlanner.setPanel(EventPlanner.Panel.HOME);
         }
     }
 
