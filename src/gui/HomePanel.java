@@ -104,8 +104,9 @@ public class HomePanel extends JPanel {
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			removeAll();
-			repaint();	
+			EventPlanner.setPanel(EventPlanner.Panel.STUDENT);
+			//removeAll();
+			//repaint();
 		}
 	}
 
@@ -117,7 +118,7 @@ public class HomePanel extends JPanel {
 		public void actionPerformed(ActionEvent arg0)
 		{
 			removeAll();
-			repaint();	
+			repaint();
 		}
 	}
 	class SettingsButtonListener implements ActionListener
@@ -127,8 +128,9 @@ public class HomePanel extends JPanel {
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			removeAll();
-			repaint();	
+			EventPlanner.setPanel(EventPlanner.Panel.SETTINGS);
+			//removeAll();
+			//repaint();
 		}
 	}
 	class ExitButtonListener implements ActionListener

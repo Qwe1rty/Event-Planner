@@ -5,12 +5,17 @@ import data.LinkedList;
 import data.Settings;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+/**
+ * The settings panel is a panel in which to edit the global settings of the event.
+ * @author Connor Murphy
+ * @version 1.2
+ */
 public class SettingsPanel extends JPanel {
 
     private static final String BACK_BUTTON_TEXT = "Back";
@@ -55,7 +60,9 @@ public class SettingsPanel extends JPanel {
     private JButton clearDataButton;
     private JButton finishButton;
 
-
+    /**
+     * Creates the panel and sets up all the gui components
+     */
     public SettingsPanel()
     {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -160,7 +167,7 @@ public class SettingsPanel extends JPanel {
     {
         public void actionPerformed(ActionEvent e)
         {
-
+            EventPlanner.setPanel(EventPlanner.Panel.HOME);
         }
     }
 
