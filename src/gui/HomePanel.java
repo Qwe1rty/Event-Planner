@@ -20,6 +20,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * The home panel is the first screen the user sees.  It allows the user to access each part of the program or exit if they so choose
+ * @author Connor Murphy, Matthew Sun, Caleb Choi
+ * @version 1.2
+ */
 public class HomePanel extends JPanel {
 
 	private Image background;
