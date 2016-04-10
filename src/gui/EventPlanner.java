@@ -21,7 +21,7 @@ public class EventPlanner {
 	public static void main(String[] args) throws Exception {
 
 		// Creation of frame
-		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		//Create the panels
 		homePanel = new HomePanel();
