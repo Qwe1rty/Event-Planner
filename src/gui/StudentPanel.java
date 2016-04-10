@@ -1,6 +1,5 @@
 package gui;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -22,12 +21,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 
 import data.Food;
 import data.LinkedList;
 import data.Settings;
 
+/**
+ * The student panel is a panel in which new students are added
+ * @author Matthew Sun, Connor Murphy
+ * @version 1.3
+ */
 //TODO: change the class to be able to be used to add and edit students
 public class StudentPanel extends JPanel
 {
@@ -35,7 +38,7 @@ public class StudentPanel extends JPanel
     private static final String FIRST_NAME_LABEL_TEXT = "First Name: ";
     private static final String LAST_NAME_LABEL_TEXT = "Last Name: ";
     private static final String STUDENT_ID_LABEL_TEXT = "Student Number: ";
-    private static final String FOOD_CHOICE_LABEL_TEXT = "  Food Choice: ";
+    private static final String FOOD_CHOICE_LABEL_TEXT = "    Food Choice: ";
     private static final String PHONE_NUM_LABEL_TEXT = "Phone Number: ";
     private static final String PAID_BY_LABEL_TEXT = "Paid By: ";
     private static final String TABLE_NUM_LABEL_TEXT = "Table Number: ";
@@ -44,17 +47,16 @@ public class StudentPanel extends JPanel
     private static final String CANCEL_BUTTON_TEXT = "Cancel";
     private static final String CONFIRM_BUTTON_TEXT = "Confirm";
 
-    private static final int TEXT_AREA_ROWS = 8;
-    private static final int TEXT_AREA_COLS = 30;
+    private static final int TEXT_AREA_ROWS = 10;
+    private static final int TEXT_AREA_COLS = 35;
 
-    private static final int TEXT_FIELD_ROWS = 20;
-    private static final Font BUTTON_FONT = new Font ("Tw Cen MT", Font.BOLD, 38);
+    private static final int TEXT_FIELD_ROWS = 21;
+    private static final Font BUTTON_FONT = new Font ("Tw Cen MT", Font.BOLD, 22);
     private static final Font TEXT_FONT = new Font ("Tw Cen MT", Font.BOLD, 28);
-    private static final Font FIELD_FONT = new Font ("Tw Cen MT", Font.PLAIN, 26);
+    private static final Font FIELD_FONT = new Font ("Tw Cen MT", Font.PLAIN, 24);
 
-    private final Dimension COMBO_SIZE = new Dimension (345, 35);
-    private JButton backButton;
-
+    private final Dimension COMBO_SIZE = new Dimension (340, 30);
+    private final Dimension BUTTON_SIZE = new Dimension (108,50);
 
     private JTextField firstNameTextField;
     private JTextField lastNameTextField;
@@ -79,6 +81,7 @@ public class StudentPanel extends JPanel
 
     private JButton cancelButton;
     private JButton confirmButton;
+    private JButton backButton;
     
     private Image background;
     private JPanel fieldsPanel;
@@ -103,7 +106,7 @@ public class StudentPanel extends JPanel
 		fieldsPanel = new JPanel(layout);
 
 		// Background color to a light grey with slightly raised borders
-		fieldsPanel.setBackground(new Color(238, 238, 237));
+		fieldsPanel.setBackground(new Color(238, 238, 238));
 		fieldsPanel.setBorder(BorderFactory.createRaisedBevelBorder());
 		
 		// Set size of nested to slightly smaller (static value)
@@ -112,14 +115,16 @@ public class StudentPanel extends JPanel
         //Back button
         backButton = new JButton(BACK_BUTTON_TEXT);
         backButton.addActionListener(new BackButtonActionListener());
-        backButton.setBackground(new Color (127, 174, 217));
+        backButton.setBackground(new Color (3, 159, 244));
         backButton.setForeground(Color.WHITE);
         backButton.setFont(BUTTON_FONT);
+        backButton.setPreferredSize(BUTTON_SIZE);
 
         // Position the back button west of screen
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(0,0,0, 100);
         fieldsPanel.add(backButton, c);
         
         // Set all field labels and fonts
@@ -196,54 +201,82 @@ public class StudentPanel extends JPanel
         tableNumComboBox.setPreferredSize(COMBO_SIZE);
         tableNumComboBox.setFont(FIELD_FONT);
 
-        // All other components are right aligned with some vertical spacing between them
+        // All label components are right aligned with some vertical spacing between them
         c.anchor = GridBagConstraints.EAST;
         c.insets = new Insets(10, 0, 0, 0);
-        // Position all components on the grid
+        
+        // Add all wider components first
         c.gridx = 0;
         c.gridy = 1;
+        c.gridwidth = 2;
         fieldsPanel.add(firstNameLabel, c);
         
-        c.gridx ++;
-        fieldsPanel.add(firstNameTextField, c);
-        
-        c.gridx ++;
-        fieldsPanel.add(lastNameLabel, c);
-        
-        c.gridx  ++;
-        fieldsPanel.add(lastNameTextField, c);
-
         c.gridx = 0;
-        c.gridy ++;
+        c.gridy = 2;
+        c.gridwidth = 2;
         fieldsPanel.add(studentIdLabel, c);
         
-        c.gridx ++;
-        fieldsPanel.add(studentIdTextField, c);
-        
-        c.gridx ++;
-        fieldsPanel.add(foodChoiceLabel, c);
-        
-        c.gridx ++;
-        fieldsPanel.add(foodChoiceComboBox, c);
-
         c.gridx = 0;
-        c.gridy ++;
+        c.gridy = 3;
+        c.gridwidth = 2;
         fieldsPanel.add(phoneNumLabel, c);
-        
-        c.gridx ++;
-        fieldsPanel.add(phoneNumTextField, c);
-        
-        c.gridx ++;
-        fieldsPanel.add(paidByLabel, c);
-        
-        c.gridx ++;
-        fieldsPanel.add(paidByTextField, c);
-
+       
         c.gridx = 0;
-        c.gridy ++;
+        c.gridy = 4;
+        c.gridwidth = 2;
         fieldsPanel.add(tableNumLabel, c);
         
-        c.gridx ++;
+        // Add all smaller components
+        // All field components are left aligned
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 2;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        fieldsPanel.add(firstNameTextField, c);
+        
+        c.anchor = GridBagConstraints.EAST;
+        c.gridx = 3;
+        c.gridy = 1;
+        fieldsPanel.add(lastNameLabel, c);
+        
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 4;
+        c.gridy = 1;
+        fieldsPanel.add(lastNameTextField, c);
+
+        c.gridx = 2;
+        c.gridy = 2;
+        c.gridwidth = 1;
+        fieldsPanel.add(studentIdTextField, c);
+        
+        c.anchor = GridBagConstraints.EAST;
+        c.gridx = 3;
+        c.gridy = 2; 
+        fieldsPanel.add(foodChoiceLabel, c);
+        
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 4;
+        c.gridy = 2; 
+        fieldsPanel.add(foodChoiceComboBox, c);
+
+        c.gridx = 2;
+        c.gridy = 3;
+        c.gridwidth = 1;
+        fieldsPanel.add(phoneNumTextField, c);
+        
+        c.anchor = GridBagConstraints.EAST;
+        c.gridx = 3;
+        c.gridy = 3;
+        fieldsPanel.add(paidByLabel, c);
+        
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 4;
+        c.gridy = 3;
+        fieldsPanel.add(paidByTextField, c);
+        
+        c.gridx = 2;
+        c.gridy = 4;
+        c.gridwidth = 1;
         fieldsPanel.add(tableNumComboBox, c);
 
         //Titles for the allergies and additional information text areas
@@ -251,19 +284,18 @@ public class StudentPanel extends JPanel
         allergiesLabel.setFont(TEXT_FONT);
         
         // Position allergy and extra-info components centered, each taking up 2 grid spaces
-        c.gridwidth = 2;
+        c.gridwidth = 3;
         c.anchor = GridBagConstraints.CENTER;
         
         c.gridx = 0;
-        c.gridy ++;
+        c.gridy = 5;
         fieldsPanel.add(allergiesLabel, c);
 
         moreInfoLabel = new JLabel(MORE_INFO_LABEL_TEXT);
         moreInfoLabel.setFont(TEXT_FONT);
-        c.gridx = 2;
-        c.anchor = GridBagConstraints.CENTER;
+        c.gridx = 3;
         fieldsPanel.add(moreInfoLabel, c);
-
+        
         textFieldBorder = BorderFactory.createLineBorder(Color.GRAY, 1, true);
         //The allergies and the additional information areas
         allergiesTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
@@ -272,13 +304,15 @@ public class StudentPanel extends JPanel
         
         c.gridx = 0;
         c.gridy ++;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets (10, 0, 0, 15);
         fieldsPanel.add(allergiesTextArea, c);
 
         moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
         moreInfoTextArea.setFont(FIELD_FONT);
         moreInfoTextArea.setBorder(textFieldBorder);
         
-        c.gridx = 2;
+        c.gridx = 3;
         fieldsPanel.add(moreInfoTextArea, c);
 
         //The cancel and confirm buttons
@@ -287,21 +321,23 @@ public class StudentPanel extends JPanel
         cancelButton.setBackground(new Color(243, 69, 65));
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setFont(BUTTON_FONT);
+        cancelButton.setPreferredSize(BUTTON_SIZE);
         
         confirmButton = new JButton(CONFIRM_BUTTON_TEXT);
         confirmButton.addActionListener(new ConfirmButtonActionListener());
         confirmButton.setBackground(new Color(56, 186, 125));
         confirmButton.setForeground(Color.WHITE);
         confirmButton.setFont(BUTTON_FONT);
+        confirmButton.setPreferredSize(BUTTON_SIZE);
 
         // Position the cancel and confirm buttons with some spacing
-        c.insets = new Insets (10, 0, 0, 10);
+        c.insets = new Insets (12, 0, 0, 10);
         c.anchor = GridBagConstraints.EAST;
         c.gridx = 0;
         c.gridy ++;
         fieldsPanel.add(cancelButton, c);
         
-        c.gridx = 2;
+        c.gridx = 3;
         c.anchor = GridBagConstraints.WEST;
         fieldsPanel.add(confirmButton, c);
 
@@ -309,6 +345,9 @@ public class StudentPanel extends JPanel
         add(fieldsPanel);
     }
     
+    /**
+     * Draws the background image onto main panel
+     */
     public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, null);
 	}
@@ -317,7 +356,7 @@ public class StudentPanel extends JPanel
     {
         public void actionPerformed(ActionEvent e)
         {
- 		EventPlanner.setPanel(EventPlanner.Panel.HOME);
+        	 EventPlanner.setPanel(EventPlanner.Panel.HOME);
         }
     }
 
