@@ -33,9 +33,16 @@ public class Food {
 	// Checks whether food exists in list
 	public static boolean isValidFood(Food f) {return FOODLIST.indexOf(f) == -1;}
 	
-	// Gets stringname
+	/**
+	 * Gets stringname of a food
+	 * @return stringname of food 
+	 */
 	public String toString() {return food;}
 
+	/**
+	 * Converts the global food list into type String 
+	 * @return a LinkedList<String> with foods converted to type String 
+	 */
 	// Gets list of foods in string list form - used for GUI
 	public static LinkedList<String> getMealOptions() {
 		LinkedList<String> foods = new LinkedList<String>();
@@ -44,5 +51,11 @@ public class Food {
 		}
 		return foods;
 	}
+	
+	/**
+	 * Clears all items in the global food list
+	 * @author Caleb Choi
+	 */
+	public static void clearList() {FOODLIST = new LinkedList<Food>();}
 
 }
