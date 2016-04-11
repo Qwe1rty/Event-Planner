@@ -112,11 +112,11 @@ public class HomePanel extends JPanel {
 	class StudentButtonListener implements ActionListener
 	{
 		/**
-		 * When student button is pressed change to the student screen
+		 * When student button is pressed
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			EventPlanner.setPanel(EventPlanner.Panel.STUDENT);
+			EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
 			//removeAll();
 			//repaint();
 		}
@@ -136,7 +136,7 @@ public class HomePanel extends JPanel {
 	class SettingsButtonListener implements ActionListener
 	{
 		/**
-		 * When settings button is pressed change to the settings screen
+		 * When settings button is pressed
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
