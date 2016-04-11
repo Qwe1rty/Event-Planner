@@ -20,6 +20,16 @@ public class Food {
 	// Add and remove from available foods
 	public static void addFood(Food f) {FOODLIST.append(f);}
 	public static void removeFood(Food f) {FOODLIST.remove(f);}
+
+	//Remove all foods from the food list
+	public static void removeAll()
+	{
+		int size = FOODLIST.size();
+		for(int i = 0; i < size; ++i)
+		{
+			FOODLIST.remove(0);
+		}
+	}
 	// Checks whether food exists in list
 	public static boolean isValidFood(Food f) {return FOODLIST.indexOf(f) == -1;}
 	

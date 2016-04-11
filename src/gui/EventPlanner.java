@@ -32,8 +32,8 @@ public class EventPlanner {
 		FRAME.getContentPane().add(homePanel);
 
 		// Miscellaneous settings
-		FRAME.setLocation(50, 0);
 		FRAME.setSize(WINDOW_WIDTH, WINDOW_HEIGHT + 27);
+		FRAME.setLocationRelativeTo(null); //Centre the window
 		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FRAME.setResizable(false);
 		FRAME.setVisible(true);
