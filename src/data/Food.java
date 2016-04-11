@@ -34,5 +34,8 @@ public class Food {
 		}
 		return foods;
 	}
+	
+	// Clear all
+	public static void clearList() {FOODLIST = new LinkedList<Food>();}
 
 }
