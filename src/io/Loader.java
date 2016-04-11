@@ -1,10 +1,15 @@
 package io;
 
+import gui.EventPlanner;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import data.Food;
 import data.LinkedList;
@@ -24,19 +29,29 @@ import data.Student.InvalidStudentIDException;
  */
 public final class Loader {
 
-	// Program file extension
+	// Program file extension and filter
 	private static final String FILE_EXTENSION = "event";
+	private static final FileNameExtensionFilter FILE_FILTER = new FileNameExtensionFilter("Custom extension only", FILE_EXTENSION);
 	
 	/**
-	 * Loads the students into a list of students from the given file
+	 * Loads the students into a list of students from the given file. File chooser dialog box
+	 * will appear and user can choose the file to load.
 	 * 
 	 * @param path File path
 	 * @return null If the load was successful, returns a linked list with students' data.
 	 * 		Otherwise, null will be returned
+	 * @throws FileNotFoundException 
+	 * @author Caleb Choi
 	 */
-	public static LinkedList<Student> parseFile(String path) {
+	public static LinkedList<Student> parseFile() throws FileNotFoundException {
 		
-		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+		// Shows file selection dialog for user, and keeps selected file 
+		JFileChooser fc = initializeFileChooser();
+		int selection = fc.showOpenDialog(EventPlanner.FRAME);
+		if (selection != JFileChooser.APPROVE_OPTION) return null;
+		
+		// Creates input stream
+		try (BufferedReader br = new BufferedReader(new FileReader(fc.getSelectedFile()))) {
 			
 			// Read the global data
 			Settings.setLocation(br.readLine());
@@ -88,13 +103,22 @@ public final class Loader {
 			
 			// Returns list of students. Default sorting order is by Firstname
 			return Sort.sort(students, Parameter.FIRSTNAME, true);
-
 		}
-		catch (FileNotFoundException e) {
-			return null;
-		}
-		catch (IOException e) {
-			return null;
-		}
+		
+		catch (FileNotFoundException e) {return null;}
+		catch (IOException e) {return null;}
+	}
+	
+	/**
+	 * Creates a customized file chooser
+	 * 
+	 * @return a JFileChooser with filter and selection mode set up
+	 * @author Caleb Choi
+	 */
+	private static JFileChooser initializeFileChooser() {
+		JFileChooser fc = new JFileChooser();
+		fc.setFileFilter(FILE_FILTER);
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		return fc;
 	}
 }
