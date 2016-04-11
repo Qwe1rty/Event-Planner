@@ -6,14 +6,14 @@ public class EventPlanner {
 
 	public enum Panel
 	{
-			HOME, SETTINGS, STUDENT
+			HOME, SETTINGS, STUDENT, DISPLAY_STUDENT
 	};
 
 	// Window width and height
 	public static final int WINDOW_HEIGHT = 720;
 	public static final int WINDOW_WIDTH = 1280;
 
-	private static JPanel homePanel, settingsPanel, studentPanel;
+	private static JPanel homePanel, settingsPanel, studentPanel, studentDisplay;
 
 	// Program frame
 	public static final JFrame FRAME = new JFrame("RHHS Event Planner");
@@ -27,13 +27,15 @@ public class EventPlanner {
 		homePanel = new HomePanel();
 		settingsPanel = new SettingsPanel();
 		studentPanel = new StudentPanel();
+		studentDisplay = new DisplayStudentPanel();
+		
 
 		// Adds home panel
 		FRAME.getContentPane().add(homePanel);
 
 		// Miscellaneous settings
+		FRAME.setLocation(50, 0);
 		FRAME.setSize(WINDOW_WIDTH, WINDOW_HEIGHT + 27);
-		FRAME.setLocationRelativeTo(null); //Centre the window
 		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FRAME.setResizable(false);
 		FRAME.setVisible(true);
@@ -57,6 +59,10 @@ public class EventPlanner {
 		else if(panel == Panel.STUDENT)
 		{
 			FRAME.add(studentPanel);
+		}
+		else if (panel == Panel.DISPLAY_STUDENT)
+		{
+			FRAME.add(studentDisplay);
 		}
 		FRAME.revalidate();
 		FRAME.repaint();
