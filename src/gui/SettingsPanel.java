@@ -333,10 +333,12 @@ public class SettingsPanel extends JPanel {
          * @param e the event
          */
         public void actionPerformed(ActionEvent e) {
-            if (selectedRow >= 0) {
+            if (selectedRow >= 0 && selectedRow < foodOptions.getRowCount()) {
+            	System.out.println(foodOptions.getRowCount());
                 String value = (String) foodOptions.getValueAt(selectedRow, 0);
 	            ((DefaultTableModel) foodOptions.getModel()).removeRow(selectedRow);
 	            Food.removeFood(new Food(value));
+	            selectedRow = -1;
             }
         }
     }
