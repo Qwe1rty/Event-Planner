@@ -9,6 +9,7 @@ public enum Parameter {
 	STUDENT_ID, 
 	LASTNAME, 
 	FIRSTNAME, 
+	FOODTYPE,
 	ALLERGIES,
 	TABLE_NUMBER
 }

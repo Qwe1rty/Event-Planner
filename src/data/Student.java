@@ -26,6 +26,7 @@ public class Student {
 	private String paidBy;
 	private String allergies;
 	private int tableNum; // 0 means unassigned
+	private String phoneNum;
 	
 	// Constructors
 	// Fully declared student
