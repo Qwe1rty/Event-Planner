@@ -11,6 +11,8 @@ package data;
  * @param paidBy Stores who paid ticket
  * @param allergies Stores the person's allergies
  * @param tableNum Stores the person's selected table
+ * @param phoneNum Stores the person's phone number
+ * @param info Stores extra information for a person
  * @throws InvalidStudentIDException Will be thrown if student ID contains letters or is not 9 characters long
  * 
  * @author Caleb Choi
@@ -28,7 +30,7 @@ public class Student {
 	private int tableNum; // 0 means unassigned
 	private String phoneNum;
 	private String info;
-	
+
 	// Constructors
 	// Fully declared student
 	// For optional values, if you want to make them invalid/empty, make then null (or 0 for table #)
@@ -65,7 +67,7 @@ public class Student {
 	public int getTableNum() {return tableNum;}
 	public String getPhoneNum() {return phoneNum;}
 	public String getInfo() {return info;}
-	
+
 	// Setters
 	public void setStudentId(String studentId) throws InvalidStudentIDException {
 		if (studentId.length() != 9) throw new InvalidStudentIDException("Length of ID is not equal to 9");
@@ -88,9 +90,9 @@ public class Student {
 	public class InvalidStudentIDException extends Exception {
 		public InvalidStudentIDException(String message) {super(message);}
 	}
-	
+
 	public class InvalidFoodException extends Exception {
 		public InvalidFoodException(String message) {super(message);}
 	}
-	
+
 }
