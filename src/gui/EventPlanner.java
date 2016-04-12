@@ -1,13 +1,25 @@
 package gui;
 
-import javax.swing.JFrame;
-import javax.swing.UIManager;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.IOException;
+
+import javax.swing.*;
 
 public class EventPlanner {
+
+	public enum Panel
+	{
+			HOME, SETTINGS, STUDENT, DISPLAY_STUDENT, 
+	};
 
 	// Window width and height
 	public static final int WINDOW_HEIGHT = 720;
 	public static final int WINDOW_WIDTH = 1280;
+
+	private static JPanel homePanel, settingsPanel, studentPanel, studentDisplay;
 
 	// Program frame
 	public static final JFrame FRAME = new JFrame("RHHS Event Planner");
@@ -15,10 +27,36 @@ public class EventPlanner {
 	public static void main(String[] args) throws Exception {
 
 		// Creation of frame
-		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+		
+        
+        try {
+            GraphicsEnvironment ge =
+                GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(EventPlanner.class.getResource("/font/font.ttf").toURI())));
+       } catch (IOException|FontFormatException e) {
+            //Handle exception
+       }
+
+        String fonts[] = 
+        	      GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+
+        	    for ( int i = 0; i < fonts.length; i++ )
+        	    {
+        	      System.out.println(fonts[i]);
+        	    }
+        	  
+        
+		//Create the panels
+		homePanel = new HomePanel();
+		settingsPanel = new SettingsPanel();
+		studentPanel = new StudentPanel();
+		studentDisplay = new DisplayStudentPanel();
+		
 
 		// Adds home panel
-		FRAME.getContentPane().add(new HomePanel());
+		FRAME.getContentPane().add(homePanel);
 
 		// Miscellaneous settings
 		FRAME.setLocation(50, 0);
@@ -26,6 +64,33 @@ public class EventPlanner {
 		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FRAME.setResizable(false);
 		FRAME.setVisible(true);
+	}
+
+	/**
+	 * Used to change the panel currently displayed to the user
+	 * @param panel the type of panel to change to
+     */
+	public static void setPanel(Panel panel)
+	{
+		FRAME.getContentPane().removeAll();
+		if(panel == Panel.HOME)
+		{
+			FRAME.add(homePanel);
+		}
+		else if(panel == Panel.SETTINGS)
+		{
+			FRAME.add(settingsPanel);
+		}
+		else if(panel == Panel.STUDENT)
+		{
+			FRAME.add(studentPanel);
+		}
+		else if (panel == Panel.DISPLAY_STUDENT)
+		{
+			FRAME.add(studentDisplay);
+		}
+		FRAME.revalidate();
+		FRAME.repaint();
 	}
 
 }
