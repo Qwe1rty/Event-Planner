@@ -114,15 +114,37 @@ public final class Loader {
 
 	public static void saveFile(LinkedList<Student> ll) {
 
+		// Shows file selection dialog for user, and keeps selected file 
+		JFileChooser fc = initializeFileChooser();
+		int selection = fc.showOpenDialog(EventPlanner.FRAME);
+		if (selection != JFileChooser.APPROVE_OPTION) return;
+
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+			
+			// Gets the path of the chosen file. Checks if file extension needs to be added
+			String fileName = fc.getSelectedFile().getAbsolutePath();
+			if (fileName.indexOf(".") != -1) {
+				fileName = fileName.substring(0, fileName.indexOf(".")) + FILE_EXTENSION;
+			} else fileName += "." + FILE_EXTENSION;
+			
+			// Checks if file exists. If so, it is overriden
+			File file = new File(fileName);
+			if (file.exists()) {file.delete();}
+			file.createNewFile();
+			
+			// Creates output stream
+			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			
+			
+			
+			bw.close();
 
 		} catch (IOException ioe) {
 
 		}
 
 	}
-	
+
 	/**
 	 * Creates a customized file chooser
 	 * 
