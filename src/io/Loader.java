@@ -62,6 +62,7 @@ public final class Loader {
 			Settings.setTableSize(Integer.parseInt(br.readLine()));
 			Settings.setTicketCost(Double.parseDouble(br.readLine()));
 
+			// Foods
 			int numMealOptions = Integer.parseInt(br.readLine());
 			for (int option = 0; option < numMealOptions; ++option)
 				Food.addFood(new Food(br.readLine()));
@@ -135,8 +136,29 @@ public final class Loader {
 			// Creates output stream
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 			
+			// Prints global data
+			bw.write(Settings.getLocation()); bw.newLine();
+			bw.write(Settings.getNumTables()); bw.newLine();
+			bw.write(Settings.getTableSize()); bw.newLine();
+			bw.write(String.valueOf(Settings.getTicketCost())); bw.newLine();
 			
+			// Prints all foods
+			bw.write(Food.FOODLIST.size()); bw.newLine();
+			for (int i = 0; i < Food.FOODLIST.size(); i++) {
+				try {
+					bw.write(Food.FOODLIST.get(i).toString());
+					bw.newLine();
+				} catch (Exception e) {}
+			}
 			
+			// Student stuff
+			bw.write(Settings.getNumStudents()); bw.newLine();
+			
+			for (int i = 0; i < ll.size(); i++) {
+				
+			}
+			
+			// Close stream
 			bw.close();
 
 		} catch (IOException ioe) {
