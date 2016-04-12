@@ -31,14 +31,22 @@ public class EventPlanner {
 
 		
         
-        try {
-            GraphicsEnvironment ge =
-                GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(EventPlanner.class.getResource("/font/font.ttf").toURI())));
-       } catch (IOException|FontFormatException e) {
-            //Handle exception
-       }
-
+		  try {
+	            GraphicsEnvironment ge =
+	                GraphicsEnvironment.getLocalGraphicsEnvironment();
+	            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(EventPlanner.class.getResource("/font/font.ttf").toURI())));
+	       } catch (IOException|FontFormatException e) {
+	            //Handle exception
+	       }
+        
+		  try {
+	            GraphicsEnvironment ge =
+	                GraphicsEnvironment.getLocalGraphicsEnvironment();
+	            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(EventPlanner.class.getResource("/font/fontbold.ttf").toURI())));
+	       } catch (IOException|FontFormatException e) {
+	            //Handle exception
+	       }
+        
         String fonts[] = 
         	      GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
