@@ -13,27 +13,22 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import data.Food;
 import data.LinkedList;
 import data.Settings;
+import data.Student;
 
 /**
  * The student panel is a panel in which new students are added
+ *
  * @author Matthew Sun, Connor Murphy
  * @version 1.3
  */
 //TODO: change the class to be able to be used to add and edit students
-public class StudentPanel extends JPanel
-{
+public class StudentPanel extends JPanel {
     private static final String BACK_BUTTON_TEXT = "Back";
     private static final String FIRST_NAME_LABEL_TEXT = "First Name: ";
     private static final String LAST_NAME_LABEL_TEXT = "Last Name: ";
@@ -51,12 +46,12 @@ public class StudentPanel extends JPanel
     private static final int TEXT_AREA_COLS = 35;
 
     private static final int TEXT_FIELD_ROWS = 21;
-    private static final Font BUTTON_FONT = new Font ("Tw Cen MT", Font.BOLD, 22);
-    private static final Font TEXT_FONT = new Font ("Tw Cen MT", Font.BOLD, 28);
-    private static final Font FIELD_FONT = new Font ("Tw Cen MT", Font.PLAIN, 24);
+    private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
+    private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
+    private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
 
-    private final Dimension COMBO_SIZE = new Dimension (340, 30);
-    private final Dimension BUTTON_SIZE = new Dimension (108,50);
+    private final Dimension COMBO_SIZE = new Dimension(340, 30);
+    private final Dimension BUTTON_SIZE = new Dimension(108, 50);
 
     private JTextField firstNameTextField;
     private JTextField lastNameTextField;
@@ -87,16 +82,13 @@ public class StudentPanel extends JPanel
     private JPanel fieldsPanel;
     private Border textFieldBorder;
 
-    public StudentPanel()
-    {
+    public StudentPanel() {
         setLayout(new GridBagLayout());
 
         // Get the bg image
         try {
             background = ImageIO.read(getClass().getResource("/images/bg.png"));
-        }
-        catch(IOException ioe)
-        {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
 
@@ -110,12 +102,12 @@ public class StudentPanel extends JPanel
         fieldsPanel.setBorder(BorderFactory.createRaisedBevelBorder());
 
         // Set size of nested to slightly smaller (static value)
-        fieldsPanel.setPreferredSize(new Dimension (1206, 626));
+        fieldsPanel.setPreferredSize(new Dimension(1206, 626));
 
         //Back button
         backButton = new JButton(BACK_BUTTON_TEXT);
         backButton.addActionListener(new BackButtonActionListener());
-        backButton.setBackground(new Color (3, 159, 244));
+        backButton.setBackground(new Color(3, 159, 244));
         backButton.setForeground(Color.WHITE);
         backButton.setFont(BUTTON_FONT);
         backButton.setPreferredSize(BUTTON_SIZE);
@@ -124,7 +116,7 @@ public class StudentPanel extends JPanel
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(0,0,0, 100);
+        c.insets = new Insets(0, 0, 0, 100);
         fieldsPanel.add(backButton, c);
 
         // Set all field labels and fonts
@@ -148,7 +140,7 @@ public class StudentPanel extends JPanel
 
         LinkedList<String> foodChoices = Food.getMealOptions();
         String[] choices;
-        if(foodChoices != null) {
+        if (foodChoices != null) {
             choices = new String[foodChoices.size()];
             try {
                 for (int i = 0; i < foodChoices.size(); ++i) {
@@ -159,9 +151,7 @@ public class StudentPanel extends JPanel
             }
             foodChoiceLabel = new JLabel(FOOD_CHOICE_LABEL_TEXT);
             foodChoiceComboBox = new JComboBox<String>(choices);
-        }
-        else
-        {
+        } else {
             choices = new String[0];
             foodChoiceLabel = new JLabel(FOOD_CHOICE_LABEL_TEXT);
             foodChoiceComboBox = new JComboBox<String>(choices);
@@ -187,11 +177,9 @@ public class StudentPanel extends JPanel
         Integer[] tables = new Integer[numTables];
         try {
             for (int i = 0; i < numTables; ++i) {
-                tables[i] = (i+1);
+                tables[i] = (i + 1);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         tableNumLabel = new JLabel(TABLE_NUM_LABEL_TEXT);
@@ -303,9 +291,9 @@ public class StudentPanel extends JPanel
         allergiesTextArea.setBorder(textFieldBorder);
 
         c.gridx = 0;
-        c.gridy ++;
+        c.gridy++;
         c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets (10, 0, 0, 15);
+        c.insets = new Insets(10, 0, 0, 15);
         fieldsPanel.add(allergiesTextArea, c);
 
         moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
@@ -317,7 +305,7 @@ public class StudentPanel extends JPanel
 
         //The cancel and confirm buttons
         cancelButton = new JButton(CANCEL_BUTTON_TEXT);
-        cancelButton.addActionListener(new CancelButtonActionListener());
+        cancelButton.addActionListener(new BackButtonActionListener());
         cancelButton.setBackground(new Color(243, 69, 65));
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setFont(BUTTON_FONT);
@@ -331,10 +319,10 @@ public class StudentPanel extends JPanel
         confirmButton.setPreferredSize(BUTTON_SIZE);
 
         // Position the cancel and confirm buttons with some spacing
-        c.insets = new Insets (12, 0, 0, 10);
+        c.insets = new Insets(12, 0, 0, 10);
         c.anchor = GridBagConstraints.EAST;
         c.gridx = 0;
-        c.gridy ++;
+        c.gridy++;
         fieldsPanel.add(cancelButton, c);
 
         c.gridx = 3;
@@ -352,27 +340,100 @@ public class StudentPanel extends JPanel
         g.drawImage(background, 0, 0, null);
     }
 
-    private class BackButtonActionListener implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
+    /**
+     * Goes back to the main screen that displays students when clicked
+     */
+    private class BackButtonActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
             EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
         }
     }
 
-    private class CancelButtonActionListener implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
 
-        }
-    }
+    /**
+     * Saves all the entered data into a new Student. Checks to ensure all the entered data is valid and the minimum information for a student is provided.
+     */
+    private class ConfirmButtonActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            Student student = new Student();
+            String missingComponents = "";
+            String invalidComponents = "";
 
-    private class ConfirmButtonActionListener implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
+            String firstName = firstNameTextField.getText();
+            if (firstName.length() > 0) {
+                student.setFirstname(firstName);
+            } else {
+                missingComponents += "First Name\n";
+            }
 
+            String lastName = lastNameTextField.getText();
+            if (lastName.length() > 0) {
+                student.setLastname(lastName);
+            } else {
+                missingComponents += "Last Name\n";
+            }
+
+            try {
+                String id = studentIdTextField.getText();
+                if (id.length() > 0) {
+                    student.setStudentId(id);
+                } else {
+                    missingComponents += "Student Number\n";
+                }
+            } catch (Student.InvalidStudentIDException ex) {
+                invalidComponents += "Student Number\n";
+            }
+
+            try {
+                String food = (String) foodChoiceComboBox.getSelectedItem();
+                if (food != null && food.length() > 0) {
+                    student.setFood(food);
+                } else {
+                    missingComponents += "FoodChoice\n";
+                }
+            } catch (Student.InvalidFoodException ex) {
+                invalidComponents += "Food Choice\n";
+            }
+
+            //Not necessary so dont check
+            student.setPhoneNum(phoneNumTextField.getText());
+
+            //These are not necessary so there is no need to check for validity
+            student.setPaidBy(paidByTextField.getText());
+
+            try {
+                String tableNum = (String) tableNumComboBox.getSelectedItem();
+                if (tableNum != null && tableNum.length() > 0) {
+                    student.setTableNum(Integer.parseInt(tableNum));
+                } else {
+                    missingComponents += "Table Number\n";
+                }
+
+            } catch (NumberFormatException ex) {
+                invalidComponents += "Table Number\n";
+            }
+
+            //These are not necessary so there is no need to check for validity
+            student.setAllergies(allergiesTextArea.getText());
+            student.setInfo(moreInfoTextArea.getText());
+
+            boolean valid = true;
+            //Ensure the student has at least the minimal information and display a warning if they are errors
+            if (missingComponents.length() > 0) {
+                valid = false;
+                JOptionPane.showMessageDialog(null, "Missing Entries: \n" + missingComponents + "Please go back and correct.", "Missing Entries", JOptionPane.ERROR_MESSAGE);
+            }
+            if(invalidComponents.length() > 0)
+            {
+                valid = false;
+                JOptionPane.showMessageDialog(null, "Invalid Entries: \n" + invalidComponents + "Please go back and correct.", "Invalid Entries", JOptionPane.ERROR_MESSAGE);
+            }
+
+            //Let the user confirm only if the info entered is valid
+            if (valid) {
+                //TODO: add the new student to the global list of students
+                EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
+            }
         }
     }
 
