@@ -93,4 +93,16 @@ public class EventPlanner {
 		FRAME.repaint();
 	}
 
+	/**
+	 * Used to change the currently selected panel to the student profile palen
+	 * @param panel the panel of the profile to show
+     */
+	public static void showStudentProfile(StudentProfile panel)
+	{
+		FRAME.getContentPane().removeAll();
+		FRAME.add(panel);
+		FRAME.revalidate();
+		FRAME.repaint();
+	}
+
 }
