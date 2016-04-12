@@ -27,28 +27,21 @@ public class Student {
 	private String allergies;
 	private int tableNum; // 0 means unassigned
 	private String phoneNum;
+	private String info;
 	
 	// Constructors
 	// Fully declared student
+	// For optional values, if you want to make them invalid/empty, make then null (or 0 for table #)
 	public Student(String ID, String lastname, String firstname,
-			String food, boolean paid, String paidBy, String allergies, int tableNum) throws InvalidStudentIDException, InvalidFoodException {
+			String food, boolean paid, String paidBy, String allergies,
+			int tableNum, String phoneNum, String info) throws InvalidStudentIDException, InvalidFoodException {
 		this(ID, lastname, firstname, food, paid, paidBy);
-		setAllergies(allergies);
-		setTableNum(tableNum);
+		if (allergies != null) setAllergies(allergies);
+		if (tableNum != 0) setTableNum(tableNum);
+		if (phoneNum != null) setPhoneNum(phoneNum);
+		if (info != null) setInfo(info);
 	}
-	// Student with undeclared allergies
-	public Student(String ID, String lastname, String firstname,
-			String food, boolean paid, String paidBy, int tableNum) throws InvalidStudentIDException, InvalidFoodException {
-		this(ID, lastname, firstname, food, paid, paidBy);
-		setTableNum(tableNum);
-	}
-	// Student with undeclared paidBy
-	public Student(String ID, String lastname, String firstname,
-			String food, boolean paid, String paidBy, String allergies) throws InvalidStudentIDException, InvalidFoodException {
-		this(ID, lastname, firstname, food, paid, paidBy);
-		setAllergies(allergies);
-	}
-	// Student with undeclared allergies or paidBy
+	// Student with only mandatory fields
 	public Student(String studentId, String lastname, String firstname,
 			String food, boolean paid, String paidBy) throws InvalidStudentIDException, InvalidFoodException {
 		setStudentId(studentId);
@@ -68,8 +61,10 @@ public class Student {
 	public Food getFood() {return food;}
 	public boolean isPaid() {return paid;}
 	public String getPaidBy() {return paidBy;}
-	public int getTableNum() {return tableNum;}
 	public String getAllergies() {return allergies;}
+	public int getTableNum() {return tableNum;}
+	public String getPhoneNum() {return phoneNum;}
+	public String getInfo() {return info;}
 	
 	// Setters
 	public void setStudentId(String studentId) throws InvalidStudentIDException {
@@ -87,6 +82,8 @@ public class Student {
 	public void setPaidBy(String paidBy) {this.paidBy = paidBy.trim();}
 	public void setAllergies(String allergies) {this.allergies = allergies.trim();}
 	public void setTableNum(int tableNum) {this.tableNum = tableNum;}
+	public void setPhoneNum(String phoneNum) {this.phoneNum = phoneNum;}
+	public void setInfo(String info) {this.info = info;}
 
 	public class InvalidStudentIDException extends Exception {
 		public InvalidStudentIDException(String message) {super(message);}
