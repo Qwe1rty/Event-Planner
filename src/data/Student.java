@@ -70,7 +70,7 @@ public class Student {
 	public String getPaidBy() {return paidBy;}
 	public int getTableNum() {return tableNum;}
 	public String getAllergies() {return allergies;}
-
+	
 	// Setters
 	public void setStudentId(String studentId) throws InvalidStudentIDException {
 		if (studentId.length() != 9) throw new InvalidStudentIDException("Length of ID is not equal to 9");

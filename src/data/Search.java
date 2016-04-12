@@ -7,7 +7,15 @@ public class Search {
 		LinkedList<Student> lll = new LinkedList<Student>();
 		
 		for (int i = 0; i < ll.size(); i++) {
-			if ()
+			if (p == Parameter.STUDENT_ID) {
+				if (ll.get(i).getID().contains(s)) lll.append(ll.get(i));
+			} else if (p == Parameter.FIRSTNAME) {
+				if (ll.get(i).getFirstname().contains(s)) lll.append(ll.get(i));
+			} else if (p == Parameter.LASTNAME) {
+				
+			} else if (p == Parameter.ALLERGIES) {
+				
+//			} else if (p == Parameter.)
 		}
 		return ll;
 		
