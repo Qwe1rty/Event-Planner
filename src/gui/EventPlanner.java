@@ -32,13 +32,13 @@ public class EventPlanner {
 		
         
         try {
-            GraphicsEnvironment ge = 
+            GraphicsEnvironment ge =
                 GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("/font/font.ttf")));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(EventPlanner.class.getResource("/font/font.ttf").toURI())));
        } catch (IOException|FontFormatException e) {
             //Handle exception
        }
-        
+
         String fonts[] = 
         	      GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
