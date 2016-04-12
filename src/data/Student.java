@@ -25,7 +25,7 @@ public class Student {
 	private boolean paid;
 	private String paidBy;
 	private String allergies;
-	private int tableNum;
+	private int tableNum; // 0 means unassigned
 	
 	// Constructors
 	// Fully declared student
@@ -68,6 +68,7 @@ public class Student {
 	public boolean isPaid() {return paid;}
 	public String getPaidBy() {return paidBy;}
 	public int getTableNum() {return tableNum;}
+	public String getAllergies() {return allergies;}
 
 	// Setters
 	public void setStudentId(String studentId) throws InvalidStudentIDException {

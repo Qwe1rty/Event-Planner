@@ -15,8 +15,8 @@ public class LinkedList<E> {
 		}
 	}
 	
-	public E get(int index) throws Exception {
-		if (headLink == null) throw new Exception("List is empty");
+	public E get(int index) {
+		if (headLink == null) return null;
 		else {return headLink.getItem(index);}			
 	}
 	
@@ -112,9 +112,9 @@ public class LinkedList<E> {
 		private void set(Object item) {this.item = (E) item;}
 		
 		private E getItem() {return item;}
-		private E getItem(int i) throws Exception {
+		private E getItem(int i) {
 			if (i == 0) return item;
-			else if (getLink() == null) throw new Exception("Index is out of bounds");
+			else if (getLink() == null) return null;
 			else return getLink().getItem(i - 1);
 		}
 		private Link<E> getLink() {return link;}

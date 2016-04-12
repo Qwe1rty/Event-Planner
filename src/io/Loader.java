@@ -40,7 +40,6 @@ public final class Loader {
 	 * Loads the students into a list of students from the given file. File chooser dialog box
 	 * will appear and user can choose the file to load.
 	 * 
-	 * @param path File path
 	 * @return null If the load was successful, returns a linked list with students' data.
 	 * 		Otherwise, null will be returned
 	 * @throws FileNotFoundException 
@@ -113,6 +112,13 @@ public final class Loader {
 		catch (IOException e) {return null;}
 	}
 
+	/**
+	 * Will save the current project file to the user's selected directory
+	 * 
+	 * @param LinkedList<Student> a linked list full of students. Function will also read
+	 * 		from Settings.java for global settings
+	 * @author Caleb Choi
+	 */
 	public static void saveFile(LinkedList<Student> ll) {
 
 		// Shows file selection dialog for user, and keeps selected file 
@@ -121,27 +127,27 @@ public final class Loader {
 		if (selection != JFileChooser.APPROVE_OPTION) return;
 
 		try {
-			
+
 			// Gets the path of the chosen file. Checks if file extension needs to be added
 			String fileName = fc.getSelectedFile().getAbsolutePath();
 			if (fileName.indexOf(".") != -1) {
 				fileName = fileName.substring(0, fileName.indexOf(".")) + FILE_EXTENSION;
 			} else fileName += "." + FILE_EXTENSION;
-			
+
 			// Checks if file exists. If so, it is overriden
 			File file = new File(fileName);
 			if (file.exists()) {file.delete();}
 			file.createNewFile();
-			
+
 			// Creates output stream
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-			
+
 			// Prints global data
 			bw.write(Settings.getLocation()); bw.newLine();
 			bw.write(Settings.getNumTables()); bw.newLine();
 			bw.write(Settings.getTableSize()); bw.newLine();
 			bw.write(String.valueOf(Settings.getTicketCost())); bw.newLine();
-			
+
 			// Prints all foods
 			bw.write(Food.FOODLIST.size()); bw.newLine();
 			for (int i = 0; i < Food.FOODLIST.size(); i++) {
@@ -150,14 +156,33 @@ public final class Loader {
 					bw.newLine();
 				} catch (Exception e) {}
 			}
-			
+
 			// Student stuff
 			bw.write(Settings.getNumStudents()); bw.newLine();
-			
+
 			for (int i = 0; i < ll.size(); i++) {
+				String student = "";
+
+				student += ll.get(i).getID() + ",";
+				student += ll.get(i).getFirstname() + ",";
+				student += ll.get(i).getLastname() + ",";
+				student += ll.get(i).getFood().toString() + ",";
+				student += ll.get(i).getPaidBy() + ",";
+				student += ll.get(i).isPaid() + ",";
+				student += ll.get(i).getPaidBy();
 				
+				if (ll.get(i).getAllergies() != null) {
+					student += ",A" + ll.get(i).getAllergies();
+				}
+				if (ll.get(i).getTableNum() != 0) {
+					student += ",T" + ll.get(i).getTableNum();
+				}
+				
+				bw.write(student);
+				bw.newLine();
+
 			}
-			
+
 			// Close stream
 			bw.close();
 
