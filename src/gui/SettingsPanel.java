@@ -71,6 +71,8 @@ public class SettingsPanel extends JPanel {
     
     private Image background;
     private JPanel nestedPanel;
+    private String newFoodItem;
+    private Vector<Vector<String>> options;
 
     /**
      * Creates the panel and sets up all the gui components
@@ -145,7 +147,7 @@ public class SettingsPanel extends JPanel {
         Food.addFood(new Food ("Placeholder Food Item"));
         Food.addFood(new Food ("Item of Food"));
         LinkedList<String> food = Food.getMealOptions();
-        Vector<Vector<String>> options = new Vector<>();
+        options = new Vector<>();
 
         numberOfFoodOptions = 0;
         if (food != null) {
@@ -309,22 +311,33 @@ public class SettingsPanel extends JPanel {
     {
         public void actionPerformed(ActionEvent e)
         {
-
-        }
+        	//custom title, no icon
+        	newFoodItem = JOptionPane.showInputDialog(EventPlanner.FRAME, "Enter new item:.", "", JOptionPane.PLAIN_MESSAGE);
+        	System.out.println(newFoodItem);
+        	Food.addFood(new Food(newFoodItem));
+        	
+        	Vector<String> foodItem = new Vector <>();
+        	foodItem.add(newFoodItem);
+        	DefaultTableModel model = (DefaultTableModel) foodOptions.getModel();
+        	model.addRow(foodItem);
+        	foodOptions.revalidate();
+        	foodOptions.repaint();
+        	
+        }	
     }
 
-    // TODO: 2016-04-10 Find some way to get edited data (maybe a JOptionPane)
-    class EditFoodButtonActionListener implements ActionListener {
-        /**
-         * When this button is clicked, it sets the value of the selected row of the table to the value to be edited in
-         *
-         * @param e the event
-         */
-        public void actionPerformed(ActionEvent e) {
-            if (selectedRow >= 0)
-                foodOptions.getModel().setValueAt("PLACEHOLDER EDITED VALUE", selectedRow, selectedCol);
-        }
-    }
+//    // TODO: 2016-04-10 Find some way to get edited data (maybe a JOptionPane)
+//    class EditFoodButtonActionListener implements ActionListener {
+//        /**
+//         * When this button is clicked, it sets the value of the selected row of the table to the value to be edited in
+//         *
+//         * @param e the event
+//         */
+//        public void actionPerformed(ActionEvent e) {
+//            if (selectedRow >= 0)
+//                foodOptions.getModel().setValueAt("PLACEHOLDER EDITED VALUE", selectedRow, selectedCol);
+//        }
+//    }
 
     class RemoveFoodButtonActionListener implements ActionListener {
         /**
@@ -355,7 +368,7 @@ public class SettingsPanel extends JPanel {
     {
         public void actionPerformed(ActionEvent e)
         {
-
+        	
         }
     }
 }
