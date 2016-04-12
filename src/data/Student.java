@@ -68,7 +68,6 @@ public class Student {
 	public boolean isPaid() {return paid;}
 	public String getPaidBy() {return paidBy;}
 	public int getTableNum() {return tableNum;}
-
 	// Setters
 	public void setStudentId(String studentId) throws InvalidStudentIDException {
 		if (studentId.length() != 9) throw new InvalidStudentIDException("Length of ID is not equal to 9");
