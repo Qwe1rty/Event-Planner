@@ -1,11 +1,34 @@
 package gui;
 
-import data.Student;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+
+import data.Food;
+import data.LinkedList;
+import data.Settings;
+import data.Student;
+import data.Student.InvalidFoodException;
+import data.Student.InvalidStudentIDException;
 
 /**
  * Gives a in depth visual display of the student
@@ -14,229 +37,397 @@ import java.awt.event.ActionListener;
  */
 public class StudentProfile extends JPanel {
 
-    private final String BACK_BUTTON_TEXT = "Back";
-    private final String ID_LABEL_TEXT = "Student ID:";
-    private final String FIRST_NAME_LABEL_TEXT = "First Name:";
-    private final String LAST_NAME_LABEL_TEXT = "Last Name:";
-    private final String FOOD_LABEL_TEXT = "Food Choice:";
-    private final String PAID_LABEL_TEXT = "Paid:";
-    private final String PAID_BY_LABEL_TEXT = "Paid By:";
-    private final String ALLERGIES_LABEL_TEXT = "Allergies:";
-    private final String MORE_INFO_LABEL_TEXT = "Additional Information:";
-    private final String TABLE_NUM_LABEL_TEXT = "Table Number:";
+	private static final String BACK_BUTTON_TEXT = "Back";
+	private static final String FIRST_NAME_LABEL_TEXT = "First Name: ";
+	private static final String LAST_NAME_LABEL_TEXT = "Last Name: ";
+	private static final String STUDENT_ID_LABEL_TEXT = "Student Number: ";
+	private static final String FOOD_CHOICE_LABEL_TEXT = "    Food Choice: ";
+	private static final String PHONE_NUM_LABEL_TEXT = "Phone Number: ";
+	private static final String PAID_BY_LABEL_TEXT = "Paid By: ";
+	private static final String TABLE_NUM_LABEL_TEXT = "Table Number: ";
+	private static final String ALLERGIES_LABEL_TEXT = "Allergies";
+	private static final String MORE_INFO_LABEL_TEXT = "Additional Information";
+	private static final String CANCEL_BUTTON_TEXT = "Cancel";
+	private static final String CONFIRM_BUTTON_TEXT = "Confirm";
 
+	private static final int TEXT_AREA_ROWS = 10;
+	private static final int TEXT_AREA_COLS = 35;
 
-    private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
-    private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
-    private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
+	private static final int TEXT_FIELD_ROWS = 21;
+	private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
+	private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
+	private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
 
-    private final Dimension BUTTON_SIZE = new Dimension(108, 50);
+	private final Dimension COMBO_SIZE = new Dimension(340, 30);
+	private final Dimension BUTTON_SIZE = new Dimension(108, 50);
 
-    private Student student;
+	private JTextField firstNameTextField;
+	private JTextField lastNameTextField;
+	private JTextField studentIdTextField;
+	private JComboBox<String> foodChoiceComboBox;
+	private JTextField phoneNumTextField;
+	private JTextField paidByTextField;
+	private JComboBox<Integer> tableNumComboBox;
+	private JLabel firstNameLabel;
+	private JLabel lastNameLabel;
+	private JLabel studentIdLabel;
+	private JLabel foodChoiceLabel;
+	private JLabel phoneNumLabel;
+	private JLabel paidByLabel;
+	private JLabel tableNumLabel;
 
-    private GridBagConstraints c;
+	private JLabel allergiesLabel;
+	private JLabel moreInfoLabel;
 
-    private JButton backButton;
-    private JButton finishButton;
-    private JTextField idField;
-    private JTextField firstNameField;
-    private JTextField lastNameField;
-    private JTextField foodField;
-    private JTextField paidField;
-    private JTextField paidByField;
-    private JTextArea allergiesArea;
-    private JTextArea moreInfoArea;
-    private JTextField tableNumField;
+	private JTextArea allergiesTextArea;
+	private JTextArea moreInfoTextArea;
 
-    private JLabel idLabel;
-    private JLabel firstNameLabel;
-    private JLabel lastNameLabel;
-    private JLabel foodLabel;
-    private JLabel paidLabel;
-    private JLabel paidByLabel;
-    private JLabel allergiesLabel;
-    private JLabel moreInfoLabel;
-    private JLabel tableNumLabel;
+	private JButton cancelButton;
+	private JButton confirmButton;
+	private JButton backButton;
 
-    //TODO: add a way for the user to know if the student id and food entered is valid or not
-    //TODO: Change the paid text field to a check mark
-    //TODO: change food to combo box
-    //Could make it so that the user can click on the student paid by and open up their data
+	private Image background;
+	private JPanel fieldsPanel;
+	private Border textFieldBorder;
 
-    public StudentProfile(Student student) {
-        this.student = student;
+	private Student student;
 
-        setLayout(new GridBagLayout());
-        c = new GridBagConstraints();
+	public StudentProfile(Student student) {
+		this.student = student;
 
-        // Background color to a light grey with slightly raised borders
-        setBackground(new Color(238, 238, 238));
-        setBorder(BorderFactory.createRaisedBevelBorder());
+		setLayout(new GridBagLayout());
 
-        // Set size of nested to slightly smaller (static value)
-        setPreferredSize(new Dimension(1206, 626));
+		// Get the bg image
+		try {
+			background = ImageIO.read(getClass().getResource("/images/bg.png"));
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
-        //Back button
-        backButton = new JButton(BACK_BUTTON_TEXT);
-        backButton.addActionListener(new BackButtonActionListener());
-        backButton.setBackground(new Color(3, 159, 244));
-        backButton.setForeground(Color.WHITE);
-        backButton.setFont(BUTTON_FONT);
-        backButton.setPreferredSize(BUTTON_SIZE);
+		// Set the layout of the nested panel to follow grid bag layotu
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		fieldsPanel = new JPanel(layout);
 
-        // Position the back button west of screen
-        c.gridx = 0;
-        c.gridy = 0;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(0, 0, 0, 100);
-        add(backButton, c);
+		// Background color to a light grey with slightly raised borders
+		fieldsPanel.setBackground(new Color(238, 238, 238));
+		fieldsPanel.setBorder(BorderFactory.createRaisedBevelBorder());
 
-        //Student name
-        firstNameLabel = new JLabel(FIRST_NAME_LABEL_TEXT);
-        c.gridx = 0;
-        c.gridy = 1;
-        add(firstNameLabel, c);
+		// Set size of nested to slightly smaller (static value)
+		fieldsPanel.setPreferredSize(new Dimension(1206, 626));
 
-        firstNameField = new JTextField(student.getFirstname());
-        c.gridx = 1;
-        c.gridy = 1;
-        add(firstNameField, c);
+		// Back button
+		backButton = new JButton(BACK_BUTTON_TEXT);
+		backButton.addActionListener(new BackButtonActionListener());
+		backButton.setBackground(new Color(3, 159, 244));
+		backButton.setForeground(Color.WHITE);
+		backButton.setFont(BUTTON_FONT);
+		backButton.setPreferredSize(BUTTON_SIZE);
 
-        lastNameLabel = new JLabel(LAST_NAME_LABEL_TEXT);
-        c.gridx = 2;
-        c.gridy = 1;
-        add(lastNameLabel, c);
+		// Position the back button west of screen
+		c.gridx = 0;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.WEST;
+		c.insets = new Insets(0, 0, 0, 100);
+		fieldsPanel.add(backButton, c);
 
-        lastNameField = new JTextField(student.getLastname());
-        c.gridx = 3;
-        c.gridy = 1;
-        add(lastNameField, c);
+		// Set all field labels and fonts
+		firstNameLabel = new JLabel(FIRST_NAME_LABEL_TEXT);
+		firstNameLabel.setFont(TEXT_FONT);
 
-        //Student id
-        idLabel = new JLabel(ID_LABEL_TEXT);
-        c.gridx = 0;
-        c.gridy = 2;
-        add(idLabel, c);
+		firstNameTextField = new JTextField(TEXT_FIELD_ROWS);
+		firstNameTextField.setFont(FIELD_FONT);
+		String firstName = student.getFirstname();
+		if (firstName != null) {
+			firstNameTextField.setText(firstName);
+		}
 
-        idField = new JTextField(student.getID());
-        c.gridx = 1;
-        c.gridy = 2;
-        add(idField, c);
+		lastNameLabel = new JLabel(LAST_NAME_LABEL_TEXT);
+		lastNameLabel.setFont(TEXT_FONT);
 
-        //Food
-        foodLabel = new JLabel(FOOD_LABEL_TEXT);
-        c.gridx = 2;
-        c.gridy = 2;
-        add(foodLabel, c);
+		lastNameTextField = new JTextField(TEXT_FIELD_ROWS);
+		lastNameTextField.setFont(FIELD_FONT);
+		String lastName = student.getLastname();
+		if (lastName != null) {
+			lastNameTextField.setText(lastName);
+		}
 
-        foodField = new JTextField(student.getFood().toString());
-        c.gridx = 3;
-        c.gridy = 2;
-        add(foodField, c);
+		studentIdLabel = new JLabel(STUDENT_ID_LABEL_TEXT);
+		studentIdLabel.setFont(TEXT_FONT);
 
-        //Payment information
-        paidLabel = new JLabel(PAID_LABEL_TEXT);
-        c.gridx = 0;
-        c.gridy = 3;
-        add(paidLabel, c);
+		studentIdTextField = new JTextField(TEXT_FIELD_ROWS);
+		studentIdTextField.setFont(FIELD_FONT);
+		String id = student.getID();
+		if (id != null) {
+			studentIdTextField.setText(id);
+		}
 
-        paidField = new JTextField(Boolean.toString(student.isPaid()));
-        c.gridx = 1;
-        c.gridy = 3;
-        add(paidField, c);
+		LinkedList<String> foodChoices = Food.getMealOptions();
+		String[] choices;
+		if (foodChoices != null) {
+			choices = new String[foodChoices.size()];
+			try {
+				for (int i = 0; i < foodChoices.size(); ++i) {
+					choices[i] = foodChoices.get(i);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			foodChoiceLabel = new JLabel(FOOD_CHOICE_LABEL_TEXT);
+			foodChoiceComboBox = new JComboBox<String>(choices);
+		} else {
+			choices = new String[0];
+			foodChoiceLabel = new JLabel(FOOD_CHOICE_LABEL_TEXT);
+			foodChoiceComboBox = new JComboBox<String>(choices);
+		}
 
-        paidByLabel = new JLabel(PAID_BY_LABEL_TEXT);
-        c.gridx = 2;
-        c.gridy = 3;
-        add(paidByLabel);
+		foodChoiceLabel.setFont(TEXT_FONT);
+		foodChoiceComboBox.setPreferredSize(COMBO_SIZE);
+		foodChoiceComboBox.setFont(FIELD_FONT);
+		String foodChoice = student.getFood().toString();
+		if (foodChoice != null) {
+			foodChoiceComboBox.setSelectedItem(foodChoice);
+		}
 
-        paidByField = new JTextField(student.getPaidBy());
-        c.gridx = 3;
-        c.gridy = 3;
-        add(paidField, c);
+		phoneNumLabel = new JLabel(PHONE_NUM_LABEL_TEXT);
+		phoneNumLabel.setFont(TEXT_FONT);
 
-        //Allergies and more information labels each taking up two spaces
-        allergiesLabel = new JLabel(ALLERGIES_LABEL_TEXT);
-        c.gridwidth = 2;
-        c.gridx = 0;
-        c.gridy = 4;
-        add(allergiesLabel, c);
+		phoneNumTextField = new JTextField(TEXT_FIELD_ROWS);
+		phoneNumTextField.setFont(FIELD_FONT);
+		String phoneNum = student.getPhoneNum();
+		if (phoneNum != null) {
+			phoneNumTextField.setText(phoneNum);
+		}
 
-        moreInfoLabel = new JLabel(MORE_INFO_LABEL_TEXT);
-        c.gridwidth = 2;
-        c.gridx = 1;
-        c.gridy = 4;
-        add(allergiesLabel, c);
-    /*
-        //The allergies and the additional information areas
-        allergiesTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
-        allergiesTextArea.setFont(FIELD_FONT);
-        allergiesTextArea.setBorder(textFieldBorder);
+		paidByLabel = new JLabel(PAID_BY_LABEL_TEXT);
+		paidByLabel.setFont(TEXT_FONT);
 
-        c.gridx = 0;
-        c.gridy ++;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets (10, 0, 0, 15);
-        fieldsPanel.add(allergiesTextArea, c);
+		paidByTextField = new JTextField(TEXT_FIELD_ROWS);
+		paidByTextField.setFont(FIELD_FONT);
+		String paidBy = student.getPaidBy();
+		if (paidBy != null) {
+			paidByTextField.setText(paidBy);
+		}
 
-        moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
-        moreInfoTextArea.setFont(FIELD_FONT);
-        moreInfoTextArea.setBorder(textFieldBorder);
+		int numTables = Settings.getNumTables();
+		Integer[] tables = new Integer[numTables];
+		try {
+			for (int i = 0; i < numTables; ++i) {
+				tables[i] = (i + 1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		tableNumLabel = new JLabel(TABLE_NUM_LABEL_TEXT);
+		tableNumLabel.setFont(TEXT_FONT);
 
-        c.gridx = 3;
-        fieldsPanel.add(moreInfoTextArea, c);*/
+		tableNumComboBox = new JComboBox<Integer>(tables);
+		tableNumComboBox.setPreferredSize(COMBO_SIZE);
+		tableNumComboBox.setFont(FIELD_FONT);
+		String tableNum = Integer.toString(student.getTableNum());
+		if (tableNum != null) {
+			tableNumComboBox.setSelectedItem(tableNum);
+		}
 
-        /*
-	private String allergies;
-	more info
-	private int tableNum;*
-         */
+		// All label components are right aligned with some vertical spacing
+		// between them
+		c.anchor = GridBagConstraints.EAST;
+		c.insets = new Insets(10, 0, 0, 0);
 
-        //The Finish button
-    }
+		// Add all wider components first
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 2;
+		fieldsPanel.add(firstNameLabel, c);
 
-    class BackButtonActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
-        }
-    }
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		fieldsPanel.add(studentIdLabel, c);
 
-    /**
-     * When the user selects that they are finished viewing this students profile, this class updates the new data for the student
-     */
-    class FinishButtonActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                student.setStudentId(idField.getText());
-            } catch (Student.InvalidStudentIDException ex) {
-                //If the id is invalid, do not update it
-            }
-            try {
-                student.setFood(foodField.getText());
-            } catch (Student.InvalidFoodException ex) {
-                //If the food is invalid, do not update it
-            }
-            try {
-                student.setTableNum(Integer.parseInt(tableNumField.getText()));
-            } catch (NumberFormatException ex) {
-                //If the table number is invalid, do not update it
-            }
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 2;
+		fieldsPanel.add(phoneNumLabel, c);
 
-            student.setLastname(lastNameField.getText());
-            student.setFirstname(firstNameField.getText());
+		c.gridx = 0;
+		c.gridy = 4;
+		c.gridwidth = 2;
+		fieldsPanel.add(tableNumLabel, c);
 
-            String paid = paidField.getText();
-            if (paid.equalsIgnoreCase("true")) {
-                student.setPaid(true);
-            } else if (paid.equalsIgnoreCase("false")) {
-                student.setPaid(false);
-            }
-            student.setPaidBy(paidByField.getText());
-            student.setAllergies(allergiesArea.getText());
+		// Add all smaller components
+		// All field components are left aligned
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = 2;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		fieldsPanel.add(firstNameTextField, c);
 
-            EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
-        }
-    }
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx = 3;
+		c.gridy = 1;
+		fieldsPanel.add(lastNameLabel, c);
+
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = 4;
+		c.gridy = 1;
+		fieldsPanel.add(lastNameTextField, c);
+
+		c.gridx = 2;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		fieldsPanel.add(studentIdTextField, c);
+
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx = 3;
+		c.gridy = 2;
+		fieldsPanel.add(foodChoiceLabel, c);
+
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = 4;
+		c.gridy = 2;
+		fieldsPanel.add(foodChoiceComboBox, c);
+
+		c.gridx = 2;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		fieldsPanel.add(phoneNumTextField, c);
+
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx = 3;
+		c.gridy = 3;
+		fieldsPanel.add(paidByLabel, c);
+
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = 4;
+		c.gridy = 3;
+		fieldsPanel.add(paidByTextField, c);
+
+		c.gridx = 2;
+		c.gridy = 4;
+		c.gridwidth = 1;
+		fieldsPanel.add(tableNumComboBox, c);
+
+		// Titles for the allergies and additional information text areas
+		allergiesLabel = new JLabel(ALLERGIES_LABEL_TEXT);
+		allergiesLabel.setFont(TEXT_FONT);
+
+		// Position allergy and extra-info components centered, each taking up 2
+		// grid spaces
+		c.gridwidth = 3;
+		c.anchor = GridBagConstraints.CENTER;
+
+		c.gridx = 0;
+		c.gridy = 5;
+		fieldsPanel.add(allergiesLabel, c);
+
+		moreInfoLabel = new JLabel(MORE_INFO_LABEL_TEXT);
+		moreInfoLabel.setFont(TEXT_FONT);
+		c.gridx = 3;
+		fieldsPanel.add(moreInfoLabel, c);
+
+		textFieldBorder = BorderFactory.createLineBorder(Color.GRAY, 1, true);
+		// The allergies and the additional information areas
+		allergiesTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
+		allergiesTextArea.setFont(FIELD_FONT);
+		allergiesTextArea.setBorder(textFieldBorder);
+		String allergies = student.getAllergies();
+		if (allergies != null) {
+			allergiesTextArea.setText(allergies);
+		}
+
+		c.gridx = 0;
+		c.gridy++;
+		c.anchor = GridBagConstraints.WEST;
+		c.insets = new Insets(10, 0, 0, 15);
+		fieldsPanel.add(allergiesTextArea, c);
+
+		moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
+		moreInfoTextArea.setFont(FIELD_FONT);
+		moreInfoTextArea.setBorder(textFieldBorder);
+		String moreInfo = student.getMoreInfo();
+		if (moreInfo != null) {
+			moreInfoTextArea.setText(moreInfo);
+		}
+
+		c.gridx = 3;
+		fieldsPanel.add(moreInfoTextArea, c);
+
+		// The cancel and confirm buttons
+		cancelButton = new JButton(CANCEL_BUTTON_TEXT);
+		cancelButton.addActionListener(new BackButtonActionListener());
+		cancelButton.setBackground(new Color(243, 69, 65));
+		cancelButton.setForeground(Color.WHITE);
+		cancelButton.setFont(BUTTON_FONT);
+		cancelButton.setPreferredSize(BUTTON_SIZE);
+
+		confirmButton = new JButton(CONFIRM_BUTTON_TEXT);
+		confirmButton.addActionListener(new FinishButtonActionListener());
+		confirmButton.setBackground(new Color(56, 186, 125));
+		confirmButton.setForeground(Color.WHITE);
+		confirmButton.setFont(BUTTON_FONT);
+		confirmButton.setPreferredSize(BUTTON_SIZE);
+
+		// Position the cancel and confirm buttons with some spacing
+		c.insets = new Insets(12, 0, 0, 10);
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx = 0;
+		c.gridy++;
+		fieldsPanel.add(cancelButton, c);
+
+		c.gridx = 3;
+		c.anchor = GridBagConstraints.WEST;
+		fieldsPanel.add(confirmButton, c);
+
+		// Add all components to the panel
+		add(fieldsPanel);
+	}
+
+	class BackButtonActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// Custom button text
+			Object[] options = { "Yes", "No" };
+			int result = JOptionPane.showOptionDialog(null,
+					"Are you sure you want to leave without saving?", "Back",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null, options, options[1]);
+			if (result == JOptionPane.YES_OPTION)
+				EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
+		}
+	}
+
+	/**
+	 * When the user selects that they are finished viewing this students
+	 * profile, this class updates the new data for the student
+	 */
+	class FinishButtonActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				student.setStudentId(studentIdTextField.getText());
+			} catch (Student.InvalidStudentIDException ex) {
+				// If the id is invalid, do not update it
+			}
+			try {
+				student.setFood((String) foodChoiceComboBox.getSelectedItem());
+			} catch (Student.InvalidFoodException ex) {
+				// If the food is invalid, do not update it
+			}
+			try {
+				student.setTableNum(Integer.parseInt((String) tableNumComboBox
+						.getSelectedItem()));
+			} catch (NumberFormatException ex) {
+				// If the table number is invalid, do not update it
+			}
+
+			student.setLastname(lastNameTextField.getText());
+			student.setFirstname(firstNameTextField.getText());
+
+			student.setPaidBy(paidByTextField.getText());
+			student.setAllergies(allergiesTextArea.getText());
+
+			EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
+		}
+	}
 }
