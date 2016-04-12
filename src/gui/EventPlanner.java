@@ -1,12 +1,18 @@
 package gui;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.*;
 
 public class EventPlanner {
 
 	public enum Panel
 	{
-			HOME, SETTINGS, STUDENT, DISPLAY_STUDENT
+			HOME, SETTINGS, STUDENT, DISPLAY_STUDENT, 
 	};
 
 	// Window width and height
@@ -23,6 +29,25 @@ public class EventPlanner {
 		// Creation of frame
 		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
+		
+        
+        try {
+            GraphicsEnvironment ge = 
+                GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("/font/font.ttf")));
+       } catch (IOException|FontFormatException e) {
+            //Handle exception
+       }
+        
+        String fonts[] = 
+        	      GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+
+        	    for ( int i = 0; i < fonts.length; i++ )
+        	    {
+        	      System.out.println(fonts[i]);
+        	    }
+        	  
+        
 		//Create the panels
 		homePanel = new HomePanel();
 		settingsPanel = new SettingsPanel();
