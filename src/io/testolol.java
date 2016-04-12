@@ -9,7 +9,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class testolol {
 
 	public static void main(String[] args) {
+		
+//		fileChooser();
 
+	}
+	
+	private static void fileChooser() {
+		
 		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception e) {}
 		JFileChooser fc = new JFileChooser();
 		

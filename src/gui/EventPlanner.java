@@ -8,11 +8,15 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+/**
+ * Header class for the program.
+ * 
+ * @author Caleb Choi, Connur Murphy, Matthew Sun
+ */
 public class EventPlanner {
 
-	public enum Panel
-	{
-			HOME, SETTINGS, STUDENT, DISPLAY_STUDENT, 
+	public enum Panel {
+		HOME, SETTINGS, STUDENT, DISPLAY_STUDENT, 
 	};
 
 	// Window width and height
@@ -26,42 +30,30 @@ public class EventPlanner {
 
 	public static void main(String[] args) throws Exception {
 
-		// Creation of frame
-		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		// System ook and feel
+		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-		
-        
-		  try {
-	            GraphicsEnvironment ge =
-	                GraphicsEnvironment.getLocalGraphicsEnvironment();
-	            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(EventPlanner.class.getResource("/font/font.ttf").toURI())));
-	       } catch (IOException|FontFormatException e) {
-	            //Handle exception
-	       }
-        
-		  try {
-	            GraphicsEnvironment ge =
-	                GraphicsEnvironment.getLocalGraphicsEnvironment();
-	            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(EventPlanner.class.getResource("/font/fontbold.ttf").toURI())));
-	       } catch (IOException|FontFormatException e) {
-	            //Handle exception
-	       }
-        
-        String fonts[] = 
-        	      GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		try {
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(EventPlanner.class.getResource("/font/font.ttf").toURI())));
+		} catch (IOException|FontFormatException e) {}
 
-        	    for ( int i = 0; i < fonts.length; i++ )
-        	    {
-        	      System.out.println(fonts[i]);
-        	    }
-        	  
-        
+		try {
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(EventPlanner.class.getResource("/font/fontbold.ttf").toURI())));
+		} catch (IOException|FontFormatException e) {}
+
+		String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+
+		for ( int i = 0; i < fonts.length; i++ ) {
+			System.out.println(fonts[i]);
+		}
+
 		//Create the panels
 		homePanel = new HomePanel();
 		settingsPanel = new SettingsPanel();
 		studentPanel = new StudentPanel();
 		studentDisplay = new DisplayStudentPanel();
-		
 
 		// Adds home panel
 		FRAME.getContentPane().add(homePanel);
@@ -77,7 +69,7 @@ public class EventPlanner {
 	/**
 	 * Used to change the panel currently displayed to the user
 	 * @param panel the type of panel to change to
-     */
+	 */
 	public static void setPanel(Panel panel)
 	{
 		FRAME.getContentPane().removeAll();

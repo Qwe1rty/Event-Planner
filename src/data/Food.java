@@ -46,9 +46,8 @@ public class Food {
 	// Gets list of foods in string list form - used for GUI
 	public static LinkedList<String> getMealOptions() {
 		LinkedList<String> foods = new LinkedList<String>();
-		for (int i = 0; i < FOODLIST.size(); i++) {
+		for (int i = 0; i < FOODLIST.size(); i++)
 			try {foods.append(FOODLIST.get(i).toString());} catch (Exception e) {}
-		}
 		return foods;
 	}
 	

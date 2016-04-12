@@ -345,7 +345,7 @@ public class StudentProfile extends JPanel {
 		moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
 		moreInfoTextArea.setFont(FIELD_FONT);
 		moreInfoTextArea.setBorder(textFieldBorder);
-		String moreInfo = student.getMoreInfo();
+		String moreInfo = student.getInfo();
 		if (moreInfo != null) {
 			moreInfoTextArea.setText(moreInfo);
 		}

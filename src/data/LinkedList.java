@@ -1,4 +1,12 @@
 package data;
+
+/**
+ * A generic Linked List object. Allows for a dynamic list of items
+ * with no size limit. Each item is singly linked with another child item.
+ *   
+ * @author Caleb Choi
+ * @param <E>
+ */
 public class LinkedList<E> {
 	
 	private Link<E> headLink;
@@ -99,6 +107,12 @@ public class LinkedList<E> {
 		
 	}
 	
+	/**
+	 * Generic link container. Holds the item, and another child link.
+	 * 
+	 * @author Caleb Choi
+	 * @param <E>
+	 */
 	private class Link<E> {
 		
 		private E item;
