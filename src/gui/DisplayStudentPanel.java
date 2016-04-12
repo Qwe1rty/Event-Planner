@@ -10,8 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -62,6 +61,8 @@ public class DisplayStudentPanel extends JPanel {
             {"232323434", "asdfd", "asd", "43", "44", "10652"}
     };
     private Vector<Vector<String>> rowData;
+
+    private int selectedRow, selectedCol;
 
     public DisplayStudentPanel() {
         setLayout(new GridBagLayout());
@@ -144,6 +145,9 @@ public class DisplayStudentPanel extends JPanel {
 
         add(nestedPanel);
 
+        //By default have the first row selected
+        selectedRow = 0;
+        selectedCol = 0;
     }
 
     /**
@@ -164,6 +168,23 @@ public class DisplayStudentPanel extends JPanel {
             EventPlanner.setPanel(EventPlanner.Panel.HOME);
         }
     }
+
+    //This object finds the row and column where the user has clicked
+    class TableMouseListener extends MouseAdapter {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            selectedRow = displayTable.rowAtPoint(e.getPoint());//get mouse-selected row
+            selectedCol = displayTable.columnAtPoint(e.getPoint());//get mouse-selected col
+
+            //If there is a double click open the student profile;
+            if(e.getClickCount() == 2)
+            {
+              //  EventPlanner.showStudentProfile(new StudentProfile());
+            }
+
+        }
+    };
 
     class AddButtonActionListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
