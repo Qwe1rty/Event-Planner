@@ -425,6 +425,8 @@ public class StudentPanel extends JPanel {
 			// These are not necessary so there is no need to check for validity
 			student.setPaidBy(paidByTextField.getText());
 
+			//TODO: uncomment
+			/*
 			try {
 				String tableNum = (String) tableNumComboBox.getSelectedItem();
 				if (tableNum != null && tableNum.length() > 0) {
@@ -435,7 +437,8 @@ public class StudentPanel extends JPanel {
 
 			} catch (NumberFormatException ex) {
 				invalidComponents += "Table Number\n";
-			}
+			}*/
+			student.setTableNum(1);
 
 			// These are not necessary so there is no need to check for validity
 			student.setAllergies(allergiesTextArea.getText());
@@ -459,7 +462,7 @@ public class StudentPanel extends JPanel {
 
 			// Let the user confirm only if the info entered is valid
 			if (valid) {
-				// TODO: add the new student to the global list of students
+				Student.addStudent(student);
 				EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
 			}
 		}
