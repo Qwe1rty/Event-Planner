@@ -19,7 +19,10 @@ package data;
  */
 public class Student {
 
-	// Fields
+	// *** Fields ***
+	// Global list of students
+	private static LinkedList<Student> STUDENT_LIST = new LinkedList<Student>();
+	// Instance fields
 	private String ID;
 	private String lastname;
 	private String firstname;
@@ -30,33 +33,113 @@ public class Student {
 	private int tableNum; // 0 means unassigned
 	private String phoneNum;
 	private String info;
+	private boolean formSubmitted;
 
-	// Constructors
+	// *** Constructors ***
 	// Fully declared student
 	// For optional values, if you want to make them invalid/empty, make then null (or 0 for table #)
-	public Student(String ID, String lastname, String firstname,
-			String food, boolean paid, String paidBy, String allergies,
+	public Student(String ID, String firstname, String lastname,
+			String food, boolean paid, String paidBy, boolean formSubmitted, String allergies,
 			int tableNum, String phoneNum, String info) throws InvalidStudentIDException, InvalidFoodException {
-		this(ID, lastname, firstname, food, paid, paidBy);
+		this(ID, firstname, lastname, food, paid, paidBy, formSubmitted);
 		if (allergies != null) setAllergies(allergies);
 		if (tableNum != 0) setTableNum(tableNum);
 		if (phoneNum != null) setPhoneNum(phoneNum);
 		if (info != null) setInfo(info);
 	}
 	// Student with only mandatory fields
-	public Student(String studentId, String lastname, String firstname,
-			String food, boolean paid, String paidBy) throws InvalidStudentIDException, InvalidFoodException {
-		setStudentId(studentId);
-		setLastname(lastname);
+	public Student(String studentId, String firstname, String lastname,
+			String food, boolean paid, String paidBy, boolean formSubmitted) throws InvalidStudentIDException, InvalidFoodException {
+		if (studentId.equals("000000000")) studentId = null;
+		else setStudentId(studentId);
 		setFirstname(firstname);
+		setLastname(lastname);
 		setFood(food);
 		setPaid(paid);
 		setPaidBy(paidBy);
+		setFormSubmitted(formSubmitted);
+	}
+	// Constructor for guests
+	public Student(String firstname, String lastname, String food, 
+			boolean paid, String paidBy, boolean formSubmitted) throws InvalidFoodException {
+		setFirstname(firstname);
+		setLastname(lastname);
+		setFood(food);
+		setPaid(paid);
+		setPaidBy(paidBy);
+		setFormSubmitted(formSubmitted);
 	}
 	// Blank student, useful for IO
 	public Student() {}
 
-	// Getters
+	// *** Static functions ***
+	// Wrapper functions for LinkedList
+	public static void addStudent(Student s) {STUDENT_LIST.append(s);}
+	public static void removeStudent(Student s) {STUDENT_LIST.remove(s);}
+	public static Student getStudent(int index) {return STUDENT_LIST.get(index);}
+	public static int listSize() {return STUDENT_LIST.size();}
+	/**
+	 * Sorts the global list of students by a given parameter. Ordering can be
+	 * selected. Sorting method is shellsort, with a gap of 1/2^k where k is the number
+	 * of iterations through the list
+	 * 
+	 * @param param Parameter to sort the students by
+	 * @param ascending Determines sorting order. If true, order is ascending
+	 */
+	public static void sort(Parameter param, boolean ascending) {
+		int length = STUDENT_LIST.size();
+		for (int gap = length / 2; gap > 0; gap /= 2) {
+			for (int wall = gap; wall < length; wall++) {
+				try {
+					// Feast your eyes upon the most disgusting code ever written by humankind
+					if (param == Parameter.STUDENT_ID) {
+						if (ascending) {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						} else {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						}
+					} else if (param == Parameter.FIRSTNAME) {
+						if (ascending) {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						} else {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						}
+					} else if (param == Parameter.LASTNAME) {
+						if (ascending) {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						} else {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						}
+						//					} else if (p == Parameter.ALLERGIES) {
+						//						if (ascending) {
+						//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) < 0); index -= gap)
+						//								ll.swap(index - gap, index);
+						//						} else {
+						//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) > 0); index -= gap)
+						//								ll.swap(index - gap, index);
+						//						}
+						//					} else if (p == Parameter.TABLE_NUMBER) {
+						//						if (ascending) {
+						//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() < (ll.get(index - gap)).getTableNum()); index -= gap)
+						//								ll.swap(index - gap, index);
+						//						} else {
+						//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() > (ll.get(index - gap)).getTableNum()); index -= gap)
+						//								ll.swap(index - gap, index);
+						//						}
+					} else return;
+
+				} catch (Exception e) {System.out.println("nope");}
+			}
+		}
+	}
+
+	// *** Getters ***
 	public String getID() {return ID;}
 	public String getLastname() {return lastname;}
 	public String getFirstname() {return firstname;}
@@ -67,8 +150,9 @@ public class Student {
 	public int getTableNum() {return tableNum;}
 	public String getPhoneNum() {return phoneNum;}
 	public String getInfo() {return info;}
+	public boolean isFormSubmitted() {return formSubmitted;}
 
-	// Setters
+	// *** Setters ***
 	public void setStudentId(String studentId) throws InvalidStudentIDException {
 		if (studentId.length() != 9) throw new InvalidStudentIDException("Length of ID is not equal to 9");
 		else if (studentId.matches("\\D")) throw new InvalidStudentIDException("ID cannot contain characters");
@@ -86,11 +170,12 @@ public class Student {
 	public void setTableNum(int tableNum) {this.tableNum = tableNum;}
 	public void setPhoneNum(String phoneNum) {this.phoneNum = phoneNum;}
 	public void setInfo(String info) {this.info = info;}
+	public void setFormSubmitted(boolean formSubmitted) {this.formSubmitted = formSubmitted;}
 
+	// *** Exceptions ***
 	public class InvalidStudentIDException extends Exception {
 		public InvalidStudentIDException(String message) {super(message);}
 	}
-
 	public class InvalidFoodException extends Exception {
 		public InvalidFoodException(String message) {super(message);}
 	}
