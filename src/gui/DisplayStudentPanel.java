@@ -135,12 +135,15 @@ public class DisplayStudentPanel extends JPanel {
 
 
         displayTable.setPreferredScrollableViewportSize(new Dimension(1100, 500));
+        displayTable.setRowHeight(30);
+        displayTable.setFont(FIELD_FONT);
+        displayTable.getTableHeader().setFont(TEXT_FONT);
         JScrollPane scrollPane = new JScrollPane(displayTable);
 
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 5;
-        c.insets = new Insets(20, 0, 0, 0);
+        c.insets = new Insets(15, 0, 0, 0);
         nestedPanel.add(scrollPane, c);
 
         add(nestedPanel);
@@ -194,7 +197,7 @@ public class DisplayStudentPanel extends JPanel {
 
     class DeleteButtonActionListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-
+        	
         }
     }
 }
