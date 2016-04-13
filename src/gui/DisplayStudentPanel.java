@@ -166,7 +166,7 @@ public class DisplayStudentPanel extends JPanel {
         */
 
         displayTable.setModel(model);
-
+        displayTable.addMouseListener(new TableMouseListener());
         displayTable.setPreferredScrollableViewportSize(new Dimension(1100, 500));
         displayTable.setRowHeight(30);
         displayTable.setFont(FIELD_FONT);
@@ -258,9 +258,13 @@ public class DisplayStudentPanel extends JPanel {
                 String firstName = (String) displayTable.getValueAt(selectedRow, 1);
                 String lastName = (String) displayTable.getValueAt(selectedRow, 2);
                 String paidValue = (String) displayTable.getValueAt(selectedRow, 3);
-                boolean paid = paidValue.equalsIgnoreCase("Yes") ? true : false;
+                boolean paid = false;
+                if(paidValue.equalsIgnoreCase("Yes"))
+                {
+                    paid = true;
+                }
                 String chosenFood = (String) displayTable.getValueAt(selectedRow, 4);
-                int tableNum = Integer.parseInt((String) displayTable.getValueAt(selectedRow, 5));
+                int tableNum =  (int)displayTable.getValueAt(selectedRow, 5);
 
                 //Go through all the students and see if that one is the same as the one selected
                 for (int i = 0; i < Student.listSize(); ++i) {
