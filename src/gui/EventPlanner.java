@@ -54,7 +54,7 @@ public class EventPlanner {
 		settingsPanel = new SettingsPanel();
 		studentPanel = new StudentPanel();
 		studentDisplay = new DisplayStudentPanel();
-		//tableDisplay  = new TableDisplayPanel();
+		tableDisplay  = new TableDisplayPanel();
 
 		// Adds home panel
 		FRAME.getContentPane().add(homePanel);
