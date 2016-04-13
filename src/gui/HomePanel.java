@@ -129,8 +129,9 @@ public class HomePanel extends JPanel {
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			removeAll();
-			repaint();
+			EventPlanner.setPanel(EventPlanner.Panel.TABLE_DISPLAY);
+//			removeAll();
+//			repaint();
 		}
 	}
 	class SettingsButtonListener implements ActionListener
