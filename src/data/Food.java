@@ -20,7 +20,7 @@ public class Food {
 	
 	// *** Static functions ***
 	// Add and remove from available foods
-	public static void addFood(Food f) {FOODLIST.append(f);}
+	public static void appendFood(Food f) {FOODLIST.append(f);}
 	public static boolean removeFood(Food f) {
 		for (int i = 0; i < FOODLIST.size(); i++) {
 			if (FOODLIST.get(i).toString().equals(f.toString())) {
@@ -39,14 +39,16 @@ public class Food {
 		}
 		return false;
 	}
+	// Insert a food index by item. Indexes start at 0
+	public static void insert(int index, Food f) {FOODLIST.insert(index, f);}
+	// Get an item by index
+	public static Food get(int index) {return FOODLIST.get(index);}
 	// Remove all foods from the food list
 	public static void removeAll() {FOODLIST.clear();}
 	// Checks whether food exists in list
 	public static boolean isValidFood(Food f) {return FOODLIST.indexOf(f) == -1;}
 	// Return size of foodlist
 	public static int listSize() {return FOODLIST.size();}
-	// Gets an item
-	public static Food get(int i) {return FOODLIST.get(i);}
 	
 	
 	// *** Instance functions ***

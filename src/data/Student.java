@@ -78,7 +78,67 @@ public class Student {
 	public static void removeStudent(Student s) {STUDENT_LIST.remove(s);}
 	public static Student getStudent(int index) {return STUDENT_LIST.get(index);}
 	public static int listSize() {return STUDENT_LIST.size();}
-	
+	/**
+	 * Sorts the global list of students by a given parameter. Ordering can be
+	 * selected. Sorting method is shellsort, with a gap of 1/2^k where k is the number
+	 * of iterations through the list
+	 * 
+	 * @param param Parameter to sort the students by
+	 * @param ascending Determines sorting order. If true, order is ascending
+	 */
+	public static void sort(Parameter param, boolean ascending) {
+		int length = STUDENT_LIST.size();
+		for (int gap = length / 2; gap > 0; gap /= 2) {
+			for (int wall = gap; wall < length; wall++) {
+				try {
+					// Feast your eyes upon the most disgusting code ever written by humankind
+					if (param == Parameter.STUDENT_ID) {
+						if (ascending) {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						} else {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						}
+					} else if (param == Parameter.FIRSTNAME) {
+						if (ascending) {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						} else {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						}
+					} else if (param == Parameter.LASTNAME) {
+						if (ascending) {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						} else {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						}
+						//					} else if (p == Parameter.ALLERGIES) {
+						//						if (ascending) {
+						//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) < 0); index -= gap)
+						//								ll.swap(index - gap, index);
+						//						} else {
+						//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) > 0); index -= gap)
+						//								ll.swap(index - gap, index);
+						//						}
+						//					} else if (p == Parameter.TABLE_NUMBER) {
+						//						if (ascending) {
+						//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() < (ll.get(index - gap)).getTableNum()); index -= gap)
+						//								ll.swap(index - gap, index);
+						//						} else {
+						//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() > (ll.get(index - gap)).getTableNum()); index -= gap)
+						//								ll.swap(index - gap, index);
+						//						}
+					} else return;
+
+				} catch (Exception e) {System.out.println("nope");}
+			}
+		}
+	}
+
 	// *** Getters ***
 	public String getID() {return ID;}
 	public String getLastname() {return lastname;}

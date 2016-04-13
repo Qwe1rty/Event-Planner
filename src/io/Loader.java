@@ -45,12 +45,12 @@ public final class Loader {
 	 * @throws FileNotFoundException 
 	 * @author Caleb Choi
 	 */
-	public static LinkedList<Student> parseFile() throws FileNotFoundException {
+	public static void parseFile() throws FileNotFoundException {
 
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
 		int selection = fc.showOpenDialog(EventPlanner.FRAME);
-		if (selection != JFileChooser.APPROVE_OPTION) return null;
+		if (selection != JFileChooser.APPROVE_OPTION) return;
 
 		// Creates input stream
 		try (BufferedReader br = new BufferedReader(new FileReader(fc.getSelectedFile()))) {
@@ -64,7 +64,7 @@ public final class Loader {
 			// Foods
 			int numMealOptions = Integer.parseInt(br.readLine());
 			for (int option = 0; option < numMealOptions; ++option)
-				Food.addFood(new Food(br.readLine()));
+				Food.appendFood(new Food(br.readLine()));
 
 			Settings.setNumStudents(Integer.parseInt(br.readLine()));
 			LinkedList<Student> students = new LinkedList<Student>();
@@ -108,11 +108,11 @@ public final class Loader {
 			}
 
 			// Returns list of students. Default sorting order is by Firstname
-			return Sort.sort(students, Parameter.FIRSTNAME, true);
+			Student.sort(Parameter.FIRSTNAME, true);
 		}
 
-		catch (FileNotFoundException e) {return null;}
-		catch (IOException e) {return null;}
+		catch (FileNotFoundException e) {return;}
+		catch (IOException e) {return;}
 	}
 
 	/**

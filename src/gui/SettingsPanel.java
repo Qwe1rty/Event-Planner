@@ -137,18 +137,18 @@ public class SettingsPanel extends JPanel
 		columnNames.add("Food");
 
 		// /Find the already defined foods
-		Food.addFood(new Food("Steak and Potatoes"));
-		Food.addFood(new Food("Rocks and Paper"));
-		Food.addFood(new Food("Vegetarian Options"));
-		Food.addFood(new Food("Connor Murphy"));
-		Food.addFood(new Food("Matthew Sun"));
-		Food.addFood(new Food("Caleb Choi"));
-		Food.addFood(new Food("Mango Bay"));
-		Food.addFood(new Food("Mr Mangat"));
-		Food.addFood(new Food("Generic Food Item"));
-		Food.addFood(new Food("More Food Items"));
-		Food.addFood(new Food("Placeholder Food Item"));
-		Food.addFood(new Food("Item of Food"));
+		Food.appendFood(new Food("Steak and Potatoes"));
+		Food.appendFood(new Food("Rocks and Paper"));
+		Food.appendFood(new Food("Vegetarian Options"));
+		Food.appendFood(new Food("Connor Murphy"));
+		Food.appendFood(new Food("Matthew Sun"));
+		Food.appendFood(new Food("Caleb Choi"));
+		Food.appendFood(new Food("Mango Bay"));
+		Food.appendFood(new Food("Mr Mangat"));
+		Food.appendFood(new Food("Generic Food Item"));
+		Food.appendFood(new Food("More Food Items"));
+		Food.appendFood(new Food("Placeholder Food Item"));
+		Food.appendFood(new Food("Item of Food"));
 		LinkedList<String> food = Food.getMealOptions();
 		options = new Vector<>();
 
@@ -328,7 +328,7 @@ public class SettingsPanel extends JPanel
 			// Only add the item if the String entered is valid
 			if (newFoodItem != null && newFoodItem.length() > 0)
 			{
-				Food.addFood(new Food(newFoodItem));
+				Food.appendFood(new Food(newFoodItem));
 	
 				// Add the food item
 				Vector<String> foodItem = new Vector<>();
