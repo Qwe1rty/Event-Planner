@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -27,14 +28,16 @@ public class DisplayStudentPanel extends JPanel {
     private final String BACK_BUTTON_TEXT = "Back";
     private final String ADD_BUTTON_TEXT = "Add";
     private final String REMOVE_BUTTON_TEXT = "Delete";
+    private final String SEARCH_BUTTON_TEXT = "Search";
 
     private final int TEXT_AREA_ROWS = 17;
     private final int TEXT_AREA_COLS = 70;
-    private final int TEXT_FIELD_COLS = 3;
+    private final int TEXT_FIELD_COLS = 15;
 
-    private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
-    private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 26);
-    private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 22);
+    private final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
+    private final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 26);
+    private final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 22);
+    private final Font SEARCH_FONT = new Font ("Tw Cen MT", Font.PLAIN, 42);
 
     private final Dimension BUTTON_SIZE = new Dimension(108, 50);
 
@@ -43,6 +46,11 @@ public class DisplayStudentPanel extends JPanel {
     private JButton backButton;
     private JButton addButton;
     private JButton deleteButton;
+    private JButton searchButton;
+    
+    private String searchItem;
+    
+    private JTextField searchBar;
 
     private JLabel studentNum;
     private JLabel firstName;
@@ -61,7 +69,6 @@ public class DisplayStudentPanel extends JPanel {
             {"232323434", "asdfd", "asd", "43", "44", "10652"}
     };
     private Vector<Vector<String>> rowData;
-
     private int selectedRow, selectedCol;
 
     public DisplayStudentPanel() {
@@ -113,7 +120,7 @@ public class DisplayStudentPanel extends JPanel {
         c.gridy = 0;
         nestedPanel.add(addButton, c);
 
-        // Add Button
+        // Delete Button
         deleteButton = new JButton(REMOVE_BUTTON_TEXT);
         deleteButton.addActionListener(new DeleteButtonActionListener());
         deleteButton.setBackground(new Color(243, 69, 65));
@@ -125,6 +132,20 @@ public class DisplayStudentPanel extends JPanel {
         c.gridx = 2;
         c.gridy = 0;
         nestedPanel.add(deleteButton, c);
+        
+        // Search Button
+        searchButton = new JButton(SEARCH_BUTTON_TEXT);
+        searchButton.addActionListener(new SearchButtonActionListener());
+        searchButton.setBackground(new Color(3, 159, 244));
+        searchButton.setPreferredSize(BUTTON_SIZE);
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setFont(BUTTON_FONT);
+        
+        // Position the search button next to the delete button
+        c.gridx = 3;
+        c.gridy = 0;
+        nestedPanel.add(searchButton, c);
+        
 
         //TODO: Change the data in the table to the loaded data
         displayTable = new JTable(placeholderData, COLUMN_NAMES) {
@@ -198,6 +219,21 @@ public class DisplayStudentPanel extends JPanel {
     class DeleteButtonActionListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
         	
+        }
+    }
+    
+    // TODO: 2016-04-12 Implement actual search functions
+    class SearchButtonActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent arg0) {
+        	// A dialog box appears that prompts user input
+			searchItem = JOptionPane.showInputDialog(EventPlanner.FRAME,
+					"", "Search", JOptionPane.PLAIN_MESSAGE);
+			
+			if (searchItem != null && searchItem.length() > 0)
+			{
+				System.out.println("SEARCH FOR " + searchItem);
+			}
+			
         }
     }
 }
