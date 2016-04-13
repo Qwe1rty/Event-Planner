@@ -92,6 +92,9 @@ public final class Loader {
 				s.setPaid(paid);
 				// Paid by
 				s.setPaidBy(st.nextToken());
+				// Form submitted
+				boolean form = st.nextToken().equals("true");
+				s.setFormSubmitted(form);
 
 				// Allergies and table number
 				while (st.hasMoreTokens()) {
@@ -170,6 +173,7 @@ public final class Loader {
 				student += ll.get(i).getPaidBy() + ",";
 				student += ll.get(i).isPaid() + ",";
 				student += ll.get(i).getPaidBy();
+				student += ll.get(i).isFormSubmitted();
 				
 				if (ll.get(i).getAllergies() != null) {
 					student += ",A" + ll.get(i).getAllergies();

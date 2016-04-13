@@ -30,28 +30,41 @@ public class Student {
 	private int tableNum; // 0 means unassigned
 	private String phoneNum;
 	private String info;
+	private boolean formSubmitted;
 
 	// Constructors
 	// Fully declared student
 	// For optional values, if you want to make them invalid/empty, make then null (or 0 for table #)
-	public Student(String ID, String lastname, String firstname,
-			String food, boolean paid, String paidBy, String allergies,
+	public Student(String ID, String firstname, String lastname,
+			String food, boolean paid, String paidBy, boolean formSubmitted, String allergies,
 			int tableNum, String phoneNum, String info) throws InvalidStudentIDException, InvalidFoodException {
-		this(ID, lastname, firstname, food, paid, paidBy);
+		this(ID, firstname, lastname, food, paid, paidBy, formSubmitted);
 		if (allergies != null) setAllergies(allergies);
 		if (tableNum != 0) setTableNum(tableNum);
 		if (phoneNum != null) setPhoneNum(phoneNum);
 		if (info != null) setInfo(info);
 	}
 	// Student with only mandatory fields
-	public Student(String studentId, String lastname, String firstname,
-			String food, boolean paid, String paidBy) throws InvalidStudentIDException, InvalidFoodException {
-		setStudentId(studentId);
-		setLastname(lastname);
+	public Student(String studentId, String firstname, String lastname,
+			String food, boolean paid, String paidBy, boolean formSubmitted) throws InvalidStudentIDException, InvalidFoodException {
+		if (studentId.equals("000000000")) studentId = null;
+		else setStudentId(studentId);
 		setFirstname(firstname);
+		setLastname(lastname);
 		setFood(food);
 		setPaid(paid);
 		setPaidBy(paidBy);
+		setFormSubmitted(formSubmitted);
+	}
+	// Constructor for guests
+	public Student(String firstname, String lastname, String food, 
+			boolean paid, String paidBy, boolean formSubmitted) throws InvalidFoodException {
+		setFirstname(firstname);
+		setLastname(lastname);
+		setFood(food);
+		setPaid(paid);
+		setPaidBy(paidBy);
+		setFormSubmitted(formSubmitted);
 	}
 	// Blank student, useful for IO
 	public Student() {}
@@ -67,6 +80,7 @@ public class Student {
 	public int getTableNum() {return tableNum;}
 	public String getPhoneNum() {return phoneNum;}
 	public String getInfo() {return info;}
+	public boolean isFormSubmitted() {return formSubmitted;}
 
 	// Setters
 	public void setStudentId(String studentId) throws InvalidStudentIDException {
@@ -86,6 +100,7 @@ public class Student {
 	public void setTableNum(int tableNum) {this.tableNum = tableNum;}
 	public void setPhoneNum(String phoneNum) {this.phoneNum = phoneNum;}
 	public void setInfo(String info) {this.info = info;}
+	public void setFormSubmitted(boolean formSubmitted) {this.formSubmitted = formSubmitted;}
 
 	public class InvalidStudentIDException extends Exception {
 		public InvalidStudentIDException(String message) {super(message);}
