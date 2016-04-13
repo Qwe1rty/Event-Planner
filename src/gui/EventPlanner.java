@@ -84,6 +84,7 @@ public class EventPlanner {
 		}
 		else if(panel == Panel.STUDENT)
 		{
+			((StudentPanel) studentPanel).refresh();
 			FRAME.add(studentPanel);
 		}
 		else if (panel == Panel.DISPLAY_STUDENT)
