@@ -19,7 +19,10 @@ package data;
  */
 public class Student {
 
-	// Fields
+	// *** Fields ***
+	// Global list of students
+	private static LinkedList<Student> STUDENT_LIST = new LinkedList<Student>();
+	// Instance fields
 	private String ID;
 	private String lastname;
 	private String firstname;
@@ -32,7 +35,7 @@ public class Student {
 	private String info;
 	private boolean formSubmitted;
 
-	// Constructors
+	// *** Constructors ***
 	// Fully declared student
 	// For optional values, if you want to make them invalid/empty, make then null (or 0 for table #)
 	public Student(String ID, String firstname, String lastname,
@@ -69,7 +72,14 @@ public class Student {
 	// Blank student, useful for IO
 	public Student() {}
 
-	// Getters
+	// *** Static functions ***
+	// Wrapper functions for LinkedList
+	public static void addStudent(Student s) {STUDENT_LIST.append(s);}
+	public static void removeStudent(Student s) {STUDENT_LIST.remove(s);}
+	public static Student getStudent(int index) {return STUDENT_LIST.get(index);}
+	public static int listSize() {return STUDENT_LIST.size();}
+	
+	// *** Getters ***
 	public String getID() {return ID;}
 	public String getLastname() {return lastname;}
 	public String getFirstname() {return firstname;}
@@ -82,7 +92,7 @@ public class Student {
 	public String getInfo() {return info;}
 	public boolean isFormSubmitted() {return formSubmitted;}
 
-	// Setters
+	// *** Setters ***
 	public void setStudentId(String studentId) throws InvalidStudentIDException {
 		if (studentId.length() != 9) throw new InvalidStudentIDException("Length of ID is not equal to 9");
 		else if (studentId.matches("\\D")) throw new InvalidStudentIDException("ID cannot contain characters");
@@ -102,10 +112,10 @@ public class Student {
 	public void setInfo(String info) {this.info = info;}
 	public void setFormSubmitted(boolean formSubmitted) {this.formSubmitted = formSubmitted;}
 
+	// *** Exceptions ***
 	public class InvalidStudentIDException extends Exception {
 		public InvalidStudentIDException(String message) {super(message);}
 	}
-
 	public class InvalidFoodException extends Exception {
 		public InvalidFoodException(String message) {super(message);}
 	}

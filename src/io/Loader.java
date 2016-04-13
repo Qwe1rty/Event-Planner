@@ -152,10 +152,10 @@ public final class Loader {
 			bw.write(String.valueOf(Settings.getTicketCost())); bw.newLine();
 
 			// Prints all foods
-			bw.write(Food.FOODLIST.size()); bw.newLine();
-			for (int i = 0; i < Food.FOODLIST.size(); i++) {
+			bw.write(Food.listSize()); bw.newLine();
+			for (int i = 0; i < Food.listSize(); i++) {
 				try {
-					bw.write(Food.FOODLIST.get(i).toString());
+					bw.write(Food.get(i).toString());
 					bw.newLine();
 				} catch (Exception e) {}
 			}

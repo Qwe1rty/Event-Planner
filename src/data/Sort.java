@@ -17,53 +17,43 @@ public class Sort {
 					// Feast your eyes upon the most disgusting code ever written by humankind
 					if (param == Parameter.STUDENT_ID) {
 						if (ascending) {
-							for (int index = wall; index >= gap && ((list.get(index)).getID().compareTo((list.get(index - gap)).getID()) < 0); index -= gap) {
+							for (int index = wall; index >= gap && ((list.get(index)).getID().compareTo((list.get(index - gap)).getID()) < 0); index -= gap)
 								list.swap(index - gap, index);
-							}
 						} else {
-							for (int index = wall; index >= gap && ((list.get(index)).getID().compareTo((list.get(index - gap)).getID()) > 0); index -= gap) {
+							for (int index = wall; index >= gap && ((list.get(index)).getID().compareTo((list.get(index - gap)).getID()) > 0); index -= gap)
 								list.swap(index - gap, index);
-							}
 						}
 					} else if (param == Parameter.FIRSTNAME) {
 						if (ascending) {
-							for (int index = wall; index >= gap && ((list.get(index)).getFirstname().compareTo((list.get(index - gap)).getFirstname()) < 0); index -= gap) {
+							for (int index = wall; index >= gap && ((list.get(index)).getFirstname().compareTo((list.get(index - gap)).getFirstname()) < 0); index -= gap)
 								list.swap(index - gap, index);
-							}
 						} else {
-							for (int index = wall; index >= gap && ((list.get(index)).getFirstname().compareTo((list.get(index - gap)).getFirstname()) > 0); index -= gap) {
+							for (int index = wall; index >= gap && ((list.get(index)).getFirstname().compareTo((list.get(index - gap)).getFirstname()) > 0); index -= gap)
 								list.swap(index - gap, index);
-							}
 						}
 					} else if (param == Parameter.LASTNAME) {
 						if (ascending) {
-							for (int index = wall; index >= gap && ((list.get(index)).getLastname().compareTo((list.get(index - gap)).getLastname()) < 0); index -= gap) {
+							for (int index = wall; index >= gap && ((list.get(index)).getLastname().compareTo((list.get(index - gap)).getLastname()) < 0); index -= gap)
 								list.swap(index - gap, index);
-							}
 						} else {
-							for (int index = wall; index >= gap && ((list.get(index)).getLastname().compareTo((list.get(index - gap)).getLastname()) > 0); index -= gap) {
+							for (int index = wall; index >= gap && ((list.get(index)).getLastname().compareTo((list.get(index - gap)).getLastname()) > 0); index -= gap)
 								list.swap(index - gap, index);
-							}
 						}
 //					} else if (p == Parameter.ALLERGIES) {
 //						if (ascending) {
-//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) < 0); index -= gap) {
+//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) < 0); index -= gap)
 //								ll.swap(index - gap, index);
-//							}
 //						} else {
-//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) > 0); index -= gap) {
+//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) > 0); index -= gap)
 //								ll.swap(index - gap, index);
-//							}
 //						}
 //					} else if (p == Parameter.TABLE_NUMBER) {
 //						if (ascending) {
-//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() < (ll.get(index - gap)).getTableNum()); index -= gap) {
+//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() < (ll.get(index - gap)).getTableNum()); index -= gap)
 //								ll.swap(index - gap, index);
-//							}
 //						} else {
-//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() > (ll.get(index - gap)).getTableNum()); index -= gap) {
+//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() > (ll.get(index - gap)).getTableNum()); index -= gap)
 //								ll.swap(index - gap, index);
-//							}
 //						}
 					} else break;
 					
