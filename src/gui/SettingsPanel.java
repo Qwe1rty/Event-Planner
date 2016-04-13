@@ -137,18 +137,6 @@ public class SettingsPanel extends JPanel
 		columnNames.add("Food");
 
 		// /Find the already defined foods
-		Food.appendFood(new Food("Steak and Potatoes"));
-		Food.appendFood(new Food("Rocks and Paper"));
-		Food.appendFood(new Food("Vegetarian Options"));
-		Food.appendFood(new Food("Connor Murphy"));
-		Food.appendFood(new Food("Matthew Sun"));
-		Food.appendFood(new Food("Caleb Choi"));
-		Food.appendFood(new Food("Mango Bay"));
-		Food.appendFood(new Food("Mr Mangat"));
-		Food.appendFood(new Food("Generic Food Item"));
-		Food.appendFood(new Food("More Food Items"));
-		Food.appendFood(new Food("Placeholder Food Item"));
-		Food.appendFood(new Food("Item of Food"));
 		LinkedList<String> food = Food.getMealOptions();
 		options = new Vector<>();
 
@@ -257,9 +245,11 @@ public class SettingsPanel extends JPanel
 		pplPerTable.setFont(TEXT_FONT);
 
 		numTablesField = new JTextField(TEXT_FIELD_COLS);
+		numTablesField.addActionListener(new NumberTablesActionListener());
 		numTablesField.setFont(FIELD_FONT);
 
 		pplPerTableField = new JTextField(TEXT_FIELD_COLS);
+		pplPerTableField.addActionListener(new PeoplePerTableActionListener());
 		pplPerTableField.setFont(FIELD_FONT);
 
 		c.insets = new Insets(5, 0, 5, 5);
@@ -445,4 +435,23 @@ public class SettingsPanel extends JPanel
 
 		}
 	}
+	
+	class NumberTablesActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			Settings.setNumTables(Integer.parseInt(numTablesField.getText()));
+			System.out.println(Settings.getNumTables() + " Tables");
+		}
+	}
+	
+	class 	PeoplePerTableActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			Settings.setTableSize(Integer.parseInt(pplPerTable.getText()));
+			System.out.println(Settings.getNumTables() + " People per table");
+		}
+	}
+
 }
