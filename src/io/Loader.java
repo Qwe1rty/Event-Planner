@@ -18,7 +18,6 @@ import data.Food;
 import data.LinkedList;
 import data.Parameter;
 import data.Settings;
-import data.Sort;
 import data.Student;
 import data.Student.InvalidFoodException;
 import data.Student.InvalidStudentIDException;
@@ -67,7 +66,8 @@ public final class Loader {
 				Food.appendFood(new Food(br.readLine()));
 
 			Settings.setNumStudents(Integer.parseInt(br.readLine()));
-			LinkedList<Student> students = new LinkedList<Student>();
+
+			// Adds all students
 			for(int i = 0; i < Settings.getNumStudents(); ++i) {
 
 				StringTokenizer st = new StringTokenizer(br.readLine(), ",");
@@ -104,7 +104,7 @@ public final class Loader {
 				}
 
 				// add student to list
-				students.append(s);
+				Student.addStudent(s);
 			}
 
 			// Returns list of students. Default sorting order is by Firstname
@@ -190,9 +190,7 @@ public final class Loader {
 			// Close stream
 			bw.close();
 
-		} catch (IOException ioe) {
-
-		}
+		} catch (IOException ioe) {return;}
 
 	}
 

@@ -81,7 +81,8 @@ public class Student {
 	/**
 	 * Sorts the global list of students by a given parameter. Ordering can be
 	 * selected. Sorting method is shellsort, with a gap of 1/2^k where k is the number
-	 * of iterations through the list
+	 * of iterations through the list. It is worth noting that not all parameters
+	 * are searchable.
 	 * 
 	 * @param param Parameter to sort the students by
 	 * @param ascending Determines sorting order. If true, order is ascending
@@ -92,15 +93,15 @@ public class Student {
 			for (int wall = gap; wall < length; wall++) {
 				try {
 					// Feast your eyes upon the most disgusting code ever written by humankind
-					if (param == Parameter.STUDENT_ID) {
-						if (ascending) {
-							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						} else {
-							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						}
-					} else if (param == Parameter.FIRSTNAME) {
+//					if (param == Parameter.STUDENT_ID) {
+//						if (ascending) {
+//							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
+//								STUDENT_LIST.swap(index - gap, index);
+//						} else {
+//							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
+//								STUDENT_LIST.swap(index - gap, index);
+//						}
+					if (param == Parameter.FIRSTNAME) {
 						if (ascending) {
 							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) < 0); index -= gap)
 								STUDENT_LIST.swap(index - gap, index);
@@ -137,6 +138,42 @@ public class Student {
 				} catch (Exception e) {System.out.println("nope");}
 			}
 		}
+	}
+	/**
+	 * A search function that will return matched students in a new list,
+	 * given a full list of students. Ordering of the new list is the same
+	 * as the original.
+	 * 
+	 * @param param Parameter to search students by
+	 * @param search The user's search term to match by
+	 * @return newList New matched list of students
+	 */
+	public static LinkedList<Student> search(Parameter param, String search) {
+		
+		// New list of students with only matched items
+		LinkedList<Student> newList = new LinkedList<Student>();
+		
+		// Through full list of students
+		for (int i = 0; i < STUDENT_LIST.size(); i++) {
+			
+			// Filters by parameter. If search string matches, it's added to new list
+			if (param == Parameter.STUDENT_ID) {
+				if (STUDENT_LIST.get(i).getID() != null && STUDENT_LIST.get(i).getID().contains(search)) newList.append(STUDENT_LIST.get(i));
+			} else if (param == Parameter.FIRSTNAME) {
+				if (STUDENT_LIST.get(i).getFirstname().contains(search)) newList.append(STUDENT_LIST.get(i));
+			} else if (param == Parameter.LASTNAME) {
+				if (STUDENT_LIST.get(i).getLastname().contains(search)) newList.append(STUDENT_LIST.get(i));
+			} else if (param == Parameter.ALLERGIES) {
+				if (STUDENT_LIST.get(i).getAllergies() != null && STUDENT_LIST.get(i).getAllergies().contains(search)) newList.append(STUDENT_LIST.get(i));
+			} else if (param == Parameter.FOODTYPE) {
+				if (STUDENT_LIST.get(i).getFood().toString().contains(search)) newList.append(STUDENT_LIST.get(i));
+			} else if (param == Parameter.TABLE_NUMBER) {
+				if (STUDENT_LIST.get(i).getTableNum() != 0 && String.valueOf(STUDENT_LIST.get(i).getTableNum()).contains(search)) newList.append(STUDENT_LIST.get(i));
+			}
+			
+		}
+		// Returns new list
+		return newList;
 	}
 
 	// *** Getters ***

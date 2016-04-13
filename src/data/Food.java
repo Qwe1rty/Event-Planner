@@ -39,6 +39,21 @@ public class Food {
 		}
 		return false;
 	}
+	// Gets the index of a type of food. -1 means it isn't found
+	public static int indexOf(String s) {
+		// This is going to have to be manually iterated
+		for (int i = 0; i < FOODLIST.size(); i++) {
+			if (FOODLIST.get(i).toString().equals(s)) return i;
+		}
+		return -1;
+	}
+	public static int indexOf(Food f) {
+		// This is going to have to be manually iterated
+		for (int i = 0; i < FOODLIST.size(); i++) {
+			if (FOODLIST.get(i).toString().equals(f.toString())) return i;
+		}
+		return -1;
+	}
 	// Insert a food index by item. Indexes start at 0
 	public static void insert(int index, Food f) {FOODLIST.insert(index, f);}
 	// Get an item by index
