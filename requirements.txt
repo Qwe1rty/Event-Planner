@@ -7,7 +7,22 @@ Who Paid for Ticket
 Food Choice
 Allergies
 Tables
+If the form was submitted
+Initials for who entered the student data
 
 Output:
 A nice looking list of all the information
 Probably should use the system look and feel bc Java's one looks disgusting
+
+Tables:
+Groups are not guaranteed unless the group is the same size as the max people at the table
+Groups do get split and mashed together to make sure tables are full
+People without groups are randomly assigned to where there is space
+The number of tables is fixed
+Number of people at a table is between 8-10
+Teachers are assigned to 3 tables (generally) but not to a specific table. They just sit at one of the 3 tables
+
+
+Guests:
+Basically students with out an id and their paid by field filled out
+The student who brings the guest pays for them and the guest
