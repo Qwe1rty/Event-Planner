@@ -54,7 +54,7 @@ public class EventPlanner {
 		settingsPanel = new SettingsPanel();
 		studentPanel = new StudentPanel();
 		studentDisplay = new DisplayStudentPanel();
-		tableDisplay  = new TableDisplayPanel();
+		//tableDisplay  = new TableDisplayPanel();
 
 		// Adds home panel
 		FRAME.getContentPane().add(homePanel);
@@ -89,6 +89,7 @@ public class EventPlanner {
 		}
 		else if (panel == Panel.DISPLAY_STUDENT)
 		{
+			((DisplayStudentPanel)studentDisplay).refresh();
 			FRAME.add(studentDisplay);
 		}
 		else if (panel == Panel.TABLE_DISPLAY)
