@@ -16,14 +16,14 @@ import javax.swing.*;
 public class EventPlanner {
 
 	public enum Panel {
-		HOME, SETTINGS, STUDENT, DISPLAY_STUDENT, 
+		HOME, SETTINGS, STUDENT, DISPLAY_STUDENT, TABLE_DISPLAY
 	};
 
 	// Window width and height
 	public static final int WINDOW_HEIGHT = 720;
 	public static final int WINDOW_WIDTH = 1280;
 
-	private static JPanel homePanel, settingsPanel, studentPanel, studentDisplay;
+	private static JPanel homePanel, settingsPanel, studentPanel, studentDisplay, tableDisplay;
 
 	// Program frame
 	public static final JFrame FRAME = new JFrame("RHHS Event Planner");
@@ -54,6 +54,7 @@ public class EventPlanner {
 		settingsPanel = new SettingsPanel();
 		studentPanel = new StudentPanel();
 		studentDisplay = new DisplayStudentPanel();
+		tableDisplay  = new TableDisplayPanel();
 
 		// Adds home panel
 		FRAME.getContentPane().add(homePanel);
@@ -88,6 +89,10 @@ public class EventPlanner {
 		else if (panel == Panel.DISPLAY_STUDENT)
 		{
 			FRAME.add(studentDisplay);
+		}
+		else if (panel == Panel.TABLE_DISPLAY)
+		{
+			FRAME.add(tableDisplay);
 		}
 		FRAME.revalidate();
 		FRAME.repaint();
