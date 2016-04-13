@@ -335,7 +335,7 @@ public class SettingsPanel extends JPanel
 				//Remove the old item and add the new item
 				int index = Food.indexOf(new Food(value));
 				Food.removeFood(value);
-				Food.addFood(new Food(result), index);
+				Food.insert(index, new Food(result));
 			}
 		}
 	}
