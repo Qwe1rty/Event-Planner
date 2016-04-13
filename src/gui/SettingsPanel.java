@@ -188,7 +188,15 @@ public class SettingsPanel extends JPanel
 			}
 		};
 
-		foodOptions = new JTable(options, columnNames);
+		foodOptions = new JTable(options, columnNames)
+		{
+			@Override
+			public boolean isCellEditable(int row, int col)
+			{
+				return false;
+			}
+		};
+		foodOptions.addMouseListener(new EditMouseListener());
 		foodOptions.setPreferredScrollableViewportSize(new Dimension(760, 270));
 		foodOptions.addMouseListener(tableMouseListener);
 		foodOptions.setRowHeight(30);
@@ -308,6 +316,29 @@ public class SettingsPanel extends JPanel
 	{
 		g.drawImage(background, 0, 0, null);
 	}
+	
+	class EditMouseListener extends MouseAdapter
+	{
+		@Override 
+		public void mousePressed(MouseEvent e)
+		{
+			int row = foodOptions.rowAtPoint(e.getPoint());
+			int col = foodOptions.columnAtPoint(e.getPoint());
+			
+			//Edit the food item on a double click
+			if(e.getClickCount() == 2)
+			{
+				String value = (String) foodOptions.getValueAt(row, col);
+				String result = JOptionPane.showInputDialog(null, "Edit Food:", "Edit", JOptionPane.PLAIN_MESSAGE);
+				foodOptions.setValueAt(result, row, col);
+				
+				//Remove the old item and add the new item
+				int index = Food.indexOf(new Food(value));
+				Food.removeFood(value);
+				Food.addFood(new Food(result), index);
+			}
+		}
+	}
 
 	class BackButtonActionListener implements ActionListener
 	{
@@ -377,12 +408,17 @@ public class SettingsPanel extends JPanel
 				String value = (String) foodOptions.getValueAt(selectedRow, 0);
 				((DefaultTableModel) foodOptions.getModel())
 						.removeRow(selectedRow);
-				Food.removeFood(new Food(value));
+				//Food.removeFood(value);
 				selectedRow = -1;
 			}
 		}
 	}
-
+	
+	/**
+	 * Clears all the food options from the program
+	 * @author Connor Murphy
+	 * @version April 13 2016
+	 */
 	class ClearDataButtonActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -391,11 +427,17 @@ public class SettingsPanel extends JPanel
 			
 			while(model.getRowCount() > 0)
 			{
+				Food.removeAll();
 				model.removeRow(0);
 			}
 		}
 	}
-
+	
+	/**
+	 * 
+	 * @author 066984287
+	 *
+	 */
 	class FinishButtonActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
