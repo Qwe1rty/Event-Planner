@@ -387,7 +387,12 @@ public class SettingsPanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-
+			DefaultTableModel model = (DefaultTableModel)foodOptions.getModel();
+			
+			while(model.getRowCount() > 0)
+			{
+				model.removeRow(0);
+			}
 		}
 	}
 
