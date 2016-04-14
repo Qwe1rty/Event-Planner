@@ -19,6 +19,7 @@ import data.LinkedList;
 import data.Parameter;
 import data.Settings;
 import data.Student;
+import data.Table;
 import data.Student.InvalidFoodException;
 import data.Student.InvalidStudentIDException;
 
@@ -31,6 +32,8 @@ import data.Student.InvalidStudentIDException;
  */
 public final class Loader {
 
+	// TODO update IO to accept new Student parameters
+	
 	// Program file extension and filter
 	private static final String FILE_EXTENSION = "event";
 	private static final FileNameExtensionFilter FILE_FILTER = new FileNameExtensionFilter("Custom extension only", FILE_EXTENSION);
@@ -57,6 +60,7 @@ public final class Loader {
 			// Read the global data
 			Settings.setLocation(br.readLine());
 			Settings.setNumTables(Integer.parseInt(br.readLine()));
+			Table.setLimit(Settings.getNumTables());
 			Settings.setTableSize(Integer.parseInt(br.readLine()));
 			Settings.setTicketCost(Double.parseDouble(br.readLine()));
 
@@ -103,8 +107,12 @@ public final class Loader {
 					else if (nextToken.indexOf("T") == 0) s.setTableNum(Integer.parseInt(nextToken));
 				}
 
-				// add student to list
+				// Add student to global student list
 				Student.addStudent(s);
+				
+				// Adds student to table list if appropriate
+				if (s.getTableNum() != 0) Table.getTable(s.getTableNum() - 1).appendStudent(s);
+				
 			}
 
 			// Returns list of students. Default sorting order is by Firstname
@@ -114,7 +122,7 @@ public final class Loader {
 		catch (FileNotFoundException e) {return;}
 		catch (IOException e) {return;}
 	}
-
+	
 	/**
 	 * Will save the current project file to the user's selected directory
 	 * 
