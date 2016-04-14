@@ -68,7 +68,7 @@ public class StudentProfile extends JPanel {
 	private JComboBox<String> foodChoiceComboBox;
 	private JTextField phoneNumTextField;
 	private JTextField paidByTextField;
-	private JComboBox<Integer> tableNumComboBox;
+	private JComboBox<String> tableNumComboBox;
 	private JLabel firstNameLabel;
 	private JLabel lastNameLabel;
 	private JLabel studentIdLabel;
@@ -211,10 +211,11 @@ public class StudentProfile extends JPanel {
 		}
 
 		int numTables = Settings.getNumTables();
-		Integer[] tables = new Integer[numTables];
+		String[] tables = new String[numTables + 1];
 		try {
-			for (int i = 0; i < numTables; ++i) {
-				tables[i] = (i + 1);
+			tables[0] = "Unassigned";
+			for (int i = 1; i < numTables + 1; ++i) {
+				tables[i] = Integer.toString(i);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -222,7 +223,7 @@ public class StudentProfile extends JPanel {
 		tableNumLabel = new JLabel(TABLE_NUM_LABEL_TEXT);
 		tableNumLabel.setFont(TEXT_FONT);
 
-		tableNumComboBox = new JComboBox<Integer>(tables);
+		tableNumComboBox = new JComboBox<String>(tables);
 		tableNumComboBox.setPreferredSize(COMBO_SIZE);
 		tableNumComboBox.setFont(FIELD_FONT);
 		String tableNum = Integer.toString(student.getTableNum());
@@ -423,10 +424,11 @@ public class StudentProfile extends JPanel {
 				// If the food is invalid, do not update it
 			}
 			try {
-				student.setTableNum((int)tableNumComboBox
-						.getSelectedItem());
+				student.setTableNum(Integer.parseInt((String)tableNumComboBox
+						.getSelectedItem()));
 			} catch (NumberFormatException ex) {
-				// If the table number is invalid, do not update it
+				// If the table number is invalid the selected option is "unassigned" meaning a table number of 0
+				student.setTableNum(0);
 			}
 
 			student.setLastname(lastNameTextField.getText());

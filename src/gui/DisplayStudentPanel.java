@@ -67,12 +67,7 @@ public class DisplayStudentPanel extends JPanel {
     private Image background;
     private JPanel nestedPanel;
     private JTable displayTable;
-    private Object[][] placeholderData = {{"067848929", "Matthew", "Sun", "Yes", "Vegetarian", "1062"},
-            {"1232132132", "Connor", "Murple", "No", "Maybe", "12"},
-            {"022222229", "Hello", "Caleb", "Yes", "-", "23"},
-            {"213232323", "dff", "df", "aa", "ss", "1"},
-            {"232323434", "asdfd", "asd", "43", "44", "10652"}
-    };
+    private Object[][] placeholderData = {{}};
     private Vector<Vector<String>> rowData;
     private int selectedRow, selectedCol;
 
@@ -155,15 +150,7 @@ public class DisplayStudentPanel extends JPanel {
         //TODO: Change the data in the table to the loaded data
         StudentTableModel model = new StudentTableModel(placeholderData, COLUMN_NAMES);
         displayTable = new JTable(placeholderData, COLUMN_NAMES);
-        /*
-        {
-            @Override
-            public boolean isCellEditable(int row, int col)
-            {
-                return false;
-            }
-        };
-        */
+       
 
         displayTable.setModel(model);
         displayTable.addMouseListener(new TableMouseListener());
@@ -202,7 +189,9 @@ public class DisplayStudentPanel extends JPanel {
         for (int i = 0; i < Student.listSize(); ++i) {
             Student student = Student.getStudent(i);
             String paid = student.isPaid() ? "Yes" : "No";
-            model.addRow(new Object[]{student.getID(), student.getFirstname(), student.getLastname(), paid, student.getFood().toString(), student.getTableNum()});
+            int tableNum = student.getTableNum();
+            String table = tableNum == 0?"Unassigned":Integer.toString(tableNum);
+            model.addRow(new Object[]{student.getID(), student.getFirstname(), student.getLastname(), paid, student.getFood().toString(), table});
         }
     }
 
@@ -233,13 +222,7 @@ public class DisplayStudentPanel extends JPanel {
     }
 
     class BackButtonActionListener implements ActionListener {
-        public void actionPerformed(ActionEvent arg0) {
-            for (int row = 0; row < 5; row++) {
-                for (int col = 0; col < 6; col++) {
-                    System.out.println(placeholderData[row][col] + " ");
-                }
-                System.out.println(" ");
-            }
+        public void actionPerformed(ActionEvent e) {
             EventPlanner.setPanel(EventPlanner.Panel.HOME);
         }
     }
@@ -264,7 +247,17 @@ public class DisplayStudentPanel extends JPanel {
                     paid = true;
                 }
                 String chosenFood = (String) displayTable.getValueAt(selectedRow, 4);
-                int tableNum =  (int)displayTable.getValueAt(selectedRow, 5);
+                
+                int tableNum;
+                try
+                {
+                	tableNum =  Integer.parseInt((String)displayTable.getValueAt(selectedRow, 5));
+                }
+                catch(NumberFormatException ex)
+                {
+                	//table number is unassigned (0)
+                	tableNum = 0;
+                }
 
                 //Go through all the students and see if that one is the same as the one selected
                 for (int i = 0; i < Student.listSize(); ++i) {
