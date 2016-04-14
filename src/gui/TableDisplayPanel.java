@@ -30,7 +30,7 @@ import data.Student;
 
 /**
  * Displays the table planning panel
- * @author Matthew Sun
+ * @author Matthew Sun, Connor Murphy
  *
  */
 public class TableDisplayPanel extends JPanel
@@ -64,14 +64,11 @@ public class TableDisplayPanel extends JPanel
 	private JTable availibleTables;
 	private JScrollPane availibleTablesScrollPane;
 	
-    private Object[][] placeholderData = {{"067848929", "Matthew", "Sun", "Yes", "Vegetarian", "1062"},
-            {"1232132132", "Connor", "Murple", "No", "Maybe", "12"},
-            {"022222229", "Hello", "Caleb", "Yes", "-", "23"},
-            {"213232323", "dff", "df", "aa", "ss", "1"},
-            {"232323434", "asdfd", "asd", "43", "44", "10652"}
-    };
+    private Object[][] placeholderData = new Object [0][0];
 	private JTable studentDisplay;
 	private JScrollPane studentDisplayScrollPane;
+	private JTable tableDisplay;
+	private JScrollPane tableDisplayScrollPane;
 	
 	
 
@@ -176,16 +173,16 @@ public class TableDisplayPanel extends JPanel
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 2;
+		c.gridheight = 2;
 		c.insets = new Insets(10, 0, 0, 10);
 		nestedPanel.add(availibleTablesScrollPane, c);
 
-		
-        //Create a new table that displays students
-        StudentTableModel model = new StudentTableModel(placeholderData, COLUMN_NAMES);
+        //Create a new table that only displays students that haven't been assigned yet
+        StudentTableModel unassigned = new StudentTableModel(placeholderData, COLUMN_NAMES);
         studentDisplay = new JTable(placeholderData, COLUMN_NAMES);
 
-        studentDisplay.setModel(model);
-        studentDisplay.setPreferredScrollableViewportSize(new Dimension(880, 495));
+        studentDisplay.setModel(unassigned);
+        studentDisplay.setPreferredScrollableViewportSize(new Dimension(880, 250));
         studentDisplay.setRowHeight(30);
         studentDisplay.setFont(FIELD_FONT);
         studentDisplay.getTableHeader().setFont(TEXT_FONT);
@@ -194,8 +191,24 @@ public class TableDisplayPanel extends JPanel
         // Position this table right of the table table
         c.gridx = 2;
         c.gridy = 1;
+        c.gridheight = 1;
         nestedPanel.add(studentDisplayScrollPane, c);
         
+        // Create a table that displays students that are at the current table selected
+        StudentTableModel atTable = new StudentTableModel(placeholderData, COLUMN_NAMES);
+        tableDisplay = new JTable (placeholderData, COLUMN_NAMES);
+        
+        tableDisplay.setModel(atTable);
+        tableDisplay.setPreferredScrollableViewportSize(new Dimension(880, 230));
+        tableDisplay.setRowHeight(30);
+        tableDisplay.setFont(FIELD_FONT);
+        tableDisplay.setTableHeader(null);
+        tableDisplayScrollPane = new JScrollPane(tableDisplay);
+        
+        // Position this table below the unassigned students
+        c.gridx = 2;
+        c.gridy = 2;
+        nestedPanel.add(tableDisplayScrollPane, c);
 		
 		add(nestedPanel);
 	}
@@ -232,16 +245,25 @@ public class TableDisplayPanel extends JPanel
 			tableTableModel.addRow(rowData);
 		}
 		
+		// Remove all students from the unassigned students table
 		DefaultTableModel studentTableModel = (DefaultTableModel) studentDisplay.getModel();
         while (studentDisplay.getRowCount() > 0) {
         	studentTableModel.removeRow(0);
         }
-
-        //Add the updated students to the table
+        System.out.println("REFREH");
+        //Add the updated students to the table (only unassigned students)
         for (int i = 0; i < Student.listSize(); ++i) {
             Student student = Student.getStudent(i);
-            String paid = student.isPaid() ? "Yes" : "No";
-            studentTableModel.addRow(new Object[]{student.getID(), student.getFirstname(), student.getLastname(), paid, student.getFood().toString(), student.getTableNum()});
+            System.out.println(student.getTableNum());
+            // Only add a student to the unassigned panel if they are unassigned
+            if (student.getTableNum() == 0)
+            {
+            	System.out.println("HELLO");
+	            String paid = student.isPaid() ? "Yes" : "No";
+	            int tableNumber = student.getTableNum();
+	            String table = tableNumber == 0 ? "Unassigned": Integer.toString(tableNumber);
+	            studentTableModel.addRow(new Object[]{student.getID(), student.getFirstname(), student.getLastname(), paid, student.getFood().toString(), table});
+            }
         }
 	}
 	
