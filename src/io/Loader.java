@@ -103,8 +103,10 @@ public final class Loader {
 				// Allergies and table number
 				while (st.hasMoreTokens()) {
 					String nextToken = st.nextToken();
-					if (nextToken.indexOf("A") == 0) s.setAllergies(nextToken);
-					else if (nextToken.indexOf("T") == 0) s.setTableNum(Integer.parseInt(nextToken));
+					if (nextToken.indexOf("A") == 0) s.setAllergies(nextToken.substring(1, nextToken.length()));
+					else if (nextToken.indexOf("T") == 0) s.setTableNum(Integer.parseInt(nextToken.substring(1, nextToken.length())));
+					else if (nextToken.indexOf("P") == 0) s.setPhoneNum(nextToken.substring(1, nextToken.length()));
+					else if (nextToken.indexOf("I") == 0) s.setInfo(nextToken.substring(1, nextToken.length()));
 				}
 
 				// Add student to global student list
@@ -130,7 +132,7 @@ public final class Loader {
 	 * 		from Settings.java for global settings
 	 * @author Caleb Choi
 	 */
-	public static void saveFile(LinkedList<Student> ll) {
+	public static void saveFile() {
 
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
@@ -168,28 +170,38 @@ public final class Loader {
 				} catch (Exception e) {}
 			}
 
-			// Student stuff
+			// Write total number of students
 			bw.write(Settings.getNumStudents()); bw.newLine();
 
-			for (int i = 0; i < ll.size(); i++) {
+			// Add all students to file
+			for (int i = 0; i < Student.listSize(); i++) {
 				String student = "";
 
-				student += ll.get(i).getID() + ",";
-				student += ll.get(i).getFirstname() + ",";
-				student += ll.get(i).getLastname() + ",";
-				student += ll.get(i).getFood().toString() + ",";
-				student += ll.get(i).getPaidBy() + ",";
-				student += ll.get(i).isPaid() + ",";
-				student += ll.get(i).getPaidBy();
-				student += ll.get(i).isFormSubmitted();
+				// Mandatory student values
+				student += Student.getStudent(i).getID() + ",";
+				student += Student.getStudent(i).getFirstname() + ",";
+				student += Student.getStudent(i).getLastname() + ",";
+				student += Student.getStudent(i).getFood().toString() + ",";
+				student += Student.getStudent(i).getPaidBy() + ",";
+				student += Student.getStudent(i).isPaid() + ",";
+				student += Student.getStudent(i).getPaidBy() + ",";
+				student += Student.getStudent(i).isFormSubmitted();
 				
-				if (ll.get(i).getAllergies() != null) {
-					student += ",A" + ll.get(i).getAllergies();
+				// Optional student values
+				if (Student.getStudent(i).getAllergies() != null) {
+					student += ",A" + Student.getStudent(i).getAllergies();
 				}
-				if (ll.get(i).getTableNum() != 0) {
-					student += ",T" + ll.get(i).getTableNum();
+				if (Student.getStudent(i).getTableNum() != 0) {
+					student += ",T" + Student.getStudent(i).getTableNum();
+				}
+				if (Student.getStudent(i).getPhoneNum() != null) {
+					student += ",P" + Student.getStudent(i).getPhoneNum();
+				}
+				if (Student.getStudent(i).getInfo() != null) {
+					student += ",I" + Student.getStudent(i).getInfo();
 				}
 				
+				// Writes finished student string to file
 				bw.write(student);
 				bw.newLine();
 

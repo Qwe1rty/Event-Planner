@@ -29,11 +29,11 @@ public class Student {
 	private Food food;
 	private boolean paid;
 	private String paidBy;
-	private String allergies;
-	private int tableNum; // 0 means unassigned
-	private String phoneNum;
-	private String info;
 	private boolean formSubmitted;
+	private String allergies; // -o
+	private int tableNum; // -o; 0 means unassigned
+	private String phoneNum; // -o
+	private String info; // -o
 
 	// *** Constructors ***
 	// Fully declared student
