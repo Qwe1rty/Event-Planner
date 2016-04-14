@@ -15,7 +15,7 @@ public class Table {
 	private LinkedList<Student> students;
 
 	// *** Constructor ***
-	public Table() {this.students = new LinkedList<Student>();}
+	private Table() {this.students = new LinkedList<Student>();}
 
 	// ** Static methods ***
 	// LinkedList wrapper functions for global table list
@@ -24,6 +24,7 @@ public class Table {
 	public static Table getTable(int index) {return TABLE_LIST.get(index);}
 	public static int listSize() {return TABLE_LIST.size();}
 	// LinkedList wrapper functions for students within tables in global table list
+	// There isn't really a way to modify tables without doing this, which sucked
 	public static void addStudent(int index, Student student) {
 		Table table = TABLE_LIST.get(index);
 		table.appendStudent(student);
@@ -38,6 +39,10 @@ public class Table {
 		Table table = TABLE_LIST.get(tableIndex);
 		table.insertStudent(studentIndex, student);
 		TABLE_LIST.insert(tableIndex, table);
+	}
+	public static int tableSize(int index) {return TABLE_LIST.get(index).tableSize();}
+	public static Student getStudent(int tableIndex, int studentIndex) {
+		return TABLE_LIST.get(tableIndex).getStudent(studentIndex);
 	}
 	/**
 	 *  Sets new limit in the table list. If new limit is less than current list,
@@ -57,6 +62,7 @@ public class Table {
 	// *** Instance methods ***
 	// LinkedList wrapped functions for individual tables. These are private because
 	// you should only be modifying individual tables through the static method above.
+	// (There were some complications, in case you were wondering why I did that)
 	private boolean appendStudent(Student student) {
 		if (students.size() < Settings.getTableSize()) {
 			students.append(student);
@@ -65,6 +71,8 @@ public class Table {
 	}
 	private boolean removeStudent(int index) {return students.remove(index);}
 	private boolean insertStudent(int index, Student s) {return students.insert(index, s);}
+	private int tableSize() {return students.size();}
+	public Student getStudent(int index) {return students.get(index);}
 //	private boolean swapStudent(int indexa, int indexb) {
 //		try {return students.swap(indexa, indexb);} catch (Exception e) {return false;}
 //	}
