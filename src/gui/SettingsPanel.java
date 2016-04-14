@@ -245,11 +245,9 @@ public class SettingsPanel extends JPanel
 		pplPerTable.setFont(TEXT_FONT);
 
 		numTablesField = new JTextField(TEXT_FIELD_COLS);
-		numTablesField.addActionListener(new NumberTablesActionListener());
 		numTablesField.setFont(FIELD_FONT);
 
 		pplPerTableField = new JTextField(TEXT_FIELD_COLS);
-		pplPerTableField.addActionListener(new PeoplePerTableActionListener());
 		pplPerTableField.setFont(FIELD_FONT);
 
 		c.insets = new Insets(5, 0, 5, 5);
@@ -284,8 +282,8 @@ public class SettingsPanel extends JPanel
 		clearDataButton.setFont(SMALLER_BUTTON_FONT);
 		clearDataButton.setPreferredSize(new Dimension(200, 50));
 
-		finishButton = new JButton(FINISH_BUTTON_TEXT);
-		finishButton.addActionListener(new FinishButtonActionListener());
+//		finishButton = new JButton(FINISH_BUTTON_TEXT);
+//		finishButton.addActionListener(new FinishButtonActionListener());
 
 		c.gridx = 0;
 		c.gridy = 7;
@@ -334,7 +332,34 @@ public class SettingsPanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			// Get any integer values entered into the text fields
+			String numTables = numTablesField.getText();
+			String perTable = pplPerTableField.getText();
+			System.out.println(numTables + " tables");
+			System.out.println(perTable + " ppl per table");
+			
+			// Only if integers are in the fields, change the current global values
+			if (isInteger(numTables))
+				Settings.setNumTables(Integer.parseInt(numTables));
+			if (isInteger(perTable))
+				Settings.setTableSize(Integer.parseInt(perTable));
+			// Switch to the home panel
 			EventPlanner.setPanel(EventPlanner.Panel.HOME);
+		}
+		
+		/**
+		 * Checks if a given String is an integer or not
+		 * @param s the given String
+		 * @return whether or not the given String is an integer or not
+		 */
+		public boolean isInteger (String s)
+		{
+			for (int n = 0 ; n < s.length() ; n ++)
+			{
+				if (!Character.isDigit(s.charAt(n)))
+					return false;
+			}
+			return true;
 		}
 	}
 
@@ -423,35 +448,16 @@ public class SettingsPanel extends JPanel
 		}
 	}
 	
-	/**
-	 * 
-	 * @author 066984287
-	 *
-	 */
-	class FinishButtonActionListener implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-
-		}
-	}
-	
-	class NumberTablesActionListener implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-			Settings.setNumTables(Integer.parseInt(numTablesField.getText()));
-			System.out.println(Settings.getNumTables() + " Tables");
-		}
-	}
-	
-	class 	PeoplePerTableActionListener implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-			Settings.setTableSize(Integer.parseInt(pplPerTable.getText()));
-			System.out.println(Settings.getNumTables() + " People per table");
-		}
-	}
-
+//	/**
+//	 * 
+//	 * @author 066984287
+//	 *
+//	 */
+//	class FinishButtonActionListener implements ActionListener
+//	{
+//		public void actionPerformed(ActionEvent e)
+//		{
+//
+//		}
+//	}
 }
