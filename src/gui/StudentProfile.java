@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -382,6 +383,13 @@ public class StudentProfile extends JPanel {
 		// Add all components to the panel
 		add(fieldsPanel);
 	}
+	
+    /**
+     * Draws the background image onto main panel
+     */
+    public void paintComponent(Graphics g) {
+        g.drawImage(background, 0, 0, null);
+    }
 
 	class BackButtonActionListener implements ActionListener {
 		@Override
