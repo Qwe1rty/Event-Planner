@@ -48,7 +48,7 @@ public class Student {
 		if (info != null) setInfo(info);
 		
 		// Automatically assigns new student to table if valid
-		if (tableNum != 0) Table.getTable(tableNum).appendStudent(this);
+		if (tableNum != 0) Table.addStudent(tableNum, this);
 	}
 	// Student with only mandatory fields
 	public Student(String studentId, String firstname, String lastname,

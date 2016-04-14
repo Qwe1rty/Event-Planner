@@ -36,7 +36,8 @@ public final class Loader {
 	
 	// Program file extension and filter
 	private static final String FILE_EXTENSION = "event";
-	private static final FileNameExtensionFilter FILE_FILTER = new FileNameExtensionFilter("Custom extension only", FILE_EXTENSION);
+	private static final FileNameExtensionFilter FILE_FILTER = 
+			new FileNameExtensionFilter("Custom extension only", FILE_EXTENSION);
 
 	/**
 	 * Loads the students into a list of students from the given file. File chooser dialog box
@@ -113,7 +114,7 @@ public final class Loader {
 				Student.addStudent(s);
 				
 				// Adds student to table list if appropriate
-				if (s.getTableNum() != 0) Table.getTable(s.getTableNum() - 1).appendStudent(s);
+				if (s.getTableNum() != 0) Table.addStudent(s.getTableNum() - 1, s);
 				
 			}
 
