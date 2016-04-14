@@ -423,8 +423,8 @@ public class StudentProfile extends JPanel {
 				// If the food is invalid, do not update it
 			}
 			try {
-				student.setTableNum(Integer.parseInt((String) tableNumComboBox
-						.getSelectedItem()));
+				student.setTableNum((int)tableNumComboBox
+						.getSelectedItem());
 			} catch (NumberFormatException ex) {
 				// If the table number is invalid, do not update it
 			}
