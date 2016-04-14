@@ -43,14 +43,14 @@ public class Student {
 			int tableNum, String phoneNum, String info) throws InvalidStudentIDException, InvalidFoodException {
 		this(ID, firstname, lastname, food, paid, paidBy, formSubmitted);
 		if (allergies != null) setAllergies(allergies);
-		if (tableNum != 0) setTableNum(tableNum);
+		setTableNum(tableNum);
 		if (phoneNum != null) setPhoneNum(phoneNum);
 		if (info != null) setInfo(info);
 	}
 	// Student with only mandatory fields
 	public Student(String studentId, String firstname, String lastname,
 			String food, boolean paid, String paidBy, boolean formSubmitted) throws InvalidStudentIDException, InvalidFoodException {
-		if (studentId.equals("000000000")) studentId = null;
+		if (studentId == null) studentId = "000000000";
 		else setStudentId(studentId);
 		setFirstname(firstname);
 		setLastname(lastname);
