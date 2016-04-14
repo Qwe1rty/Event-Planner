@@ -398,7 +398,7 @@ public class SettingsPanel extends JPanel
 				String value = (String) foodOptions.getValueAt(selectedRow, 0);
 				((DefaultTableModel) foodOptions.getModel())
 						.removeRow(selectedRow);
-				//Food.removeFood(value);
+				Food.removeFood(value);
 				selectedRow = -1;
 			}
 		}
