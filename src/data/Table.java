@@ -11,11 +11,11 @@ public class Table {
 	// *** Fields ***
 	// Global table list
 	private static LinkedList<Table> TABLE_LIST = new LinkedList<Table>();
-	// Each table holds an array of students
-	private Student[] students;
+	// Each table holds a list of students, but size is limited by Settings
+	private LinkedList<Student> students;
 	
 	// *** Constructor ***
-	public Table() {this.students = new Student[Settings.getTableSize()];}
+	public Table() {this.students = new LinkedList<Student>();}
 	
 	// ** Static methods ***
 	// LinkedList wrapper functions
@@ -39,5 +39,17 @@ public class Table {
 	}
 	
 	// *** Instance methods ***
+	public boolean appendStudent(Student s) {
+		if (students.size() < Settings.getTableSize()) {
+			students.append(s);
+			return true;}
+		return false;
+	}
+	public boolean removeStudent(int index) {return students.remove(index);}
+	public boolean insertStudent(int index, Student s) {return students.insert(index, s);}
+	public boolean swapStudent(int indexa, int indexb) {
+		try {return students.swap(indexa, indexb);} catch (Exception e) {return false;}
+	}
+	
 	
 }
