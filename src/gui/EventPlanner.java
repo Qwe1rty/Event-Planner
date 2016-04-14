@@ -90,6 +90,7 @@ public class EventPlanner {
 		}
 		else if (panel == Panel.TABLE_DISPLAY)
 		{
+			((TableDisplayPanel)tableDisplay).refresh();
 			FRAME.add(tableDisplay);
 		}
 		FRAME.revalidate();
