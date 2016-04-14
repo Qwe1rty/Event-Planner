@@ -46,6 +46,9 @@ public class Student {
 		setTableNum(tableNum);
 		if (phoneNum != null) setPhoneNum(phoneNum);
 		if (info != null) setInfo(info);
+		
+		// Automatically assigns new student to table if valid
+		if (tableNum != 0) Table.getTable(tableNum).appendStudent(this);
 	}
 	// Student with only mandatory fields
 	public Student(String studentId, String firstname, String lastname,
@@ -93,15 +96,15 @@ public class Student {
 			for (int wall = gap; wall < length; wall++) {
 				try {
 					// Feast your eyes upon the most disgusting code ever written by humankind
-//					if (param == Parameter.STUDENT_ID) {
-//						if (ascending) {
-//							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
-//								STUDENT_LIST.swap(index - gap, index);
-//						} else {
-//							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
-//								STUDENT_LIST.swap(index - gap, index);
-//						}
-					if (param == Parameter.FIRSTNAME) {
+					if (param == Parameter.STUDENT_ID) {
+						if (ascending) {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						} else {
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						}
+					} else if (param == Parameter.FIRSTNAME) {
 						if (ascending) {
 							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) < 0); index -= gap)
 								STUDENT_LIST.swap(index - gap, index);

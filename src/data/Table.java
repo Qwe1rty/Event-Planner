@@ -18,7 +18,7 @@ public class Table {
 	public Table() {this.students = new LinkedList<Student>();}
 	
 	// ** Static methods ***
-	// LinkedList wrapper functions
+	// LinkedList wrapper functions for global table list
 	public static void addTable(Table table) {TABLE_LIST.append(table);}
 	public static void removeTable(int index) {TABLE_LIST.remove(index);}
 	public static Table getTable(int index) {return TABLE_LIST.get(index);}
@@ -39,6 +39,7 @@ public class Table {
 	}
 	
 	// *** Instance methods ***
+	// LinkedList wrapped functions for individual tables
 	public boolean appendStudent(Student s) {
 		if (students.size() < Settings.getTableSize()) {
 			students.append(s);
