@@ -34,7 +34,7 @@ import data.Student.InvalidStudentIDException;
 /**
  * Gives a in depth visual display of the student
  *
- * @author Connor Murphy
+ * @author Connor Murphy, Matthew Sun
  */
 public class StudentProfile extends JPanel {
 
