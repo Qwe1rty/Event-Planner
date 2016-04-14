@@ -335,15 +335,15 @@ public class SettingsPanel extends JPanel
 			// Get any integer values entered into the text fields
 			String numTables = numTablesField.getText();
 			String perTable = pplPerTableField.getText();
-			System.out.println(numTables + " tables");
-			System.out.println(perTable + " ppl per table");
-			
+
 			// Only if integers are in the fields, change the current global values
-			if (isInteger(numTables))
+			if (isInteger(numTables) && (Integer.parseInt(numTables) > 0))
 				Settings.setNumTables(Integer.parseInt(numTables));
-			if (isInteger(perTable))
+			if (isInteger(perTable) && (Integer.parseInt(perTable) > 0))
 				Settings.setTableSize(Integer.parseInt(perTable));
 			// Switch to the home panel
+			System.out.println(Settings.getNumTables() + " tables");
+			System.out.println(Settings.getTableSize() + " ppls per table");
 			EventPlanner.setPanel(EventPlanner.Panel.HOME);
 		}
 		
