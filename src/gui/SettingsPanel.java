@@ -354,6 +354,11 @@ public class SettingsPanel extends JPanel
 		 */
 		public boolean isInteger (String s)
 		{
+			// Empty strings are not integers
+			if (s.equals(""))
+				return false;
+			
+			// Checks each letter, if not digit return false
 			for (int n = 0 ; n < s.length() ; n ++)
 			{
 				if (!Character.isDigit(s.charAt(n)))
