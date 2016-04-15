@@ -51,8 +51,9 @@ public class TableDisplayPanel extends JPanel
 	private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
 	private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
 	private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
-	
-    private final String[] COLUMN_NAMES = {"Student No.", "First Name", "Last Name", "Payment", "Food Choice", "Table No."};
+
+	private final String[] COLUMN_NAMES = { "Student No.", "First Name",
+			"Last Name", "Payment", "Food Choice", "Table No." };
 
 	private final Dimension COMBO_SIZE = new Dimension(340, 30);
 	private final Dimension BUTTON_SIZE = new Dimension(108, 50);
@@ -68,16 +69,15 @@ public class TableDisplayPanel extends JPanel
 	private Vector<String> columnNames;
 	private JTable availibleTables;
 	private JScrollPane availibleTablesScrollPane;
-	
-    private Object[][] placeholderData = new Object [0][0];
+
+	private Object[][] placeholderData = new Object[0][0];
 	private JTable studentDisplay;
 	private JScrollPane studentDisplayScrollPane;
 	private JTable tableDisplay;
 	private JScrollPane tableDisplayScrollPane;
-	
-	private int selectedRow, selectedCol;
-	
-	
+
+	private int selectedRowOnUnassigned, selectedColOnUnassigned;
+	private int currentSelectedTable;
 
 	public TableDisplayPanel()
 	{
@@ -145,15 +145,11 @@ public class TableDisplayPanel extends JPanel
 		c.gridy = 0;
 		nestedPanel.add(deleteButton, c);
 
-
-		
-	
-		
 		// Create new table names
 		tables = new Vector<>();
 		columnNames = new Vector<>();
 		columnNames.add("Total Tables");
-		
+
 		// Add the table names to the display table
 		for (int n = 1; n < Settings.getNumTables() + 1; n++)
 		{
@@ -172,22 +168,7 @@ public class TableDisplayPanel extends JPanel
 				return false;
 			}
 		};
-		
-		// This object finds the row and column where the user has clicked
-		MouseListener tableMouseListener = new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				selectedRow = availibleTables.rowAtPoint(e.getPoint());// get
-																	// mouse-selected
-																	// row
-				selectedCol = availibleTables.columnAtPoint(e.getPoint());// get
-																		// mouse-selected
-																		// col
-				System.out.println(selectedRow + " " + selectedCol);
-			}
-		};
-		availibleTables.addMouseListener(tableMouseListener);
+
 		availibleTables.addMouseListener(new AvailibleTableMouseListener());
 		// Set display parameters, font, no header
 		availibleTables.setPreferredScrollableViewportSize(new Dimension(240,
@@ -197,7 +178,6 @@ public class TableDisplayPanel extends JPanel
 		availibleTables.setTableHeader(null);
 		availibleTablesScrollPane = new JScrollPane(availibleTables);
 
-		
 		// Position to the table below the buttons left of screen
 		c.gridx = 0;
 		c.gridy = 1;
@@ -206,39 +186,64 @@ public class TableDisplayPanel extends JPanel
 		c.insets = new Insets(10, 0, 0, 10);
 		nestedPanel.add(availibleTablesScrollPane, c);
 
-        //Create a new table that only displays students that haven't been assigned yet
-        StudentTableModel unassigned = new StudentTableModel(placeholderData, COLUMN_NAMES);
-        studentDisplay = new JTable(placeholderData, COLUMN_NAMES);
+		// This object finds the row and column where the user has clicked
+		MouseListener unassignedStudentMouseListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				selectedRowOnUnassigned = studentDisplay.rowAtPoint(e
+						.getPoint());// get
+				// mouse-selected
+				// row
+				selectedColOnUnassigned = studentDisplay.columnAtPoint(e
+						.getPoint());// get
+				// mouse-selected
+				// col
+				System.out.println(selectedRowOnUnassigned + " "
+						+ selectedColOnUnassigned);
+			}
+		};
 
-        studentDisplay.setModel(unassigned);
-        studentDisplay.setPreferredScrollableViewportSize(new Dimension(880, 250));
-        studentDisplay.setRowHeight(30);
-        studentDisplay.setFont(FIELD_FONT);
-        studentDisplay.getTableHeader().setFont(TEXT_FONT);
-        studentDisplayScrollPane = new JScrollPane(studentDisplay);
-		
-        // Position this table right of the table table
-        c.gridx = 2;
-        c.gridy = 1;
-        c.gridheight = 1;
-        nestedPanel.add(studentDisplayScrollPane, c);
-        
-        // Create a table that displays students that are at the current table selected
-        StudentTableModel atTable = new StudentTableModel(placeholderData, COLUMN_NAMES);
-        tableDisplay = new JTable (placeholderData, COLUMN_NAMES);
-        
-        tableDisplay.setModel(atTable);
-        tableDisplay.setPreferredScrollableViewportSize(new Dimension(880, 230));
-        tableDisplay.setRowHeight(30);
-        tableDisplay.setFont(FIELD_FONT);
-        tableDisplay.setTableHeader(null);
-        tableDisplayScrollPane = new JScrollPane(tableDisplay);
-        
-        // Position this table below the unassigned students
-        c.gridx = 2;
-        c.gridy = 2;
-        nestedPanel.add(tableDisplayScrollPane, c);
-		
+		// Create a new table that only displays students that haven't been
+		// assigned yet
+		StudentTableModel unassigned = new StudentTableModel(placeholderData,
+				COLUMN_NAMES);
+		studentDisplay = new JTable(placeholderData, COLUMN_NAMES);
+
+		studentDisplay.setModel(unassigned);
+		studentDisplay.setPreferredScrollableViewportSize(new Dimension(880,
+				250));
+		studentDisplay.addMouseListener(unassignedStudentMouseListener);
+		studentDisplay.setRowHeight(30);
+		studentDisplay.setFont(FIELD_FONT);
+		studentDisplay.getTableHeader().setFont(TEXT_FONT);
+		studentDisplayScrollPane = new JScrollPane(studentDisplay);
+
+		// Position this table right of the table table
+		c.gridx = 2;
+		c.gridy = 1;
+		c.gridheight = 1;
+		nestedPanel.add(studentDisplayScrollPane, c);
+
+		// Create a table that displays students that are at the current table
+		// selected
+		StudentTableModel atTable = new StudentTableModel(placeholderData,
+				COLUMN_NAMES);
+		tableDisplay = new JTable(placeholderData, COLUMN_NAMES);
+
+		tableDisplay.setModel(atTable);
+		tableDisplay
+				.setPreferredScrollableViewportSize(new Dimension(880, 230));
+		tableDisplay.setRowHeight(30);
+		tableDisplay.setFont(FIELD_FONT);
+		tableDisplay.setTableHeader(null);
+		tableDisplayScrollPane = new JScrollPane(tableDisplay);
+
+		// Position this table below the unassigned students
+		c.gridx = 2;
+		c.gridy = 2;
+		nestedPanel.add(tableDisplayScrollPane, c);
+
 		add(nestedPanel);
 	}
 
@@ -249,13 +254,12 @@ public class TableDisplayPanel extends JPanel
 	{
 		g.drawImage(background, 0, 0, null);
 	}
-	
 
 	/**
 	 * Call before changing this panel to the main frame. Refreshes the number
 	 * of tables, and the current students in the system
 	 */
-	public void refresh ()
+	public void refresh()
 	{
 		// Remove all the availible tables from the table
 		DefaultTableModel tableTableModel = (DefaultTableModel) availibleTables
@@ -267,90 +271,136 @@ public class TableDisplayPanel extends JPanel
 			System.out.println("REMOVING");
 		}
 		// Add the updated number of tables to the table
-		for (int n = 1; n < Settings.getNumTables () + 1; n ++)
+		for (int n = 1; n < Settings.getNumTables() + 1; n++)
 		{
 			Vector<String> rowData = new Vector<>();
 			rowData.addElement("Table " + n);
 			System.out.println(rowData);
 			tableTableModel.addRow(rowData);
 		}
-		
+
 		// Remove all students from the unassigned students table
-		DefaultTableModel studentTableModel = (DefaultTableModel) studentDisplay.getModel();
-        while (studentDisplay.getRowCount() > 0) {
-        	studentTableModel.removeRow(0);
-        }
-        System.out.println("REFREH");
-        //Add the updated students to the table (only unassigned students)
-        for (int i = 0; i < Student.listSize(); ++i) {
-            Student student = Student.getStudent(i);
-            System.out.println(student.getTableNum());
-            // Only add a student to the unassigned panel if they are unassigned
-            if (student.getTableNum() == 0)
-            {
-            	System.out.println("HELLO");
-	            String paid = student.isPaid() ? "Yes" : "No";
-	            int tableNumber = student.getTableNum();
-	            String table = tableNumber == 0 ? "Unassigned": Integer.toString(tableNumber);
-	            studentTableModel.addRow(new Object[]{student.getID(), student.getFirstname(), student.getLastname(), paid, student.getFood().toString(), table});
-            }
-        }
+		DefaultTableModel studentTableModel = (DefaultTableModel) studentDisplay
+				.getModel();
+		while (studentDisplay.getRowCount() > 0)
+		{
+			studentTableModel.removeRow(0);
+		}
+		System.out.println("REFREH");
+		// Add the updated students to the table (only unassigned students)
+		for (int i = 0; i < Student.listSize(); ++i)
+		{
+			Student student = Student.getStudent(i);
+			System.out.println(student.getTableNum());
+			// Only add a student to the unassigned panel if they are unassigned
+			if (student.getTableNum() == 0)
+			{
+				System.out.println("HELLO");
+				String paid = student.isPaid() ? "Yes" : "No";
+				int tableNumber = student.getTableNum();
+				String table = tableNumber == 0 ? "Unassigned" : Integer
+						.toString(tableNumber);
+				studentTableModel.addRow(new Object[] { student.getID(),
+						student.getFirstname(), student.getLastname(), paid,
+						student.getFood().toString(), table });
+			}
+		}
 	}
 	
-    class StudentTableModel extends DefaultTableModel
-    {
-        public StudentTableModel(Vector rows, Vector columnNames)
-        {
-            super(rows, columnNames);
-        }
+	/**
+	 * Refreshes everything on the page except for the table display
+	 */
+	public void refreshEveryThingButTableDisplay ()
+	{
+		// Remove all students from the unassigned students table
+		DefaultTableModel studentTableModel = (DefaultTableModel) studentDisplay
+				.getModel();
+		while (studentDisplay.getRowCount() > 0)
+		{
+			studentTableModel.removeRow(0);
+		}
+		System.out.println("REFREH");
+		// Add the updated students to the table (only unassigned students)
+		for (int i = 0; i < Student.listSize(); ++i)
+		{
+			Student student = Student.getStudent(i);
+			System.out.println(student.getTableNum());
+			// Only add a student to the unassigned panel if they are unassigned
+			if (student.getTableNum() == 0)
+			{
+				System.out.println("HELLO");
+				String paid = student.isPaid() ? "Yes" : "No";
+				int tableNumber = student.getTableNum();
+				String table = tableNumber == 0 ? "Unassigned" : Integer
+						.toString(tableNumber);
+				studentTableModel.addRow(new Object[] { student.getID(),
+						student.getFirstname(), student.getLastname(), paid,
+						student.getFood().toString(), table });
+			}
+		}
+	}
 
-        public StudentTableModel(Object[][] rows, Object[] columnNames)
-        {
-            super(rows, columnNames);
-        }
+	class StudentTableModel extends DefaultTableModel
+	{
+		public StudentTableModel(Vector rows, Vector columnNames)
+		{
+			super(rows, columnNames);
+		}
 
-        @Override
-        public boolean isCellEditable(int row, int col)
-        {
-            return false;
-        }
-    }
-    
-    /**
-     * Handles events that happens when a table is clicked
-     * @author Matthew Sun
-     * @version 4/14/16
-     */
-    class AvailibleTableMouseListener extends MouseAdapter
-    {
-    	/**
-    	 * Actions to take when the mouse clicks on a table (left JTable)
-    	 */
-    	public void mousePressed (MouseEvent e)
-    	{
-    		// Remove all current elements in the current table display table
-    		DefaultTableModel currentMembers = (DefaultTableModel) tableDisplay.getModel();
-            while (tableDisplay.getRowCount() > 0) {
-            	currentMembers.removeRow(0);
-            }
-           
-            int currentTable = availibleTables.rowAtPoint(e.getPoint()) + 1;
-            // Add all table members at the current selected table
-            for (int i = 0; i < Student.listSize(); ++i) {
-                Student student = Student.getStudent(i);
-                System.out.println(student.getTableNum());
-                // Only add a student to the current seated if they are at the selected table
-                if (student.getTableNum() == currentTable)
-                {
-                	System.out.println("HELLO");
-    	            String paid = student.isPaid() ? "Yes" : "No";
-    	            int tableNumber = student.getTableNum();
-    	            String table = tableNumber == 0 ? "Unassigned": Integer.toString(tableNumber);
-    	            currentMembers.addRow(new Object[]{student.getID(), student.getFirstname(), student.getLastname(), paid, student.getFood().toString(), table});
-                }
-            }
-    	}
-    }
+		public StudentTableModel(Object[][] rows, Object[] columnNames)
+		{
+			super(rows, columnNames);
+		}
+
+		@Override
+		public boolean isCellEditable(int row, int col)
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Handles events that happens when a table is clicked
+	 * @author Matthew Sun
+	 * @version 4/14/16
+	 */
+	class AvailibleTableMouseListener extends MouseAdapter
+	{
+		/**
+		 * Actions to take when the mouse clicks on a table (left JTable)
+		 */
+		public void mousePressed(MouseEvent e)
+		{
+			// Remove all current elements in the current table display table
+			DefaultTableModel currentMembers = (DefaultTableModel) tableDisplay
+					.getModel();
+			while (tableDisplay.getRowCount() > 0)
+			{
+				currentMembers.removeRow(0);
+			}
+
+			currentSelectedTable = availibleTables.rowAtPoint(e.getPoint()) + 1;
+			// Add all table members at the current selected table
+			for (int i = 0; i < Student.listSize(); ++i)
+			{
+				Student student = Student.getStudent(i);
+				System.out.println(student.getTableNum());
+				// Only add a student to the current seated if they are at the
+				// selected table
+				if (student.getTableNum() == currentSelectedTable)
+				{
+					System.out.println("HELLO");
+					String paid = student.isPaid() ? "Yes" : "No";
+					int tableNumber = student.getTableNum();
+					String table = tableNumber == 0 ? "Unassigned" : Integer
+							.toString(tableNumber);
+					currentMembers.addRow(new Object[] { student.getID(),
+							student.getFirstname(), student.getLastname(),
+							paid, student.getFood().toString(), table });
+				}
+			}
+		}
+	}
 
 	class BackButtonActionListener implements ActionListener
 	{
@@ -360,19 +410,40 @@ public class TableDisplayPanel extends JPanel
 		}
 	}
 
+	/**
+	 * Handles events that happen when add is pressed
+	 * @author Matthew Sun
+	 * @version 4/14/16
+	 */
 	class AddButtonActionListener implements ActionListener
 	{
+		/**
+		 * Actions to take when add is pressed
+		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-
+			// When add is pressed, remove the student from the unassigned table
+			// and add to the current selected table
+			Student studentToAdd = Student.getStudent(selectedRowOnUnassigned);
+			studentToAdd.setTableNum(currentSelectedTable);
+			refreshEveryThingButTableDisplay();
 		}
 	}
 
+	/**
+	 * Handles events that happen when delete is pressed
+	 * @author Matthew Sun
+	 * @version 4/14/16
+	 */
 	class DeleteButtonActionListener implements ActionListener
 	{
+		/**
+		 * Actions to take when delete is pressed
+		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-
+			// When delete is pressed, remove the student from the current
+			// selected table and add to the unassigned table
 		}
 	}
 }
