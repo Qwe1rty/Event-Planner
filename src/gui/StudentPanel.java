@@ -36,6 +36,8 @@ public class StudentPanel extends JPanel {
 	private static final String FOOD_CHOICE_LABEL_TEXT = "    Food Choice: ";
 	private static final String PHONE_NUM_LABEL_TEXT = "Phone Number: ";
 	private static final String PAID_BY_LABEL_TEXT = "Paid By: ";
+	private static final String INITIALS_LABEL_TEXT = "Initials: ";
+	private static final String FORM_SUBMITTED_LABEL_TEXT = "Form Submitted: ";
 	private static final String TABLE_NUM_LABEL_TEXT = "Table Number: ";
 	private static final String ALLERGIES_LABEL_TEXT = "Allergies";
 	private static final String MORE_INFO_LABEL_TEXT = "Additional Information";
@@ -60,6 +62,9 @@ public class StudentPanel extends JPanel {
 	private JTextField phoneNumTextField;
 	private JTextField paidByTextField;
 	private JComboBox<String> tableNumComboBox;
+	private JTextField initialsTextField;
+	private JCheckBox formSubmittedCheckBox;
+	
 	private JLabel firstNameLabel;
 	private JLabel lastNameLabel;
 	private JLabel studentIdLabel;
@@ -67,6 +72,8 @@ public class StudentPanel extends JPanel {
 	private JLabel phoneNumLabel;
 	private JLabel paidByLabel;
 	private JLabel tableNumLabel;
+	private JLabel initialsLabel;
+	private JLabel formSubmittedLabel;
 
 	private JLabel allergiesLabel;
 	private JLabel moreInfoLabel;
@@ -190,6 +197,17 @@ public class StudentPanel extends JPanel {
 		tableNumComboBox = new JComboBox<String>(tables);
 		tableNumComboBox.setPreferredSize(COMBO_SIZE);
 		tableNumComboBox.setFont(FIELD_FONT);
+		
+		initialsLabel = new JLabel(INITIALS_LABEL_TEXT);
+		initialsLabel.setFont(TEXT_FONT);
+		
+		initialsTextField = new JTextField(TEXT_FIELD_ROWS/5);
+		initialsTextField.setFont(FIELD_FONT);
+		
+		formSubmittedLabel = new JLabel(FORM_SUBMITTED_LABEL_TEXT);
+		formSubmittedLabel.setFont(TEXT_FONT);
+		
+		formSubmittedCheckBox = new JCheckBox();
 
 		// All label components are right aligned with some vertical spacing
 		// between them
@@ -264,7 +282,28 @@ public class StudentPanel extends JPanel {
 		c.gridx = 4;
 		c.gridy = 3;
 		fieldsPanel.add(paidByTextField, c);
+		
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx = 3;
+		c.gridy = 4;
+		fieldsPanel.add(initialsLabel, c);
+		
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = 4;
+		c.gridy = 4;
+		fieldsPanel.add(initialsTextField, c);
+		
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 4;
+		c.gridy = 4;
+		fieldsPanel.add(formSubmittedLabel, c);
+		
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx = 4;
+		c.gridy = 4;
+		fieldsPanel.add(formSubmittedCheckBox, c);
 
+		c.anchor = GridBagConstraints.WEST;
 		c.gridx = 2;
 		c.gridy = 4;
 		c.gridwidth = 1;
