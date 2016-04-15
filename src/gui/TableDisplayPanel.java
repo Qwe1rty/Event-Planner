@@ -76,7 +76,7 @@ public class TableDisplayPanel extends JPanel
 	private JTable tableDisplay;
 	private JScrollPane tableDisplayScrollPane;
 
-	private int selectedRowOnUnassigned, selectedColOnUnassigned;
+	private int selectedRowOnUnassigned, selectedRowOnAssigned;
 	private int currentSelectedTable;
 
 	public TableDisplayPanel()
@@ -192,15 +192,7 @@ public class TableDisplayPanel extends JPanel
 			public void mouseClicked(MouseEvent e)
 			{
 				selectedRowOnUnassigned = studentDisplay.rowAtPoint(e
-						.getPoint());// get
-				// mouse-selected
-				// row
-				selectedColOnUnassigned = studentDisplay.columnAtPoint(e
-						.getPoint());// get
-				// mouse-selected
-				// col
-				System.out.println(selectedRowOnUnassigned + " "
-						+ selectedColOnUnassigned);
+						.getPoint());
 			}
 		};
 
@@ -214,6 +206,7 @@ public class TableDisplayPanel extends JPanel
 		studentDisplay.setPreferredScrollableViewportSize(new Dimension(880,
 				250));
 		studentDisplay.addMouseListener(unassignedStudentMouseListener);
+		studentDisplay.getTableHeader().setReorderingAllowed(false);
 		studentDisplay.setRowHeight(30);
 		studentDisplay.setFont(FIELD_FONT);
 		studentDisplay.getTableHeader().setFont(TEXT_FONT);
@@ -225,6 +218,15 @@ public class TableDisplayPanel extends JPanel
 		c.gridheight = 1;
 		nestedPanel.add(studentDisplayScrollPane, c);
 
+		// This object finds the row and column where the user has clicked
+		MouseListener assignedStudentMouseListener = new MouseAdapter() {
+			public void mouseClicked(MouseEvent e)
+			{
+				selectedRowOnAssigned = studentDisplay.rowAtPoint(e
+						.getPoint());
+			}
+		};
+		
 		// Create a table that displays students that are at the current table
 		// selected
 		StudentTableModel atTable = new StudentTableModel(placeholderData,
@@ -252,6 +254,7 @@ public class TableDisplayPanel extends JPanel
 	 */
 	public void paintComponent(Graphics g)
 	{
+		// TODO 4/15/16 change paint component to resize the BG depending on screen size
 		g.drawImage(background, 0, 0, null);
 	}
 
@@ -305,6 +308,32 @@ public class TableDisplayPanel extends JPanel
 						student.getFood().toString(), table });
 			}
 		}
+		
+		// Remove all students from the current table display
+		DefaultTableModel currentStudentsTableModel = (DefaultTableModel) tableDisplay.getModel();
+		while (tableDisplay.getRowCount() > 0)
+		{
+			currentStudentsTableModel.removeRow(0);
+		}
+		System.out.println("REFREH");
+		// Add the updated students to the table (only unassigned students)
+		for (int i = 0; i < Student.listSize(); ++i)
+		{
+			Student student = Student.getStudent(i);
+			System.out.println(student.getTableNum());
+			// Only add a student to the unassigned panel if they are unassigned
+			if (student.getTableNum() == currentSelectedTable)
+			{
+				System.out.println("HELLO");
+				String paid = student.isPaid() ? "Yes" : "No";
+				int tableNumber = student.getTableNum();
+				String table = tableNumber == 0 ? "Unassigned" : Integer
+						.toString(tableNumber);
+				currentStudentsTableModel.addRow(new Object[] { student.getID(),
+						student.getFirstname(), student.getLastname(), paid,
+						student.getFood().toString(), table });
+			}
+		}
 	}
 	
 	/**
@@ -334,6 +363,32 @@ public class TableDisplayPanel extends JPanel
 				String table = tableNumber == 0 ? "Unassigned" : Integer
 						.toString(tableNumber);
 				studentTableModel.addRow(new Object[] { student.getID(),
+						student.getFirstname(), student.getLastname(), paid,
+						student.getFood().toString(), table });
+			}
+		}
+		
+		// Remove all students from the current table display
+		DefaultTableModel currentStudentsTableModel = (DefaultTableModel) tableDisplay.getModel();
+		while (tableDisplay.getRowCount() > 0)
+		{
+			currentStudentsTableModel.removeRow(0);
+		}
+		System.out.println("REFREH");
+		// Add the updated students to the table (only unassigned students)
+		for (int i = 0; i < Student.listSize(); ++i)
+		{
+			Student student = Student.getStudent(i);
+			System.out.println(student.getTableNum());
+			// Only add a student to the unassigned panel if they are unassigned
+			if (student.getTableNum() == currentSelectedTable)
+			{
+				System.out.println("HELLO");
+				String paid = student.isPaid() ? "Yes" : "No";
+				int tableNumber = student.getTableNum();
+				String table = tableNumber == 0 ? "Unassigned" : Integer
+						.toString(tableNumber);
+				currentStudentsTableModel.addRow(new Object[] { student.getID(),
 						student.getFirstname(), student.getLastname(), paid,
 						student.getFood().toString(), table });
 			}
@@ -424,8 +479,27 @@ public class TableDisplayPanel extends JPanel
 		{
 			// When add is pressed, remove the student from the unassigned table
 			// and add to the current selected table
-			Student studentToAdd = Student.getStudent(selectedRowOnUnassigned);
-			studentToAdd.setTableNum(currentSelectedTable);
+			
+
+			
+			 String id = (String) studentDisplay.getValueAt(selectedRowOnUnassigned, 0);
+             String firstName = (String) studentDisplay.getValueAt(selectedRowOnUnassigned, 1);
+             String lastName = (String) studentDisplay.getValueAt(selectedRowOnUnassigned, 2);
+             System.out.println("ID " + id + " firstname " + firstName);
+             
+             //Go through all the students and see if that one is the same as the one selected
+             for (int i = 0; i < Student.listSize(); ++i) {
+                 Student student = Student.getStudent(i);
+                 if (student.getID().equalsIgnoreCase(id) &&
+                         student.getFirstname().equalsIgnoreCase(firstName) &&
+                         student.getLastname().equalsIgnoreCase(lastName)) {
+                     //This is the student, change their table
+         			student.setTableNum(currentSelectedTable);
+                     break;
+                 }
+             }
+			
+			
 			refreshEveryThingButTableDisplay();
 		}
 	}
@@ -442,8 +516,24 @@ public class TableDisplayPanel extends JPanel
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			// When delete is pressed, remove the student from the current
-			// selected table and add to the unassigned table
+			 String id = (String) tableDisplay.getValueAt(selectedRowOnAssigned, 0);
+             String firstName = (String) tableDisplay.getValueAt(selectedRowOnAssigned, 1);
+             String lastName = (String) tableDisplay.getValueAt(selectedRowOnAssigned, 2);
+             System.out.println("ID " + id + " firstname " + firstName);
+             
+             //Go through all the students and see if that one is the same as the one selected
+             for (int i = 0; i < Student.listSize(); ++i) {
+                 Student student = Student.getStudent(i);
+                 if (student.getID().equalsIgnoreCase(id) &&
+                         student.getFirstname().equalsIgnoreCase(firstName) &&
+                         student.getLastname().equalsIgnoreCase(lastName)) {
+                     //This is the student, change their table
+         			student.setTableNum(0);
+                     break;
+                 }
+             }
+             
+         	refreshEveryThingButTableDisplay();
 		}
 	}
 }
