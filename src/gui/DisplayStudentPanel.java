@@ -378,11 +378,6 @@ public class DisplayStudentPanel extends JPanel {
 			}
 			
 			refresh();
-			
-			for(int i = 0; i < Student.listSize(); ++i)
-			{
-				System.out.print(Student.getStudent(i).getFirstname() + " ");
-			}
 		}
 	}
 
