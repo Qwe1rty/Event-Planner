@@ -376,6 +376,13 @@ public class DisplayStudentPanel extends JPanel {
 					Student.sort(Parameter.TABLE_NUMBER, true);
 				}
 			}
+			
+			refresh();
+			
+			for(int i = 0; i < Student.listSize(); ++i)
+			{
+				System.out.print(Student.getStudent(i).getFirstname() + " ");
+			}
 		}
 	}
 
