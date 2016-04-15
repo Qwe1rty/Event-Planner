@@ -14,17 +14,22 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import data.Food;
 import data.Settings;
 import data.Student;
 
@@ -69,6 +74,8 @@ public class TableDisplayPanel extends JPanel
 	private JScrollPane studentDisplayScrollPane;
 	private JTable tableDisplay;
 	private JScrollPane tableDisplayScrollPane;
+	
+	private int selectedRow, selectedCol;
 	
 	
 
@@ -138,6 +145,10 @@ public class TableDisplayPanel extends JPanel
 		c.gridy = 0;
 		nestedPanel.add(deleteButton, c);
 
+
+		
+	
+		
 		// Create new table names
 		tables = new Vector<>();
 		columnNames = new Vector<>();
@@ -161,6 +172,23 @@ public class TableDisplayPanel extends JPanel
 				return false;
 			}
 		};
+		
+		// This object finds the row and column where the user has clicked
+		MouseListener tableMouseListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				selectedRow = availibleTables.rowAtPoint(e.getPoint());// get
+																	// mouse-selected
+																	// row
+				selectedCol = availibleTables.columnAtPoint(e.getPoint());// get
+																		// mouse-selected
+																		// col
+				System.out.println(selectedRow + " " + selectedCol);
+			}
+		};
+		availibleTables.addMouseListener(tableMouseListener);
+		availibleTables.addMouseListener(new AvailibleTableMouseListener());
 		// Set display parameters, font, no header
 		availibleTables.setPreferredScrollableViewportSize(new Dimension(240,
 				530));
@@ -168,6 +196,7 @@ public class TableDisplayPanel extends JPanel
 		availibleTables.setFont(FIELD_FONT);
 		availibleTables.setTableHeader(null);
 		availibleTablesScrollPane = new JScrollPane(availibleTables);
+
 		
 		// Position to the table below the buttons left of screen
 		c.gridx = 0;
@@ -220,6 +249,7 @@ public class TableDisplayPanel extends JPanel
 	{
 		g.drawImage(background, 0, 0, null);
 	}
+	
 
 	/**
 	 * Call before changing this panel to the main frame. Refreshes the number
@@ -284,6 +314,42 @@ public class TableDisplayPanel extends JPanel
         {
             return false;
         }
+    }
+    
+    /**
+     * Handles events that happens when a table is clicked
+     * @author Matthew Sun
+     * @version 4/14/16
+     */
+    class AvailibleTableMouseListener extends MouseAdapter
+    {
+    	/**
+    	 * Actions to take when the mouse clicks on a table (left JTable)
+    	 */
+    	public void mousePressed (MouseEvent e)
+    	{
+    		// Remove all current elements in the current table display table
+    		DefaultTableModel currentMembers = (DefaultTableModel) tableDisplay.getModel();
+            while (tableDisplay.getRowCount() > 0) {
+            	currentMembers.removeRow(0);
+            }
+           
+            int currentTable = availibleTables.rowAtPoint(e.getPoint()) + 1;
+            // Add all table members at the current selected table
+            for (int i = 0; i < Student.listSize(); ++i) {
+                Student student = Student.getStudent(i);
+                System.out.println(student.getTableNum());
+                // Only add a student to the current seated if they are at the selected table
+                if (student.getTableNum() == currentTable)
+                {
+                	System.out.println("HELLO");
+    	            String paid = student.isPaid() ? "Yes" : "No";
+    	            int tableNumber = student.getTableNum();
+    	            String table = tableNumber == 0 ? "Unassigned": Integer.toString(tableNumber);
+    	            currentMembers.addRow(new Object[]{student.getID(), student.getFirstname(), student.getLastname(), paid, student.getFood().toString(), table});
+                }
+            }
+    	}
     }
 
 	class BackButtonActionListener implements ActionListener
