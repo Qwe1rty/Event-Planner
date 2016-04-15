@@ -11,5 +11,6 @@ public enum Parameter {
 	FIRSTNAME, 
 	FOODTYPE,
 	ALLERGIES,
-	TABLE_NUMBER
+	TABLE_NUMBER,
+	PAID,
 }

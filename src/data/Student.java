@@ -120,22 +120,14 @@ public class Student {
 							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) > 0); index -= gap)
 								STUDENT_LIST.swap(index - gap, index);
 						}
-						//					} else if (p == Parameter.ALLERGIES) {
-						//						if (ascending) {
-						//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) < 0); index -= gap)
-						//								ll.swap(index - gap, index);
-						//						} else {
-						//							for (int index = wall; index >= gap && ((ll.get(index)).getLastname().compareTo((ll.get(index - gap)).getLastname()) > 0); index -= gap)
-						//								ll.swap(index - gap, index);
-						//						}
-						//					} else if (p == Parameter.TABLE_NUMBER) {
-						//						if (ascending) {
-						//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() < (ll.get(index - gap)).getTableNum()); index -= gap)
-						//								ll.swap(index - gap, index);
-						//						} else {
-						//							for (int index = wall; index >= gap && ((ll.get(index)).getTableNum() > (ll.get(index - gap)).getTableNum()); index -= gap)
-						//								ll.swap(index - gap, index);
-						//						}
+					} else if (param == Parameter.PAID) {
+						if (ascending) {
+							for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						} else {
+							for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						}
 					} else return;
 
 				} catch (Exception e) {System.out.println("nope");}
