@@ -13,15 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import data.Food;
@@ -32,12 +24,13 @@ import data.Student.InvalidFoodException;
 import data.Student.InvalidStudentIDException;
 
 /**
- * Gives a in depth visual display of the student
+ * Gives a in depth visual display of the student by listing its information in a similar way to the add student panel
  *
  * @author Connor Murphy, Matthew Sun
  */
 public class StudentProfile extends JPanel {
 
+    //Constant values for labels' and buttons' text
     private static final String BACK_BUTTON_TEXT = "Back";
     private static final String FIRST_NAME_LABEL_TEXT = "First Name: ";
     private static final String LAST_NAME_LABEL_TEXT = "Last Name: ";
@@ -50,18 +43,26 @@ public class StudentProfile extends JPanel {
     private static final String MORE_INFO_LABEL_TEXT = "Additional Information";
     private static final String CANCEL_BUTTON_TEXT = "Cancel";
     private static final String CONFIRM_BUTTON_TEXT = "Confirm";
+    private static final String INITIALS_LABEL_TEXT = "Initials: ";
+    private static final String FORM_SUBMITTED_LABEL_TEXT = "Form Submitted: ";
 
+    //Size of text areas
     private static final int TEXT_AREA_ROWS = 10;
     private static final int TEXT_AREA_COLS = 35;
 
+    //Size of text fields
     private static final int TEXT_FIELD_ROWS = 21;
+
+    //Fonts for all the gui elements shown
     private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
     private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
     private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
 
+    //Sizes for combo boxes and buttons
     private final Dimension COMBO_SIZE = new Dimension(340, 30);
     private final Dimension BUTTON_SIZE = new Dimension(108, 50);
 
+    //Gui elements that display and get information about the student to the user
     private JTextField firstNameTextField;
     private JTextField lastNameTextField;
     private JTextField studentIdTextField;
@@ -69,6 +70,12 @@ public class StudentProfile extends JPanel {
     private JTextField phoneNumTextField;
     private JTextField paidByTextField;
     private JComboBox<String> tableNumComboBox;
+    private JTextField initialsTextField;
+    private JCheckBox formSubmittedCheckBox;
+    private JTextArea allergiesTextArea;
+    private JTextArea moreInfoTextArea;
+
+    //Labels to define what each gui element shows
     private JLabel firstNameLabel;
     private JLabel lastNameLabel;
     private JLabel studentIdLabel;
@@ -76,29 +83,38 @@ public class StudentProfile extends JPanel {
     private JLabel phoneNumLabel;
     private JLabel paidByLabel;
     private JLabel tableNumLabel;
-
+    private JLabel initialsLabel;
+    private JLabel formSubmittedLabel;
     private JLabel allergiesLabel;
     private JLabel moreInfoLabel;
 
-    private JTextArea allergiesTextArea;
-    private JTextArea moreInfoTextArea;
-
+    //Buttons the user can press to navigate away from this screen.
+    //Cancel and back buttons go to the previous screen without saving changes
+    //The confirm button goes to the previous screen and saves changes
     private JButton cancelButton;
     private JButton confirmButton;
     private JButton backButton;
 
+    //Elements that make the screen more visually pleasing
     private Image background;
     private JPanel fieldsPanel;
     private Border textFieldBorder;
 
+    //The studen whose information is shown
     private Student student;
 
+    /**
+     * Creates a new screen that shows detailed information about the given student. Users can view and edit
+     * information about the student.
+     *
+     * @param student the student to display and edit
+     */
     public StudentProfile(Student student) {
         this.student = student;
 
         setLayout(new GridBagLayout());
 
-        // Get the bg image
+        // Get the background image
         try {
             background = ImageIO.read(getClass().getResource("/images/bg.png"));
         } catch (IOException ioe) {
@@ -163,6 +179,8 @@ public class StudentProfile extends JPanel {
             studentIdTextField.setText(id);
         }
 
+        //Read in all the food choices and add them to the combo box for food choices
+        //If there are no food choices, add an empty set of options to the combo box
         LinkedList<String> foodChoices = Food.getMealOptions();
         String[] choices;
         if (foodChoices != null) {
@@ -210,9 +228,11 @@ public class StudentProfile extends JPanel {
             paidByTextField.setText(paidBy);
         }
 
+        //Add each table to a combo box of tables
         int numTables = Settings.getNumTables();
         String[] tables = new String[numTables + 1];
         try {
+            //0 stands for an unassigned table and that is what the user should see
             tables[0] = "Unassigned";
             for (int i = 1; i < numTables + 1; ++i) {
                 tables[i] = Integer.toString(i);
@@ -226,10 +246,20 @@ public class StudentProfile extends JPanel {
         tableNumComboBox = new JComboBox<String>(tables);
         tableNumComboBox.setPreferredSize(COMBO_SIZE);
         tableNumComboBox.setFont(FIELD_FONT);
-        String tableNum = Integer.toString(student.getTableNum());
-        if (tableNum != null) {
-            tableNumComboBox.setSelectedItem(tableNum);
-        }
+        int tableNum = student.getTableNum();
+        //Since tables start at 0, tables can be selected like an index in an array
+        tableNumComboBox.setSelectedIndex(tableNum);
+
+        initialsLabel = new JLabel(INITIALS_LABEL_TEXT);
+        initialsLabel.setFont(TEXT_FONT);
+
+        initialsTextField = new JTextField(TEXT_FIELD_ROWS / 5);
+        initialsTextField.setFont(FIELD_FONT);
+
+        formSubmittedLabel = new JLabel(FORM_SUBMITTED_LABEL_TEXT);
+        formSubmittedLabel.setFont(TEXT_FONT);
+
+        formSubmittedCheckBox = new JCheckBox();
 
         // All label components are right aligned with some vertical spacing
         // between them
@@ -305,6 +335,27 @@ public class StudentProfile extends JPanel {
         c.gridy = 3;
         fieldsPanel.add(paidByTextField, c);
 
+        c.anchor = GridBagConstraints.EAST;
+        c.gridx = 3;
+        c.gridy = 4;
+        fieldsPanel.add(initialsLabel, c);
+
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 4;
+        c.gridy = 4;
+        fieldsPanel.add(initialsTextField, c);
+
+        c.anchor = GridBagConstraints.CENTER;
+        c.gridx = 4;
+        c.gridy = 4;
+        fieldsPanel.add(formSubmittedLabel, c);
+
+        c.anchor = GridBagConstraints.EAST;
+        c.gridx = 4;
+        c.gridy = 4;
+        fieldsPanel.add(formSubmittedCheckBox, c);
+
+        c.anchor = GridBagConstraints.WEST;
         c.gridx = 2;
         c.gridy = 4;
         c.gridwidth = 1;
@@ -333,10 +384,6 @@ public class StudentProfile extends JPanel {
         allergiesTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
         allergiesTextArea.setFont(FIELD_FONT);
         allergiesTextArea.setBorder(textFieldBorder);
-        String allergies = student.getAllergies();
-        if (allergies != null) {
-            allergiesTextArea.setText(allergies);
-        }
 
         c.gridx = 0;
         c.gridy++;
@@ -347,10 +394,6 @@ public class StudentProfile extends JPanel {
         moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
         moreInfoTextArea.setFont(FIELD_FONT);
         moreInfoTextArea.setBorder(textFieldBorder);
-        String moreInfo = student.getInfo();
-        if (moreInfo != null) {
-            moreInfoTextArea.setText(moreInfo);
-        }
 
         c.gridx = 3;
         fieldsPanel.add(moreInfoTextArea, c);
@@ -392,6 +435,12 @@ public class StudentProfile extends JPanel {
         g.drawImage(background, 0, 0, null);
     }
 
+    /**
+     * When the user clicks the back or cancel button this class is called.  It checks if any
+     * of the student's information changed and if it did warns the user that they have unsaved
+     * changes made. If the user wants to leave, the screen is set to the display student panel
+     * @author Connor Murphy
+     */
     class BackButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -405,7 +454,8 @@ public class StudentProfile extends JPanel {
             int tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
             String allergies = allergiesTextArea.getText();
             String moreInfo = moreInfoTextArea.getText();
-            //TODO: update once the initals and hasPaid gui elements are added
+            String intitals = initialsTextField.getText();
+            boolean formSubmitted = formSubmittedCheckBox.isSelected();
 
             //Compare what is in with what the student has to see if something has changed
             boolean changed = false;
@@ -427,7 +477,10 @@ public class StudentProfile extends JPanel {
                 changed = true;
             } else if (!moreInfo.equals(student.getInfo())) {
                 changed = true;
+            } else if (formSubmitted != student.isFormSubmitted()) {
+                changed = true;
             }
+            //TODO: add initials to the list of checks
 
             // Show a confirm exit dialog if something has changed
             if (changed) {
@@ -448,6 +501,7 @@ public class StudentProfile extends JPanel {
     /**
      * When the user selects that they are finished viewing this students
      * profile, this class updates the new data for the student
+     * @author Connor Murphy
      */
     class FinishButtonActionListener implements ActionListener {
         @Override
@@ -476,6 +530,7 @@ public class StudentProfile extends JPanel {
             student.setPaidBy(paidByTextField.getText());
             student.setAllergies(allergiesTextArea.getText());
 
+            //Show the display student panel when done
             EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
         }
     }
