@@ -1,5 +1,8 @@
 package gui;
 
+import gui.DisplayStudentPanel.SearchBarFocusListener;
+import gui.DisplayStudentPanel.SearchBarKeyListener;
+import gui.DisplayStudentPanel.SearchButtonActionListener;
 import gui.DisplayStudentPanel.StudentTableModel;
 import gui.DisplayStudentPanel.TableMouseListener;
 import gui.SettingsPanel.EditMouseListener;
@@ -14,6 +17,10 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -23,13 +30,19 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import data.Food;
+import data.LinkedList;
+import data.Parameter;
 import data.Settings;
 import data.Student;
 
@@ -43,6 +56,7 @@ public class TableDisplayPanel extends JPanel
 	private static final String BACK_BUTTON_TEXT = "Back";
 	private static final String REMOVE_BUTTON_TEXT = "Delete";
 	private static final String ADD_BUTTON_TEXT = "Add";
+	private final String SEARCH_BUTTON_TEXT = "Search";
 
 	private static final int TEXT_AREA_ROWS = 10;
 	private static final int TEXT_AREA_COLS = 35;
@@ -51,16 +65,19 @@ public class TableDisplayPanel extends JPanel
 	private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
 	private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
 	private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
+	private final Font SEARCH_FONT = new Font("Tw Cen MT", Font.PLAIN, 30);
 
 	private final String[] COLUMN_NAMES = { "Student No.", "First Name",
 			"Last Name", "Payment", "Food Choice", "Table No." };
 
 	private final Dimension COMBO_SIZE = new Dimension(340, 30);
 	private final Dimension BUTTON_SIZE = new Dimension(108, 50);
+	private final int SEARCH_FIELD_ROWS = 20;
 
 	private JButton deleteButton;
 	private JButton addButton;
 	private JButton backButton;
+	private JButton searchButton;
 
 	private Image background;
 	private JPanel nestedPanel;
@@ -75,6 +92,18 @@ public class TableDisplayPanel extends JPanel
 	private JScrollPane studentDisplayScrollPane;
 	private JTable tableDisplay;
 	private JScrollPane tableDisplayScrollPane;
+	
+	// Variables used to search for a student
+	private final String[] SEARCH_OPTIONS = { "All", "Student ID",
+			"First Name", "Last Name", "Food Choice", "Allergies", "Table No.",
+			"Paid" };
+	private final String PRE_SEARCH_TEXT = "Search...";
+	private String searchItem;
+	private JTextField searchBar;
+	private JComboBox<String> searchOptions;
+	
+	//A list of the displayed students
+	private LinkedList<Student> displayedStudents;
 
 	private int selectedRowOnUnassigned, selectedRowOnAssigned;
 	private int currentSelectedTable;
@@ -140,10 +169,51 @@ public class TableDisplayPanel extends JPanel
 		deleteButton.setForeground(Color.WHITE);
 		deleteButton.setFont(BUTTON_FONT);
 
-		// Position the add button right of the back button
+		// Position the delete button next to the add button
 		c.gridx = 2;
 		c.gridy = 0;
 		nestedPanel.add(deleteButton, c);
+
+		// Search Button
+//		searchButton = new JButton(SEARCH_BUTTON_TEXT);
+//		searchButton.addActionListener(new SearchButtonActionListener());
+//		searchButton.setBackground(new Color(3, 159, 244));
+//		searchButton.setPreferredSize(BUTTON_SIZE);
+//		searchButton.setForeground(Color.WHITE);
+//		searchButton.setFont(BUTTON_FONT);
+		
+		// Advanced search options
+		searchOptions = new JComboBox<String>(SEARCH_OPTIONS);
+		searchOptions.setFont(FIELD_FONT);
+		
+		// Position the search options next to the search bar
+		c.gridx = 3;
+		c.gridy = 0;
+		c.insets = new Insets (0,180,0,7);
+		nestedPanel.add(searchOptions, c);
+
+		// Search bar
+		searchItem = "";
+		searchBar = new JTextField(SEARCH_FIELD_ROWS);
+		searchBar.addFocusListener(new SearchBarFocusListener());
+		searchBar.addKeyListener(new SearchBarKeyListener());
+		searchBar.setText(PRE_SEARCH_TEXT);
+		searchBar.setForeground(Color.GRAY);
+		searchBar.setFont(SEARCH_FONT);
+		
+		// Position the search bar next to the search options
+		c.gridx = 4;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.WEST;
+		c.insets = new Insets (2,0,0,0);
+		nestedPanel.add(searchBar, c);
+		
+		
+		// Position the search button next to the delete button
+//		c.anchor = GridBagConstraints.WEST;
+//		c.gridx = 3;
+//		c.gridy = 0;
+//		nestedPanel.add(searchButton, c);
 
 		// Create new table names
 		tables = new Vector<>();
@@ -215,6 +285,7 @@ public class TableDisplayPanel extends JPanel
 		// Position this table right of the table table
 		c.gridx = 2;
 		c.gridy = 1;
+		c.gridwidth = 3;
 		c.gridheight = 1;
 		nestedPanel.add(studentDisplayScrollPane, c);
 
@@ -247,6 +318,80 @@ public class TableDisplayPanel extends JPanel
 		nestedPanel.add(tableDisplayScrollPane, c);
 
 		add(nestedPanel);
+		
+		
+		// By default have the first table
+		currentSelectedTable = 1;
+
+		// Create a list of students that are to be displayed
+		displayedStudents = new LinkedList<>();
+		for (int i = 0; i < Student.listSize(); ++i)
+		{
+			displayedStudents.append(Student.getStudent(i));
+		}
+	}
+	
+	/**
+	 * Call before changing this panel to the main frame. Refreshes the items in
+	 * the food drop down box
+	 */
+	public void refresh(boolean updateFromGlobalStudentList)
+	{
+		// Remove all the items from the table
+		DefaultTableModel model = (DefaultTableModel) studentDisplay.getModel();
+		while (studentDisplay.getRowCount() > 0)
+		{
+			model.removeRow(0);
+		}
+
+		if (updateFromGlobalStudentList)
+		{
+			// Remove students from displayed list
+			while (displayedStudents.size() > 0)
+				displayedStudents.remove(0);
+
+			// Add students to the list of displayed students
+			for (int i = 0; i < Student.listSize(); ++i)
+			{
+				displayedStudents.append(Student.getStudent(i));
+			}
+		}
+		// Else the display list is already updated and proceed normally
+
+		// Add the updated students to the table
+		for (int i = 0; i < displayedStudents.size(); ++i)
+		{
+			Student student = displayedStudents.get(i);
+			int tableNum = student.getTableNum();
+			// Only add unassigned students
+			if (tableNum == 0)
+			{
+				String paid = student.isPaid() ? "Yes" : "No";
+				String table = tableNum == 0 ? "Unassigned" : Integer
+						.toString(tableNum);
+				model.addRow(new Object[] { student.getID(),
+						student.getFirstname(), student.getLastname(), paid,
+						student.getFood().toString(), table });
+			}
+		}
+		
+		// Remove all the availible tables from the table
+		DefaultTableModel tableTableModel = (DefaultTableModel) availibleTables
+				.getModel();
+		System.out.println(availibleTables.getRowCount() + "ROWS");
+		while (availibleTables.getRowCount() > 0)
+		{
+			tableTableModel.removeRow(0);
+			System.out.println("REMOVING");
+		}
+		// Add the updated number of tables to the table
+		for (int n = 1; n < Settings.getNumTables() + 1; n++)
+		{
+			Vector<String> rowData = new Vector<>();
+			rowData.addElement("Table " + n);
+			System.out.println(rowData);
+			tableTableModel.addRow(rowData);
+		}
 	}
 
 	/**
@@ -534,6 +679,120 @@ public class TableDisplayPanel extends JPanel
              }
              
          	refreshEveryThingButTableDisplay();
+		}
+	}
+	
+	/**
+	 * Handles graphical changes when the search bar loses or gains focus
+	 * @author Matthew Sun
+	 * @version 4/17/16
+	 */
+	class SearchBarFocusListener implements FocusListener
+	{
+		/**
+		 * User selects the search bar, clear the search bar and change color
+		 */
+		public void focusGained(FocusEvent arg0)
+		{
+			searchBar.setText("");
+			searchBar.setForeground(Color.BLACK);
+		}
+
+		/**
+		 * User deselects the search bar, reupdate the search bar text + color
+		 */
+		public void focusLost(FocusEvent e)
+		{
+			searchBar.setText(PRE_SEARCH_TEXT);
+			searchBar.setForeground(Color.GRAY);
+		}
+	}
+	
+	/**
+	 * Does a live instant search while user types search keywords
+	 * @author Matthew Sun
+	 * @version 4/17/16
+	 */
+	class SearchBarKeyListener implements KeyListener
+	{
+	
+		public void keyPressed(KeyEvent arg0)
+		{
+			
+		}
+
+		/**
+		 * Performs a live instant search that updates the display table
+		 */
+		public void keyReleased(KeyEvent arg0)
+		{
+			// Get a live update on what is being searched (everytime a key is released)
+			searchItem = searchBar.getText();
+			System.out.println(searchItem);
+			
+			// There is a search
+			if (searchItem.length() > 0)
+			{
+				LinkedList<Student> searchResults = new LinkedList<>();
+				// Find which parameter is selected and search by it
+				if (searchOptions.getSelectedItem().equals(
+						"Student ID"))
+				{
+					searchResults = Student.search(Parameter.STUDENT_ID,
+							searchItem);
+				}
+				else if (searchOptions.getSelectedItem().equals(
+						"First Name"))
+				{
+					searchResults = Student.search(Parameter.FIRSTNAME,
+							searchItem);
+				}
+				else if (searchOptions.getSelectedItem().equals(
+						"Last Name"))
+				{
+					searchResults = Student.search(Parameter.LASTNAME,
+							searchItem);
+				}
+				else if (searchOptions.getSelectedItem().equals(
+						"Food Type"))
+				{
+					searchResults = Student.search(Parameter.FOODTYPE,
+							searchItem);
+				}
+				else if (searchOptions.getSelectedItem().equals(
+						"Allergies"))
+				{
+					searchResults = Student.search(Parameter.ALLERGIES,
+							searchItem);
+				}
+				else if (searchOptions.getSelectedItem().equals(
+						"Table No."))
+				{
+					searchResults = Student.search(Parameter.TABLE_NUMBER,
+							searchItem);
+				}
+				else if (searchOptions.getSelectedItem()
+						.equals("Paid"))
+				{
+					searchResults = Student.search(Parameter.PAID,
+							searchItem);
+				}
+				
+				// Update the displayed list based on search results
+				displayedStudents = searchResults;
+				// Update the table
+				refresh(false);
+			}
+			// Search terms are cleared, reset the display table
+			else if (searchItem.equals(""))
+				refresh(true);
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e)
+		{
+			// TODO Auto-generated method stub
+			
 		}
 	}
 }
