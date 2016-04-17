@@ -255,11 +255,14 @@ public class StudentProfile extends JPanel {
 
         initialsTextField = new JTextField(TEXT_FIELD_ROWS / 5);
         initialsTextField.setFont(FIELD_FONT);
+        //TODO: add student initals
+        initialsTextField.setText("ADD INITIASL");
 
         formSubmittedLabel = new JLabel(FORM_SUBMITTED_LABEL_TEXT);
         formSubmittedLabel.setFont(TEXT_FONT);
 
         formSubmittedCheckBox = new JCheckBox();
+        formSubmittedCheckBox.setSelected(student.isFormSubmitted());
 
         // All label components are right aligned with some vertical spacing
         // between them
@@ -439,6 +442,7 @@ public class StudentProfile extends JPanel {
      * When the user clicks the back or cancel button this class is called.  It checks if any
      * of the student's information changed and if it did warns the user that they have unsaved
      * changes made. If the user wants to leave, the screen is set to the display student panel
+     *
      * @author Connor Murphy
      */
     class BackButtonActionListener implements ActionListener {
@@ -451,7 +455,13 @@ public class StudentProfile extends JPanel {
             String foodChoice = (String) foodChoiceComboBox.getSelectedItem();
             String phoneNumber = phoneNumTextField.getText();
             String paidBy = paidByTextField.getText();
-            int tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
+            int tableNum;
+            try {
+                tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
+            } catch (NumberFormatException nfe) {
+                //Tried to parse the string "Unassigned" which is stored as table number 0
+                tableNum = 0;
+            }
             String allergies = allergiesTextArea.getText();
             String moreInfo = moreInfoTextArea.getText();
             String intitals = initialsTextField.getText();
@@ -490,10 +500,10 @@ public class StudentProfile extends JPanel {
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                         null, options, options[1]);
                 if (result == JOptionPane.YES_OPTION)
-                    EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
+                    EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT, false);
             } else {
                 //Nothing changed so the user can go back without consequences
-                EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
+                EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT, false);
             }
         }
     }
@@ -501,6 +511,7 @@ public class StudentProfile extends JPanel {
     /**
      * When the user selects that they are finished viewing this students
      * profile, this class updates the new data for the student
+     *
      * @author Connor Murphy
      */
     class FinishButtonActionListener implements ActionListener {
@@ -531,7 +542,7 @@ public class StudentProfile extends JPanel {
             student.setAllergies(allergiesTextArea.getText());
 
             //Show the display student panel when done
-            EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
+            EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT, false);
         }
     }
 }

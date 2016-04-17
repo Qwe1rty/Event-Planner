@@ -14,38 +14,23 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import data.LinkedList;
 import data.Parameter;
 import data.Student;
 
+/**
+ * This is the main screen the user sees. It displays the main information about every student in the
+ * program in a table.  The user can sort the information by clicking the column headers at any time
+ * @author Connor Murphy, Matthew Sun
+ */
 public class DisplayStudentPanel extends JPanel {
-	private final String BACK_BUTTON_TEXT = "Back";
-	private final String ADD_BUTTON_TEXT = "Add";
-	private final String REMOVE_BUTTON_TEXT = "Delete";
-	private final String SEARCH_BUTTON_TEXT = "Search";
-
-	private final int TEXT_AREA_ROWS = 17;
-	private final int TEXT_AREA_COLS = 70;
-	private final int TEXT_FIELD_COLS = 15;
-
-	private final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
-	private final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 26);
-	private final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 22);
-	private final Font SEARCH_FONT = new Font("Tw Cen MT", Font.PLAIN, 42);
-
-	private final Dimension BUTTON_SIZE = new Dimension(108, 50);
-
+	//Names for the columns of the table
 	private final String STUDENT_NO_COLUMN_HEADER = "Student No.";
 	private final String FIRST_NAME_COLUMN_HEADER = "First Name";
 	private final String LAST_NAME_COLUMN_HEADER = "Last Name";
@@ -53,39 +38,71 @@ public class DisplayStudentPanel extends JPanel {
 	private final String FOOD_CHOICE_COLUMN_HEADER = "Food Choice";
 	private final String TABLE_NO_COLUMN_HEADER = "Table No.";
 
+	//Text for all the buttons
+	private final String BACK_BUTTON_TEXT = "Back";
+	private final String ADD_BUTTON_TEXT = "Add";
+	private final String REMOVE_BUTTON_TEXT = "Delete";
+	private final String SEARCH_BUTTON_TEXT = "Search";
+
+	//Font for everythring that is shown in this screen
+	private final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
+	private final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 26);
+	private final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 22);
+	private final Font SEARCH_FONT = new Font("Tw Cen MT", Font.PLAIN, 42);
+
+	//The size for each button
+	private final Dimension BUTTON_SIZE = new Dimension(108, 50);
+
+	//The size of a text field
+	private final int TEXT_FIELD_ROWS = 10;
+
+	//The array of names for the columns
 	private final String[] COLUMN_NAMES = { STUDENT_NO_COLUMN_HEADER,
 			FIRST_NAME_COLUMN_HEADER, LAST_NAME_COLUMN_HEADER, PAYMENT_COLUMN_HEADER,
 			FOOD_CHOICE_COLUMN_HEADER, TABLE_NO_COLUMN_HEADER };
 
+	//The buttons
 	private JButton backButton;
 	private JButton addButton;
 	private JButton deleteButton;
 	private JButton searchButton;
 
+	//Variables used to search for a student
 	private String searchItem;
 
 	private JTextField searchBar;
 
-	private JLabel studentNum;
-	private JLabel firstName;
-	private JLabel lastName;
-	private JLabel payment;
-	private JLabel foodChoice;
-	private JLabel tableNum;
-
+	//The background for this screen
 	private Image background;
+
+	//The panel used to display everything
 	private JPanel nestedPanel;
+
+	//The table that shows all the student data
 	private JTable displayTable;
-	private Object[][] placeholderData = { {} };
-	private Vector<Vector<String>> rowData;
+
+	//Used to find where the user has clicked
 	private int selectedRow, selectedCol;
 
+	//A list of the displayed students
+	private LinkedList<Student> displayedStudents;
+
+	/**
+	 * Used to represent the values in the column headers
+	 */
 	private enum Header {
 		ID, FIRST_NAME, LAST_NAME, PAID, FOOD_CHOICE, TABLE_NO
 	};
 
+	/**
+	 * Used to keep track of what was the last selected column header in order to know whether to sort ascending
+	 * or descending
+	 */
 	private Header selectedHeader;
 
+	/**
+	 * Creates a panel that shows information about students
+	 */
 	public DisplayStudentPanel() {
 		setLayout(new GridBagLayout());
 
@@ -161,11 +178,13 @@ public class DisplayStudentPanel extends JPanel {
 		c.gridy = 0;
 		nestedPanel.add(searchButton, c);
 
-		// TODO: Change the data in the table to the loaded data
+		//Placeholder data TODO: Change the data in the table to the loaded data
+		Object[][] placeholderData = { {} };
 		StudentTableModel model = new StudentTableModel(placeholderData,
 				COLUMN_NAMES);
 		displayTable = new JTable(placeholderData, COLUMN_NAMES);
 
+		//Set values for the table
 		displayTable.setModel(model);
 		displayTable.addMouseListener(new TableMouseListener());
 		displayTable
@@ -190,22 +209,42 @@ public class DisplayStudentPanel extends JPanel {
 		selectedRow = 0;
 		selectedCol = 0;
 		selectedHeader = null;
+
+		//Create a list of students that are to be displayed
+		displayedStudents = new LinkedList<>();
+		for(int i = 0; i < Student.listSize(); ++i)
+		{
+			displayedStudents.append(Student.getStudent(i));
+		}
+
 	}
 
 	/**
 	 * Call before changing this panel to the main frame. Refreshes the items in
 	 * the food drop down box
 	 */
-	public void refresh() {
+	public void refresh(boolean updateFromGlobalStudentList) {
 		// Remove all the items from the table
 		DefaultTableModel model = (DefaultTableModel) displayTable.getModel();
 		while (displayTable.getRowCount() > 0) {
 			model.removeRow(0);
 		}
 
+		if(updateFromGlobalStudentList) {
+			//Remove students from displayed list
+			while (displayedStudents.size() > 0)
+				displayedStudents.remove(0);
+
+			//Add students to the list of displayed students
+			for (int i = 0; i < Student.listSize(); ++i) {
+				displayedStudents.append(Student.getStudent(i));
+			}
+		}
+		//Else the display list is already updated and proceed normally
+
 		// Add the updated students to the table
-		for (int i = 0; i < Student.listSize(); ++i) {
-			Student student = Student.getStudent(i);
+		for (int i = 0; i < displayedStudents.size(); ++i) {
+			Student student = displayedStudents.get(i);
 			String paid = student.isPaid() ? "Yes" : "No";
 			int tableNum = student.getTableNum();
 			String table = tableNum == 0 ? "Unassigned" : Integer
@@ -223,41 +262,59 @@ public class DisplayStudentPanel extends JPanel {
 		g.drawImage(background, 0, 0, null);
 	}
 
+	/**
+	 * The model used by the table. Its only purpose is to make the cells uneditable in the table
+	 * @author Connor Murphy
+	 */
 	class StudentTableModel extends DefaultTableModel {
-		public StudentTableModel(Vector rows, Vector columnNames) {
-			super(rows, columnNames);
-		}
-
+		/**
+		 * Creates a new table model
+		 * @param rows the initail data that goes in the rows of the table
+		 * @param columnNames the name of each column
+         */
 		public StudentTableModel(Object[][] rows, Object[] columnNames) {
 			super(rows, columnNames);
 		}
 
+		/**
+		 * Ensures that every cell in the table is uneditable
+		 * @param row the row of the cell
+		 * @param col the column of the cell
+         * @return if the column is editable (its not)
+         */
 		@Override
 		public boolean isCellEditable(int row, int col) {
 			return false;
 		}
 	}
 
+	/**
+	 * Used to go to the previous screen which is the home screen
+	 * @author Connor Murphy
+	 */
 	class BackButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			EventPlanner.setPanel(EventPlanner.Panel.HOME);
 		}
 	}
 
-	// This object finds the row and column where the user has clicked
+	/**
+	 * Finds the row and column where the user has clicked
+	 * @author Matthew Sun
+	 */
 	class TableMouseListener extends MouseAdapter {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			selectedRow = displayTable.rowAtPoint(e.getPoint());// get
-																// mouse-selected
-																// row
-			selectedCol = displayTable.columnAtPoint(e.getPoint());// get
-																	// mouse-selected
-																	// col
+			//Store the selected row and column that was selected
+			selectedRow = displayTable.rowAtPoint(e.getPoint());
+			selectedCol = displayTable.columnAtPoint(e.getPoint());
 
 			// If there is a double click open the student profile;
 			if (e.getClickCount() == 2) {
+
+				/*
+				//Store all the information about the student double clicked
 				String id = (String) displayTable.getValueAt(selectedRow, 0);
 				String firstName = (String) displayTable.getValueAt(
 						selectedRow, 1);
@@ -293,12 +350,20 @@ public class DisplayStudentPanel extends JPanel {
 							&& student.getFood().toString()
 									.equalsIgnoreCase(chosenFood)
 							&& student.getTableNum() == tableNum) {
+
 						// This is the student, show its information panel
 						EventPlanner.showStudentProfile(new StudentProfile(
 								student));
 						break;
 					}
 				}
+				*/
+
+				//TODO: remove if not working
+				//New EXPERIMENTAL method
+				Student student = displayedStudents.get(selectedRow);
+				EventPlanner.showStudentProfile(new StudentProfile(
+						student));
 
 			}
 
@@ -315,6 +380,7 @@ public class DisplayStudentPanel extends JPanel {
 	class TableColumnMouseListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			//Find the String representation of wich column header was clicked
 			int headerIndex = displayTable.getTableHeader().columnAtPoint(
 					e.getPoint());
 			String value = (String) displayTable.getColumnModel()
@@ -350,12 +416,11 @@ public class DisplayStudentPanel extends JPanel {
 				}
 			}else if (value.equalsIgnoreCase(PAYMENT_COLUMN_HEADER)) {
 				if (selectedHeader == Header.PAID) {
-					//TODO: be able to sort by paid
 					selectedHeader = null;
-					//Student.sort(Parameter.PAID, false);
+					Student.sort(Parameter.PAID, false);
 				} else {
 					selectedHeader = Header.PAID;
-					//Student.sort(Parameter.PAID, true);
+					Student.sort(Parameter.PAID, true);
 				}
 			}
 			else if (value.equalsIgnoreCase(FOOD_CHOICE_COLUMN_HEADER)) {
@@ -376,34 +441,104 @@ public class DisplayStudentPanel extends JPanel {
 					Student.sort(Parameter.TABLE_NUMBER, true);
 				}
 			}
-			
-			refresh();
+
+			//Update the displayed list
+			while(displayedStudents.size() > 0)
+			displayedStudents.remove(0);
+
+			for(int i = 0; i < Student.listSize(); ++i)
+			{
+				displayedStudents.append(Student.getStudent(i));
+			}
+
+			//Update the table to show the sorted results
+			refresh(true);
 		}
 	}
 
+	/**
+	 * Brings the user to the add student screen when they click the add button
+	 * @author Matthew Sun
+	 */
 	class AddButtonActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			EventPlanner.setPanel(EventPlanner.Panel.STUDENT);
 		}
 	}
 
+	/**
+	 * Deletes the selected student from the list of students and removes it from the table
+	 */
 	class DeleteButtonActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
+			//TODO: implement functionality
+			//Remove the student from the table
 
+			//Remove the student from the list of students
+
+			//Remove the student from its table
 		}
 	}
 
-	// TODO: 2016-04-12 Implement actual search functions
+	/**
+	 * Allows the user to search by a parameter for students
+	 */
 	class SearchButtonActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			// A dialog box appears that prompts user input
-			searchItem = JOptionPane.showInputDialog(EventPlanner.FRAME, "",
-					"Search", JOptionPane.PLAIN_MESSAGE);
+		public void actionPerformed(ActionEvent e) {
+			//A custom dialog that has a drop down list of parameters to search by and a space for the user
+			//to type in their search query
+			String[] parameters = {"Student ID", "First Name", "Last Name", "Food Type", "Allergies", "Table No.", "Paid"};
+			JComboBox<String> parametersComboBox = new JComboBox<>(parameters);
+			JTextField searchField = new JTextField(TEXT_FIELD_ROWS);
 
+			final JComponent[] inputs = new JComponent[] {
+					new JLabel("Search Parameter"),
+					parametersComboBox,
+					searchField,
+			};
+
+			JOptionPane.showMessageDialog(EventPlanner.FRAME, inputs, "Search", JOptionPane.PLAIN_MESSAGE);
+
+			searchItem = searchField.getText();
+			LinkedList<Student> searchResults = new LinkedList<>();
+			//Ensure the search term exists
 			if (searchItem != null && searchItem.length() > 0) {
-				System.out.println("SEARCH FOR " + searchItem);
+				//Find which parameter is selected and search by it
+				if(parametersComboBox.getSelectedItem().equals("Student ID"))
+				{
+					searchResults = Student.search(Parameter.STUDENT_ID, searchItem);
+				}
+				else if(parametersComboBox.getSelectedItem().equals("First Name"))
+				{
+					searchResults = Student.search(Parameter.FIRSTNAME, searchItem);
+				}
+				else if(parametersComboBox.getSelectedItem().equals("Last Name"))
+				{
+					searchResults = Student.search(Parameter.LASTNAME, searchItem);
+				}
+				else if(parametersComboBox.getSelectedItem().equals("Food Type"))
+				{
+					searchResults = Student.search(Parameter.FOODTYPE, searchItem);
+				}
+				else if(parametersComboBox.getSelectedItem().equals("Allergies"))
+				{
+					searchResults = Student.search(Parameter.ALLERGIES, searchItem);
+				}
+				else if(parametersComboBox.getSelectedItem().equals("Table No."))
+				{
+					searchResults = Student.search(Parameter.TABLE_NUMBER, searchItem);
+				}
+				else if(parametersComboBox.getSelectedItem().equals("Paid"))
+				{
+					searchResults = Student.search(Parameter.PAID, searchItem);
+				}
 			}
 
+			//Update the displayed list
+			displayedStudents = searchResults;
+
+			//Update the table
+			refresh(false);
 		}
 	}
 }
