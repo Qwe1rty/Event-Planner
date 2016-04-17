@@ -432,6 +432,8 @@ public class StudentPanel extends JPanel {
 		paidByTextField.setText("");
 		allergiesTextArea.setText("");
 		moreInfoTextArea.setText("");
+		initialsTextField.setText("");
+		formSubmittedCheckBox.setSelected(false);
 	}
 
 	/**
