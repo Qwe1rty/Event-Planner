@@ -205,7 +205,7 @@ public class DisplayStudentPanel extends JPanel
 		
 		searchOptions = new JComboBox<String>(SEARCH_OPTIONS);
 		searchOptions.setFont(FIELD_FONT);
-		c.gridx = 5;
+		c.gridx = 3;
 		c.gridy = 0;
 		c.insets = new Insets (0,200,0,1);
 		nestedPanel.add(searchOptions, c);
@@ -218,7 +218,7 @@ public class DisplayStudentPanel extends JPanel
 		searchBar.setForeground(Color.GRAY);
 		searchBar.setFont(SEARCH_FONT);
 		
-		c.gridx = 6;
+		c.gridx = 4;
 		c.gridy = 0;
 		c.insets = new Insets (2,0,0,0);
 		nestedPanel.add(searchBar, c);
@@ -245,7 +245,7 @@ public class DisplayStudentPanel extends JPanel
 
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth = 8;
+		c.gridwidth = 5;
 		c.insets = new Insets(15, 0, 0, 0);
 		nestedPanel.add(scrollPane, c);
 
