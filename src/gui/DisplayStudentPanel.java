@@ -441,7 +441,6 @@ public class DisplayStudentPanel extends JPanel {
 					Student.sort(Parameter.TABLE_NUMBER, true);
 				}
 			}
-
 			//Update the displayed list
 			while(displayedStudents.size() > 0)
 			displayedStudents.remove(0);
@@ -485,60 +484,83 @@ public class DisplayStudentPanel extends JPanel {
 	 */
 	class SearchButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			//A custom dialog that has a drop down list of parameters to search by and a space for the user
-			//to type in their search query
-			String[] parameters = {"Student ID", "First Name", "Last Name", "Food Type", "Allergies", "Table No.", "Paid"};
-			JComboBox<String> parametersComboBox = new JComboBox<>(parameters);
-			JTextField searchField = new JTextField(TEXT_FIELD_ROWS);
-
-			final JComponent[] inputs = new JComponent[] {
-					new JLabel("Search Parameter"),
-					parametersComboBox,
-					searchField,
-			};
-
-			JOptionPane.showMessageDialog(EventPlanner.FRAME, inputs, "Search", JOptionPane.PLAIN_MESSAGE);
-
-			searchItem = searchField.getText();
-			LinkedList<Student> searchResults = new LinkedList<>();
-			//Ensure the search term exists
-			if (searchItem != null && searchItem.length() > 0) {
-				//Find which parameter is selected and search by it
-				if(parametersComboBox.getSelectedItem().equals("Student ID"))
-				{
-					searchResults = Student.search(Parameter.STUDENT_ID, searchItem);
+			
+			// When the user has not searched yet, perform a search
+			if (searchButton.getText().equals("Search"))
+			{
+				//A custom dialog that has a drop down list of parameters to search by and a space for the user
+				//to type in their search query
+				String[] parameters = {"Student ID", "First Name", "Last Name", "Food Type", "Allergies", "Table No.", "Paid"};
+				JComboBox<String> parametersComboBox = new JComboBox<>(parameters);
+				JTextField searchField = new JTextField(TEXT_FIELD_ROWS);
+	
+				final JComponent[] inputs = new JComponent[] {
+						new JLabel("Search Parameter"),
+						parametersComboBox,
+						searchField,
+				};
+	
+				JOptionPane.showMessageDialog(EventPlanner.FRAME, inputs, "Search", JOptionPane.PLAIN_MESSAGE);
+	
+				searchItem = searchField.getText();
+				LinkedList<Student> searchResults = new LinkedList<>();
+				//Ensure the search term exists
+				if (searchItem != null && searchItem.length() > 0) {
+					//Find which parameter is selected and search by it
+					if(parametersComboBox.getSelectedItem().equals("Student ID"))
+					{
+						searchResults = Student.search(Parameter.STUDENT_ID, searchItem);
+					}
+					else if(parametersComboBox.getSelectedItem().equals("First Name"))
+					{
+						searchResults = Student.search(Parameter.FIRSTNAME, searchItem);
+					}
+					else if(parametersComboBox.getSelectedItem().equals("Last Name"))
+					{
+						searchResults = Student.search(Parameter.LASTNAME, searchItem);
+					}
+					else if(parametersComboBox.getSelectedItem().equals("Food Type"))
+					{
+						searchResults = Student.search(Parameter.FOODTYPE, searchItem);
+					}
+					else if(parametersComboBox.getSelectedItem().equals("Allergies"))
+					{
+						searchResults = Student.search(Parameter.ALLERGIES, searchItem);
+					}
+					else if(parametersComboBox.getSelectedItem().equals("Table No."))
+					{
+						searchResults = Student.search(Parameter.TABLE_NUMBER, searchItem);
+					}
+					else if(parametersComboBox.getSelectedItem().equals("Paid"))
+					{
+						searchResults = Student.search(Parameter.PAID, searchItem);
+					}
 				}
-				else if(parametersComboBox.getSelectedItem().equals("First Name"))
-				{
-					searchResults = Student.search(Parameter.FIRSTNAME, searchItem);
-				}
-				else if(parametersComboBox.getSelectedItem().equals("Last Name"))
-				{
-					searchResults = Student.search(Parameter.LASTNAME, searchItem);
-				}
-				else if(parametersComboBox.getSelectedItem().equals("Food Type"))
-				{
-					searchResults = Student.search(Parameter.FOODTYPE, searchItem);
-				}
-				else if(parametersComboBox.getSelectedItem().equals("Allergies"))
-				{
-					searchResults = Student.search(Parameter.ALLERGIES, searchItem);
-				}
-				else if(parametersComboBox.getSelectedItem().equals("Table No."))
-				{
-					searchResults = Student.search(Parameter.TABLE_NUMBER, searchItem);
-				}
-				else if(parametersComboBox.getSelectedItem().equals("Paid"))
-				{
-					searchResults = Student.search(Parameter.PAID, searchItem);
-				}
+	
+				//Update the displayed list
+				displayedStudents = searchResults;
+				//Update the table
+				refresh(false);
+				//Change the search button to a CLEAR SEARCH button
+				searchButton.setText("Clear");
 			}
+			// User wants to revert to original display
+			else
+			{
+				//Update the displayed list
+				while(displayedStudents.size() > 0)
+				displayedStudents.remove(0);
 
-			//Update the displayed list
-			displayedStudents = searchResults;
+				for(int i = 0; i < Student.listSize(); ++i)
+				{
+					displayedStudents.append(Student.getStudent(i));
+				}
 
-			//Update the table
-			refresh(false);
+				//Update the table to show the sorted results
+				refresh(true);
+				// Change the CLEAR SEARCH button back to a SEARCH button
+				searchButton.setText("Search");
+			}
 		}
 	}
 }
