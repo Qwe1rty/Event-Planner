@@ -26,21 +26,19 @@ import java.util.Vector;
  */
 public class SettingsPanel extends JPanel
 {
-
+	//The text that appears buttons or as labels for text input areas
 	private static final String BACK_BUTTON_TEXT = "Back";
 	private static final String TITLE_TEXT = "                                       Current Food Items                                       ";
 	private static final String ADD_BUTTON_TEXT = "Add Food Item";
-	private static final String EDIT_BUTTON_TEXT = "Edit Food Item";
 	private static final String REMOVE_BUTTON_TEXT = "Remove Food Item";
 	private static final String NUM_TABLES_TEXT = "Number of Tables:";
 	private static final String PPL_PER_TABLE_TEXT = "People per Table:";
 	private static final String CLEAR_DATA_TEXT = "Clear Data";
-	private static final String FINISH_BUTTON_TEXT = "Finish";
 
-	private static final int TEXT_AREA_ROWS = 17;
-	private static final int TEXT_AREA_COLS = 70;
+	//The size of the text field
 	private static final int TEXT_FIELD_COLS = 3;
 
+	//Fonts used by the gui components
 	private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
 	private static final Font SMALLER_BUTTON_FONT = new Font("Tw Cen MT",
 			Font.BOLD, 22);
@@ -48,34 +46,37 @@ public class SettingsPanel extends JPanel
 	private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 26);
 	private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 22);
 
+	//The size that buttons are
 	private final Dimension BUTTON_SIZE = new Dimension(375, 60);
 
-	private JButton backButton;
-
+	//The title for the food options table
 	private JLabel title;
 
+	//The buttons that are in this screen
+	private JButton backButton;
 	private JButton addFoodItemButton;
-	private JButton editFoodItemButton;
 	private JButton removeFoodItemButton;
+	private JButton clearDataButton;
 
+	//Labels for the table settings text fields
 	private JLabel numTables;
 	private JLabel pplPerTable;
+
+	//Where user enters and edits table settings
 	private JTextField numTablesField;
 	private JTextField pplPerTableField;
 
-	private JButton clearDataButton;
-	private JButton finishButton;
-
+	//Varaibles for the table
 	private Vector<String> columnNames;
-	private int numberOfFoodOptions;
 	private JTable foodOptions;
 	private JScrollPane foodOptionsScrollPane;
-	private int selectedRow, selectedCol;
+	private int selectedRow;
+	private Vector<Vector<String>> options;
 
+	//Aesthetics
 	private Image background;
 	private JPanel nestedPanel;
-	private String newFoodItem;
-	private Vector<Vector<String>> options;
+
 
 	/**
 	 * Creates the panel and sets up all the gui components
@@ -132,7 +133,6 @@ public class SettingsPanel extends JPanel
 
 		// Varaibles for the table
 		selectedRow = 0;
-		selectedCol = 0;
 		columnNames = new Vector<>();
 		columnNames.add("Food");
 
@@ -140,11 +140,8 @@ public class SettingsPanel extends JPanel
 		LinkedList<String> food = Food.getMealOptions();
 		options = new Vector<>();
 
-		numberOfFoodOptions = 0;
 		if (food != null)
 		{
-			numberOfFoodOptions = food.size();
-
 			try
 			{
 				for (int i = 0; i < food.size(); ++i)
@@ -160,22 +157,7 @@ public class SettingsPanel extends JPanel
 			}
 		}
 
-		// This object finds the row and column where the user has clicked
-		MouseListener tableMouseListener = new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				selectedRow = foodOptions.rowAtPoint(e.getPoint());// get
-																	// mouse-selected
-																	// row
-				selectedCol = foodOptions.columnAtPoint(e.getPoint());// get
-																		// mouse-selected
-																		// col
-				System.out.println(selectedRow + " " + selectedCol);
-			}
-		};
-
+		//Create the JTable
 		foodOptions = new JTable(options, columnNames)
 		{
 			@Override
@@ -184,14 +166,14 @@ public class SettingsPanel extends JPanel
 				return false;
 			}
 		};
-		foodOptions.addMouseListener(new EditMouseListener());
+
+		//Set variables for the table
 		foodOptions.setPreferredScrollableViewportSize(new Dimension(760, 270));
-		foodOptions.addMouseListener(tableMouseListener);
+		foodOptions.addMouseListener(new TableMouseListener());
 		foodOptions.setRowHeight(30);
 		foodOptions.setFont(FIELD_FONT);
 		foodOptions.setTableHeader(null);
 		foodOptionsScrollPane = new JScrollPane(foodOptions);
-		// foodOptionsScrollPane.getViewport().setBackground(Color.BLUE);
 
 		c.gridx = 0;
 		c.gridy = 2;
@@ -213,17 +195,6 @@ public class SettingsPanel extends JPanel
 		c.gridy = 4;
 		c.anchor = GridBagConstraints.WEST;
 		nestedPanel.add(addFoodItemButton, c);
-
-		// editFoodItemButton = new JButton(EDIT_BUTTON_TEXT);
-		// editFoodItemButton.addActionListener(new
-		// EditFoodButtonActionListener());
-		// editFoodItemButton.setBackground(new Color (3, 159, 244));
-		// editFoodItemButton.setForeground(Color.WHITE);
-		// editFoodItemButton.setFont(SMALLER_BUTTON_FONT);
-		// editFoodItemButton.setPreferredSize(BUTTON_SIZE);
-		// c.gridx = 3;
-		// c.gridy = 4;
-		// nestedPanel.add(editFoodItemButton, c);
 
 		removeFoodItemButton = new JButton(REMOVE_BUTTON_TEXT);
 		removeFoodItemButton
@@ -282,9 +253,6 @@ public class SettingsPanel extends JPanel
 		clearDataButton.setFont(SMALLER_BUTTON_FONT);
 		clearDataButton.setPreferredSize(new Dimension(200, 50));
 
-//		finishButton = new JButton(FINISH_BUTTON_TEXT);
-//		finishButton.addActionListener(new FinishButtonActionListener());
-
 		c.gridx = 0;
 		c.gridy = 7;
 		c.gridwidth = 7;
@@ -304,22 +272,27 @@ public class SettingsPanel extends JPanel
 	{
 		g.drawImage(background, 0, 0, null);
 	}
-	
-	class EditMouseListener extends MouseAdapter
+
+	/**
+	 * Listens for clicks on the food table and records which row is selected.  If the user clicks twice,
+	 * an edit dialog appears allowing the user to edit the selected food option
+	 */
+	class TableMouseListener extends MouseAdapter
 	{
-		@Override 
-		public void mousePressed(MouseEvent e)
-		{
-			int row = foodOptions.rowAtPoint(e.getPoint());
+		@Override
+		public void mousePressed(MouseEvent e) {
+			//Store the mouse selected row
+			selectedRow = foodOptions.rowAtPoint(e.getPoint());
+
+			//Get the mouse selected column
 			int col = foodOptions.columnAtPoint(e.getPoint());
-			
+
 			//Edit the food item on a double click
-			if(e.getClickCount() == 2)
-			{
-				String value = (String) foodOptions.getValueAt(row, col);
+			if (e.getClickCount() == 2) {
+				String value = (String) foodOptions.getValueAt(selectedRow, col);
 				String result = JOptionPane.showInputDialog(null, "Edit Food:", "Edit", JOptionPane.PLAIN_MESSAGE);
-				foodOptions.setValueAt(result, row, col);
-				
+				foodOptions.setValueAt(result, selectedRow, col);
+
 				//Remove the old item and add the new item
 				int index = Food.indexOf(new Food(value));
 				Food.removeFood(value);
@@ -328,6 +301,9 @@ public class SettingsPanel extends JPanel
 		}
 	}
 
+	/**
+	 * Allows the user to go back to the home screen. It saves changes the user made to the global settings
+	 */
 	class BackButtonActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -342,8 +318,6 @@ public class SettingsPanel extends JPanel
 			if (isInteger(perTable) && (Integer.parseInt(perTable) > 0))
 				Settings.setTableSize(Integer.parseInt(perTable));
 			// Switch to the home panel
-			System.out.println(Settings.getNumTables() + " tables");
-			System.out.println(Settings.getTableSize() + " ppls per table");
 			EventPlanner.setPanel(EventPlanner.Panel.HOME);
 		}
 		
@@ -352,7 +326,7 @@ public class SettingsPanel extends JPanel
 		 * @param s the given String
 		 * @return whether or not the given String is an integer or not
 		 */
-		public boolean isInteger (String s)
+		private boolean isInteger (String s)
 		{
 			// Empty strings are not integers
 			if (s.equals(""))
@@ -368,12 +342,19 @@ public class SettingsPanel extends JPanel
 		}
 	}
 
+	/**
+	 * Allows the user to add a food to the global list of foods
+	 */
 	class AddFoodButtonActionListener implements ActionListener
 	{
+		/**
+		 * Called when the user clicks the button
+		 * @param e the action
+         */
 		public void actionPerformed(ActionEvent e)
 		{
-			// New Dialog Box appears that prompts user input
-			newFoodItem = JOptionPane.showInputDialog(EventPlanner.FRAME,
+			// Store the user's edited value
+			String newFoodItem = JOptionPane.showInputDialog(EventPlanner.FRAME,
 					"Enter new item: ", "", JOptionPane.PLAIN_MESSAGE);
 			
 			// Only add the item if the String entered is valid
@@ -384,6 +365,8 @@ public class SettingsPanel extends JPanel
 				// Add the food item
 				Vector<String> foodItem = new Vector<>();
 				foodItem.add(newFoodItem);
+
+				//Update the new food in the table
 				DefaultTableModel model = (DefaultTableModel) foodOptions
 						.getModel();
 				model.addRow(foodItem);
@@ -396,26 +379,13 @@ public class SettingsPanel extends JPanel
 		}
 	}
 
-	// // TODO: 2016-04-10 Find some way to get edited data (maybe a
-	// JOptionPane)
-	// class EditFoodButtonActionListener implements ActionListener {
-	// /**
-	// * When this button is clicked, it sets the value of the selected row of
-	// the table to the value to be edited in
-	// *
-	// * @param e the event
-	// */
-	// public void actionPerformed(ActionEvent e) {
-	// if (selectedRow >= 0)
-	// foodOptions.getModel().setValueAt("PLACEHOLDER EDITED VALUE",
-	// selectedRow, selectedCol);
-	// }
-	// }
-
+	/**
+	 * Allos the user to remove a food from the global list of foods
+	 */
 	class RemoveFoodButtonActionListener implements ActionListener
 	{
 		/**
-		 * Removes the valid selected row from the table and from the global
+		 * Removes the food at the selected row from the table and from the global
 		 * food list when this button is clicked
 		 *
 		 * @param e the event
@@ -437,32 +407,28 @@ public class SettingsPanel extends JPanel
 	/**
 	 * Clears all the food options from the program
 	 * @author Connor Murphy
-	 * @version April 13 2016
 	 */
 	class ClearDataButtonActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			DefaultTableModel model = (DefaultTableModel)foodOptions.getModel();
-			
+
+			//Remove all foods from the master list and the table
+			Food.removeAll();
 			while(model.getRowCount() > 0)
 			{
-				Food.removeAll();
 				model.removeRow(0);
 			}
+
+			//Reset number of tables and table size
+			Settings.setNumTables(0);
+			Settings.setTableSize(0);
+
+			//Clear the text from the text fields
+			numTablesField.setText("");
+			pplPerTableField.setText("");
+
 		}
 	}
-	
-//	/**
-//	 * 
-//	 * @author 066984287
-//	 *
-//	 */
-//	class FinishButtonActionListener implements ActionListener
-//	{
-//		public void actionPerformed(ActionEvent e)
-//		{
-//
-//		}
-//	}
 }
