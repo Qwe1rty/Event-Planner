@@ -8,8 +8,7 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.Random;
 
@@ -33,7 +32,7 @@ public class EventPlanner implements WindowListener {
 
     public enum Panel {
         HOME, SETTINGS, STUDENT, DISPLAY_STUDENT, TABLE_DISPLAY
-    };
+    }
 
     // Window width and height
     public static final int WINDOW_HEIGHT = 720;
@@ -66,12 +65,11 @@ public class EventPlanner implements WindowListener {
         try {
             GraphicsEnvironment ge = GraphicsEnvironment
                     .getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(
-                    EventPlanner.class.getResource("/font/font.ttf").toURI())));
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(
-                    EventPlanner.class.getResource("/font/fontbold.ttf")
-                            .toURI())));
-        } catch (IOException | FontFormatException | URISyntaxException e) {
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
+                    EventPlanner.class.getResourceAsStream("/font/font.ttf")));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
+                    EventPlanner.class.getResourceAsStream("/font/fontbold.ttf")));
+        } catch (IOException | FontFormatException e) {
         }
 
         String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment()
