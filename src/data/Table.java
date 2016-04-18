@@ -73,6 +73,7 @@ public class Table {
 	private boolean insertStudent(int index, Student s) {return students.insert(index, s);}
 	private int tableSize() {return students.size();}
 	public Student getStudent(int index) {return students.get(index);}
+	public boolean isFull() {return students.size() >= Settings.getTableSize();}
 //	private boolean swapStudent(int indexa, int indexb) {
 //		try {return students.swap(indexa, indexb);} catch (Exception e) {return false;}
 //	}
