@@ -46,7 +46,7 @@ public class Student {
 		setTableNum(tableNum);
 		if (phoneNum != null) setPhoneNum(phoneNum);
 		if (info != null) setInfo(info);
-		
+
 		// Automatically assigns new student to table if valid
 		if (tableNum != 0) Table.addStudent(tableNum, this);
 	}
@@ -89,13 +89,14 @@ public class Student {
 	 * 
 	 * @param param Parameter to sort the students by
 	 * @param ascending Determines sorting order. If true, order is ascending
+	 * @author Caleb Choi
 	 */
 	public static void sort(Parameter param, boolean ascending) {
 		int length = STUDENT_LIST.size();
 		for (int gap = length / 2; gap > 0; gap /= 2) {
 			for (int wall = gap; wall < length; wall++) {
 				try {
-					// Feast your eyes upon the most disgusting code ever written by humankind
+					// Feast your eyes upon the most disgusting code ever written by mankind
 					if (param == Parameter.STUDENT_ID) {
 						if (ascending) {
 							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
@@ -139,36 +140,37 @@ public class Student {
 	 * given a full list of students. Ordering of the new list is the same
 	 * as the original.
 	 * 
-	 * @param param Parameter to search students by
+	 * @param param Parameter to search students by. To search all categories, put null
 	 * @param keyword The user's search term to match by
 	 * @return newList New matched list of students
+	 * @author Caleb Choi
 	 */
 	public static LinkedList<Student> search(Parameter param, String keyword) {
-		
+
 		// New list of students with only matched items
 		LinkedList<Student> newList = new LinkedList<Student>();
-		
+
 		// Makes the searchkey all lowercase
 		String search = keyword.toLowerCase();
-		
+
 		// Through full list of students
 		for (int i = 0; i < STUDENT_LIST.size(); i++) {
-			
+
 			// Filters by parameter. If search string matches, it's added to new list
-			if (param == Parameter.STUDENT_ID) {
+			if (param == Parameter.STUDENT_ID || param == null) {
 				if (STUDENT_LIST.get(i).getID() != null && STUDENT_LIST.get(i).getID().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.FIRSTNAME) {
+			} else if (param == Parameter.FIRSTNAME || param == null) {
 				if (STUDENT_LIST.get(i).getFirstname().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.LASTNAME) {
+			} else if (param == Parameter.LASTNAME || param == null) {
 				if (STUDENT_LIST.get(i).getLastname().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.ALLERGIES) {
+			} else if (param == Parameter.ALLERGIES || param == null) {
 				if (STUDENT_LIST.get(i).getAllergies() != null && STUDENT_LIST.get(i).getAllergies().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.FOODTYPE) {
+			} else if (param == Parameter.FOODTYPE || param == null) {
 				if (STUDENT_LIST.get(i).getFood().toString().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.TABLE_NUMBER) {
+			} else if (param == Parameter.TABLE_NUMBER || param == null) {
 				if (STUDENT_LIST.get(i).getTableNum() != 0 && String.valueOf(STUDENT_LIST.get(i).getTableNum()).toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
 			}
-			
+
 		}
 		// Returns new list
 		return newList;
