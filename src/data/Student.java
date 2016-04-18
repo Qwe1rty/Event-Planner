@@ -96,40 +96,33 @@ public class Student {
 		for (int gap = length / 2; gap > 0; gap /= 2) {
 			for (int wall = gap; wall < length; wall++) {
 				try {
+					
 					// Feast your eyes upon the most disgusting code ever written by mankind
-					if (param == Parameter.STUDENT_ID) {
-						if (ascending) {
-							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						} else {
-							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						}
-					} else if (param == Parameter.FIRSTNAME) {
-						if (ascending) {
-							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) < 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						} else {
-							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) > 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						}
-					} else if (param == Parameter.LASTNAME) {
-						if (ascending) {
-							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) < 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						} else {
-							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) > 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						}
-					} else if (param == Parameter.PAID) {
-						if (ascending) {
-							for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) < 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						} else {
-							for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) > 0); index -= gap)
-								STUDENT_LIST.swap(index - gap, index);
-						}
-					} else return;
+					if (param == Parameter.STUDENT_ID) { // Search by student ID
+						if (ascending) for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
+							STUDENT_LIST.swap(index - gap, index);
+						else for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
+							STUDENT_LIST.swap(index - gap, index);
+						
+					} else if (param == Parameter.FIRSTNAME) { // Search by first names
+						if (ascending) for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) < 0); index -= gap)
+							STUDENT_LIST.swap(index - gap, index);
+						else for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) > 0); index -= gap)
+							STUDENT_LIST.swap(index - gap, index);
+						
+					} else if (param == Parameter.LASTNAME) { // Search by last names
+						if (ascending) for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) < 0); index -= gap)
+							STUDENT_LIST.swap(index - gap, index);
+						else for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) > 0); index -= gap)
+							STUDENT_LIST.swap(index - gap, index);
+						
+					} else if (param == Parameter.PAID) { // Search by whether they paid or not
+						if (ascending) for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) < 0); index -= gap)
+							STUDENT_LIST.swap(index - gap, index);
+						else for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) > 0); index -= gap)
+							STUDENT_LIST.swap(index - gap, index);
+						
+					} else return; // Otherwise don't do any sorting
 
 				} catch (Exception e) {System.out.println("nope");}
 			}
@@ -154,24 +147,33 @@ public class Student {
 		String search = keyword.toLowerCase();
 
 		// Through full list of students
-		for (int i = 0; i < STUDENT_LIST.size(); i++) {
+		for (int i = 0; i < STUDENT_LIST.size(); i++)
 
 			// Filters by parameter. If search string matches, it's added to new list
-			if (param == Parameter.STUDENT_ID || param == null) {
-				if (STUDENT_LIST.get(i).getID() != null && STUDENT_LIST.get(i).getID().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.FIRSTNAME || param == null) {
-				if (STUDENT_LIST.get(i).getFirstname().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.LASTNAME || param == null) {
-				if (STUDENT_LIST.get(i).getLastname().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.ALLERGIES || param == null) {
-				if (STUDENT_LIST.get(i).getAllergies() != null && STUDENT_LIST.get(i).getAllergies().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.FOODTYPE || param == null) {
-				if (STUDENT_LIST.get(i).getFood().toString().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			} else if (param == Parameter.TABLE_NUMBER || param == null) {
-				if (STUDENT_LIST.get(i).getTableNum() != 0 && String.valueOf(STUDENT_LIST.get(i).getTableNum()).toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
-			}
+			if (param == Parameter.STUDENT_ID || param == null) // Search by student ID 
+				if (STUDENT_LIST.get(i).getID() != null && STUDENT_LIST.get(i).getID().toLowerCase().contains(search)) 
+					newList.append(STUDENT_LIST.get(i));
+		
+			else if (param == Parameter.FIRSTNAME || param == null) // Search by student firstnames
+				if (STUDENT_LIST.get(i).getFirstname().toLowerCase().contains(search)) 
+					newList.append(STUDENT_LIST.get(i));
+		
+			else if (param == Parameter.LASTNAME || param == null) // Search by student lastnames
+				if (STUDENT_LIST.get(i).getLastname().toLowerCase().contains(search)) 
+					newList.append(STUDENT_LIST.get(i));
+		
+			else if (param == Parameter.ALLERGIES || param == null) // Search by student allergies
+				if (STUDENT_LIST.get(i).getAllergies() != null && STUDENT_LIST.get(i).getAllergies().toLowerCase().contains(search)) 
+					newList.append(STUDENT_LIST.get(i));
+		
+			else if (param == Parameter.FOODTYPE || param == null) // Search by student foodtypes
+				if (STUDENT_LIST.get(i).getFood().toString().toLowerCase().contains(search)) 
+					newList.append(STUDENT_LIST.get(i));
+		
+			else if (param == Parameter.TABLE_NUMBER || param == null) // Search by student table numbers
+				if (STUDENT_LIST.get(i).getTableNum() != 0 && String.valueOf(STUDENT_LIST.get(i).getTableNum()).toLowerCase().contains(search)) 
+					newList.append(STUDENT_LIST.get(i));
 
-		}
 		// Returns new list
 		return newList;
 	}
