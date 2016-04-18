@@ -46,9 +46,6 @@ public class Student {
 		setTableNum(tableNum);
 		if (phoneNum != null) setPhoneNum(phoneNum);
 		if (info != null) setInfo(info);
-
-		// Automatically assigns new student to table if valid
-		if (tableNum != 0) Table.addStudent(tableNum, this);
 	}
 	// Student with only mandatory fields
 	public Student(String studentId, String firstname, String lastname,
@@ -98,29 +95,53 @@ public class Student {
 				try {
 					
 					// Feast your eyes upon the most disgusting code ever written by mankind
-					if (param == Parameter.STUDENT_ID) { // Search by student ID
-						if (ascending) for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
-							STUDENT_LIST.swap(index - gap, index);
-						else for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
-							STUDENT_LIST.swap(index - gap, index);
+					if (param == Parameter.STUDENT_ID) { // Sort by student ID
+						if (ascending) 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						else 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getID().compareTo((STUDENT_LIST.get(index - gap)).getID()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
 						
-					} else if (param == Parameter.FIRSTNAME) { // Search by first names
-						if (ascending) for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) < 0); index -= gap)
-							STUDENT_LIST.swap(index - gap, index);
-						else for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) > 0); index -= gap)
-							STUDENT_LIST.swap(index - gap, index);
+					} else if (param == Parameter.FIRSTNAME) { // Sort by first names
+						if (ascending) 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						else 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFirstname().compareTo((STUDENT_LIST.get(index - gap)).getFirstname()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
 						
-					} else if (param == Parameter.LASTNAME) { // Search by last names
-						if (ascending) for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) < 0); index -= gap)
-							STUDENT_LIST.swap(index - gap, index);
-						else for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) > 0); index -= gap)
-							STUDENT_LIST.swap(index - gap, index);
+					} else if (param == Parameter.LASTNAME) { // Sort by last names
+						if (ascending) 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						else 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getLastname().compareTo((STUDENT_LIST.get(index - gap)).getLastname()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
 						
-					} else if (param == Parameter.PAID) { // Search by whether they paid or not
-						if (ascending) for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) < 0); index -= gap)
-							STUDENT_LIST.swap(index - gap, index);
-						else for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) > 0); index -= gap)
-							STUDENT_LIST.swap(index - gap, index);
+					} else if (param == Parameter.PAID) { // Sort by whether they paid or not
+						if (ascending) 
+							for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						else 
+							for (int index = wall; index >= gap && (((Boolean) (STUDENT_LIST.get(index)).isPaid()).compareTo((STUDENT_LIST.get(index - gap)).isPaid()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						
+					} else if (param == Parameter.FOODTYPE) { // Sort by food type
+						if (ascending) 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFood().toString().compareTo((STUDENT_LIST.get(index - gap)).getFood().toString()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						else 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getFood().toString().compareTo((STUDENT_LIST.get(index - gap)).getFood().toString()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						
+					} else if (param == Parameter.TABLE_NUMBER) { // Sort by table number
+						if (ascending) 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getTableNum() - ((STUDENT_LIST.get(index - gap)).getTableNum()) > 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
+						else 
+							for (int index = wall; index >= gap && ((STUDENT_LIST.get(index)).getTableNum() - ((STUDENT_LIST.get(index - gap)).getTableNum()) < 0); index -= gap)
+								STUDENT_LIST.swap(index - gap, index);
 						
 					} else return; // Otherwise don't do any sorting
 
