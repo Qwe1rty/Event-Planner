@@ -61,7 +61,6 @@ public class DisplayStudentPanel extends JPanel
 	private final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 26);
 	private final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 22);
 	private final Font SEARCH_FONT = new Font("Tw Cen MT", Font.PLAIN, 27);
-	
 
 	// The size for each button
 	private final Dimension BUTTON_SIZE = new Dimension(108, 50);
@@ -188,27 +187,14 @@ public class DisplayStudentPanel extends JPanel
 		c.gridy = 0;
 		nestedPanel.add(deleteButton, c);
 
-		// Search Button
-		// searchButton = new JButton(SEARCH_BUTTON_TEXT);
-		// searchButton.addActionListener(new SearchButtonActionListener());
-		// searchButton.setBackground(new Color(3, 159, 244));
-		// searchButton.setPreferredSize(BUTTON_SIZE);
-		// searchButton.setForeground(Color.WHITE);
-		// searchButton.setFont(BUTTON_FONT);
-
-		// Position the search button next to the delete button
-		// c.gridx = 3;
-		// c.gridy = 0;
-		// nestedPanel.add(searchButton, c);
-
 		// Advanced search options
 		searchOptions = new JComboBox<String>(SEARCH_OPTIONS);
 		searchOptions.setFont(FIELD_FONT);
-		
+
 		// Position the search options next to the search bar
 		c.gridx = 3;
 		c.gridy = 0;
-		c.insets = new Insets (0,200,0,1);
+		c.insets = new Insets(0, 200, 0, 1);
 		nestedPanel.add(searchOptions, c);
 
 		// Search bar
@@ -219,11 +205,11 @@ public class DisplayStudentPanel extends JPanel
 		searchBar.setText(PRE_SEARCH_TEXT);
 		searchBar.setForeground(Color.GRAY);
 		searchBar.setFont(SEARCH_FONT);
-		
+
 		// Position the search bar next to the search options
 		c.gridx = 4;
 		c.gridy = 0;
-		c.insets = new Insets (2,0,0,0);
+		c.insets = new Insets(2, 0, 0, 0);
 		nestedPanel.add(searchBar, c);
 
 		// Placeholder data TODO: Change the data in the table to the loaded
@@ -264,7 +250,6 @@ public class DisplayStudentPanel extends JPanel
 		{
 			displayedStudents.append(Student.getStudent(i));
 		}
-
 	}
 
 	/**
@@ -374,45 +359,9 @@ public class DisplayStudentPanel extends JPanel
 			// If there is a double click open the student profile;
 			if (e.getClickCount() == 2)
 			{
-
-				/*
-				 * //Store all the information about the student double clicked
-				 * String id = (String) displayTable.getValueAt(selectedRow, 0);
-				 * String firstName = (String) displayTable.getValueAt(
-				 * selectedRow, 1); String lastName = (String)
-				 * displayTable.getValueAt(selectedRow, 2); String paidValue =
-				 * (String) displayTable.getValueAt( selectedRow, 3); boolean
-				 * paid = false; if (paidValue.equalsIgnoreCase("Yes")) { paid =
-				 * true; } String chosenFood = (String) displayTable.getValueAt(
-				 * selectedRow, 4);
-				 * 
-				 * int tableNum; try { tableNum = Integer.parseInt((String)
-				 * displayTable .getValueAt(selectedRow, 5)); } catch
-				 * (NumberFormatException ex) { // table number is unassigned
-				 * (0) tableNum = 0; }
-				 * 
-				 * // Go through all the students and see if that one is the
-				 * same // as the one selected for (int i = 0; i <
-				 * Student.listSize(); ++i) { Student student =
-				 * Student.getStudent(i); if
-				 * (student.getID().equalsIgnoreCase(id) &&
-				 * student.getFirstname().equalsIgnoreCase( firstName) &&
-				 * student.getLastname().equalsIgnoreCase(lastName) &&
-				 * student.isPaid() == paid && student.getFood().toString()
-				 * .equalsIgnoreCase(chosenFood) && student.getTableNum() ==
-				 * tableNum) {
-				 * 
-				 * // This is the student, show its information panel
-				 * EventPlanner.showStudentProfile(new StudentProfile(
-				 * student)); break; } }
-				 */
-
-				// TODO: remove if not working
-				// New EXPERIMENTAL method
 				Student student = displayedStudents.get(selectedRow);
 				EventPlanner.showStudentProfile(new StudentProfile(
 						student));
-
 			}
 
 		}
@@ -548,20 +497,30 @@ public class DisplayStudentPanel extends JPanel
 	/**
 	 * Deletes the selected student from the list of students and removes it
 	 * from the table
+	 * @author Matthew Sun
 	 */
 	class DeleteButtonActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			// TODO: implement functionality
-			// Remove the student from the table
-
-			// Remove the student from the list of students
-
-			// Remove the student from its table
+			// Get the student to remove
+			String id = (String) displayTable.getValueAt(selectedRow, 0);
+			String firstName = (String) displayTable.getValueAt(selectedRow, 1);
+			String lastName = (String) displayTable.getValueAt(selectedRow, 2);
+			
+			// Find the student to remove
+			for (int n = 0 ; n < Student.listSize() ; n ++)
+			{
+				Student currentStudent = Student.getStudent(n);
+				if (currentStudent.getID().equalsIgnoreCase(id) &&
+						currentStudent.getFirstname().equalsIgnoreCase(firstName) &&
+						currentStudent.getLastname().equalsIgnoreCase(lastName))
+					Student.removeStudent(currentStudent);
+			}
+			refresh(true);
 		}
 	}
-	
+
 	/**
 	 * Handles graphical changes when the search bar loses or gains focus
 	 * @author Matthew Sun
@@ -587,7 +546,7 @@ public class DisplayStudentPanel extends JPanel
 			searchBar.setForeground(Color.GRAY);
 		}
 	}
-	
+
 	/**
 	 * Does a live instant search while user types search keywords
 	 * @author Matthew Sun
@@ -595,10 +554,10 @@ public class DisplayStudentPanel extends JPanel
 	 */
 	class SearchBarKeyListener implements KeyListener
 	{
-	
+
 		public void keyPressed(KeyEvent arg0)
 		{
-			
+
 		}
 
 		/**
@@ -606,16 +565,21 @@ public class DisplayStudentPanel extends JPanel
 		 */
 		public void keyReleased(KeyEvent arg0)
 		{
-			// Get a live update on what is being searched (everytime a key is released)
+			// Get a live update on what is being searched (everytime a key is
+			// released)
 			searchItem = searchBar.getText();
 			System.out.println(searchItem);
-			
+
 			// There is a search
 			if (searchItem.length() > 0)
 			{
 				LinkedList<Student> searchResults = new LinkedList<>();
 				// Find which parameter is selected and search by it
-				if (searchOptions.getSelectedItem().equals(
+				if (searchOptions.getSelectedItem().equals("All"))
+				{
+
+				}
+				else if (searchOptions.getSelectedItem().equals(
 						"Student ID"))
 				{
 					searchResults = Student.search(Parameter.STUDENT_ID,
@@ -657,7 +621,7 @@ public class DisplayStudentPanel extends JPanel
 					searchResults = Student.search(Parameter.PAID,
 							searchItem);
 				}
-				
+
 				// Update the displayed list based on search results
 				displayedStudents = searchResults;
 				// Update the table
@@ -672,9 +636,8 @@ public class DisplayStudentPanel extends JPanel
 		public void keyTyped(KeyEvent arg0)
 		{
 
-			
 		}
-		
+
 	}
 
 	/**
