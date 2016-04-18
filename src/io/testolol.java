@@ -1,5 +1,7 @@
 package io;
 
+import java.io.FileNotFoundException;
+
 import gui.EventPlanner;
 
 import javax.swing.JFileChooser;
@@ -8,10 +10,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class testolol {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 //		fileChooser();
+		fileTester();
 
+	}
+	
+	private static void fileTester() throws FileNotFoundException {
+		Loader.parseFile();
+		Loader.saveAsFile();
 	}
 	
 	private static void fileChooser() {

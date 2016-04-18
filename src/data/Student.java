@@ -140,30 +140,33 @@ public class Student {
 	 * as the original.
 	 * 
 	 * @param param Parameter to search students by
-	 * @param search The user's search term to match by
+	 * @param keyword The user's search term to match by
 	 * @return newList New matched list of students
 	 */
-	public static LinkedList<Student> search(Parameter param, String search) {
+	public static LinkedList<Student> search(Parameter param, String keyword) {
 		
 		// New list of students with only matched items
 		LinkedList<Student> newList = new LinkedList<Student>();
+		
+		// Makes the searchkey all lowercase
+		String search = keyword.toLowerCase();
 		
 		// Through full list of students
 		for (int i = 0; i < STUDENT_LIST.size(); i++) {
 			
 			// Filters by parameter. If search string matches, it's added to new list
 			if (param == Parameter.STUDENT_ID) {
-				if (STUDENT_LIST.get(i).getID() != null && STUDENT_LIST.get(i).getID().contains(search)) newList.append(STUDENT_LIST.get(i));
+				if (STUDENT_LIST.get(i).getID() != null && STUDENT_LIST.get(i).getID().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
 			} else if (param == Parameter.FIRSTNAME) {
-				if (STUDENT_LIST.get(i).getFirstname().contains(search)) newList.append(STUDENT_LIST.get(i));
+				if (STUDENT_LIST.get(i).getFirstname().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
 			} else if (param == Parameter.LASTNAME) {
-				if (STUDENT_LIST.get(i).getLastname().contains(search)) newList.append(STUDENT_LIST.get(i));
+				if (STUDENT_LIST.get(i).getLastname().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
 			} else if (param == Parameter.ALLERGIES) {
-				if (STUDENT_LIST.get(i).getAllergies() != null && STUDENT_LIST.get(i).getAllergies().contains(search)) newList.append(STUDENT_LIST.get(i));
+				if (STUDENT_LIST.get(i).getAllergies() != null && STUDENT_LIST.get(i).getAllergies().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
 			} else if (param == Parameter.FOODTYPE) {
-				if (STUDENT_LIST.get(i).getFood().toString().contains(search)) newList.append(STUDENT_LIST.get(i));
+				if (STUDENT_LIST.get(i).getFood().toString().toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
 			} else if (param == Parameter.TABLE_NUMBER) {
-				if (STUDENT_LIST.get(i).getTableNum() != 0 && String.valueOf(STUDENT_LIST.get(i).getTableNum()).contains(search)) newList.append(STUDENT_LIST.get(i));
+				if (STUDENT_LIST.get(i).getTableNum() != 0 && String.valueOf(STUDENT_LIST.get(i).getTableNum()).toLowerCase().contains(search)) newList.append(STUDENT_LIST.get(i));
 			}
 			
 		}

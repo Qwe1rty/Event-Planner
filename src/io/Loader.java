@@ -31,13 +31,12 @@ import data.Student.InvalidStudentIDException;
  *
  */
 public final class Loader {
-
-	// TODO update IO to accept new Student parameters
 	
 	// Program file extension and filter
 	private static final String FILE_EXTENSION = "event";
 	private static final FileNameExtensionFilter FILE_FILTER = 
 			new FileNameExtensionFilter("Custom extension only", FILE_EXTENSION);
+	// Saves the current file 
 
 	/**
 	 * Loads the students into a list of students from the given file. File chooser dialog box
@@ -127,13 +126,20 @@ public final class Loader {
 	}
 	
 	/**
-	 * Will save the current project file to the user's selected directory
-	 * 
-	 * @param LinkedList<Student> a linked list full of students. Function will also read
-	 * 		from Settings.java for global settings
+	 * Will save all changes to file
 	 * @author Caleb Choi
 	 */
 	public static void saveFile() {
+		
+		
+		
+	}
+	
+	/**
+	 * Will create new file and save the current project file to the user's selected directory.
+	 * @author Caleb Choi
+	 */
+	public static void saveAsFile() {
 
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
