@@ -1,12 +1,14 @@
 package gui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Header class for the program.
@@ -65,7 +67,7 @@ public class EventPlanner {
         FRAME.setLocation(50, 0);
         FRAME.setSize(WINDOW_WIDTH, WINDOW_HEIGHT + 27);
         FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        FRAME.setResizable(false);
+        FRAME.setMinimumSize(new Dimension (1240, 680));
         FRAME.setVisible(true);
     }
 
@@ -87,7 +89,7 @@ public class EventPlanner {
             ((DisplayStudentPanel) studentDisplay).refresh(true);
             FRAME.add(studentDisplay);
         } else if (panel == Panel.TABLE_DISPLAY) {
-            ((TableDisplayPanel) tableDisplay).refresh();
+            ((TableDisplayPanel) tableDisplay).refresh(true);
             FRAME.add(tableDisplay);
         }
         FRAME.revalidate();

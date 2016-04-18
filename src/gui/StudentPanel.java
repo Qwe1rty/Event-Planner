@@ -201,13 +201,14 @@ public class StudentPanel extends JPanel {
 		initialsLabel = new JLabel(INITIALS_LABEL_TEXT);
 		initialsLabel.setFont(TEXT_FONT);
 		
-		initialsTextField = new JTextField(TEXT_FIELD_ROWS/5);
+		initialsTextField = new JTextField(TEXT_FIELD_ROWS/3);
 		initialsTextField.setFont(FIELD_FONT);
 		
 		formSubmittedLabel = new JLabel(FORM_SUBMITTED_LABEL_TEXT);
 		formSubmittedLabel.setFont(TEXT_FONT);
 		
 		formSubmittedCheckBox = new JCheckBox();
+		
 
 		// All label components are right aligned with some vertical spacing
 		// between them
@@ -296,11 +297,13 @@ public class StudentPanel extends JPanel {
 		c.anchor = GridBagConstraints.CENTER;
 		c.gridx = 4;
 		c.gridy = 4;
+		c.insets = new Insets (10, 100, 0, 0);
 		fieldsPanel.add(formSubmittedLabel, c);
 		
 		c.anchor = GridBagConstraints.EAST;
 		c.gridx = 4;
 		c.gridy = 4;
+		c.insets = new Insets(10, 0, 0, 0);
 		fieldsPanel.add(formSubmittedCheckBox, c);
 
 		c.anchor = GridBagConstraints.WEST;
@@ -380,7 +383,7 @@ public class StudentPanel extends JPanel {
 	 * Draws the background image onto main panel
 	 */
 	public void paintComponent(Graphics g) {
-		g.drawImage(background, 0, 0, null);
+		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 	}
 
 	/**

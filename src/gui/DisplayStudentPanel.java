@@ -55,7 +55,6 @@ public class DisplayStudentPanel extends JPanel
 	private final String BACK_BUTTON_TEXT = "Back";
 	private final String ADD_BUTTON_TEXT = "Add";
 	private final String REMOVE_BUTTON_TEXT = "Delete";
-	private final String SEARCH_BUTTON_TEXT = "Go";
 
 	// Font for everythring that is shown in this screen
 	private final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
@@ -102,7 +101,7 @@ public class DisplayStudentPanel extends JPanel
 	private JTable displayTable;
 
 	// Used to find where the user has clicked
-	private int selectedRow, selectedCol;
+	private int selectedRow;
 
 	// A list of the displayed students
 	private LinkedList<Student> displayedStudents;
@@ -202,14 +201,17 @@ public class DisplayStudentPanel extends JPanel
 		// c.gridy = 0;
 		// nestedPanel.add(searchButton, c);
 
-		
+		// Advanced search options
 		searchOptions = new JComboBox<String>(SEARCH_OPTIONS);
 		searchOptions.setFont(FIELD_FONT);
+		
+		// Position the search options next to the search bar
 		c.gridx = 3;
 		c.gridy = 0;
 		c.insets = new Insets (0,200,0,1);
 		nestedPanel.add(searchOptions, c);
 
+		// Search bar
 		searchItem = "";
 		searchBar = new JTextField(SEARCH_FIELD_ROWS);
 		searchBar.addFocusListener(new SearchBarFocusListener());
@@ -218,6 +220,7 @@ public class DisplayStudentPanel extends JPanel
 		searchBar.setForeground(Color.GRAY);
 		searchBar.setFont(SEARCH_FONT);
 		
+		// Position the search bar next to the search options
 		c.gridx = 4;
 		c.gridy = 0;
 		c.insets = new Insets (2,0,0,0);
@@ -253,7 +256,6 @@ public class DisplayStudentPanel extends JPanel
 
 		// By default have the first row and column selected
 		selectedRow = 0;
-		selectedCol = 0;
 		selectedHeader = null;
 
 		// Create a list of students that are to be displayed
@@ -311,7 +313,7 @@ public class DisplayStudentPanel extends JPanel
 	 */
 	public void paintComponent(Graphics g)
 	{
-		g.drawImage(background, 0, 0, null);
+		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 	}
 
 	/**
@@ -368,7 +370,6 @@ public class DisplayStudentPanel extends JPanel
 		{
 			// Store the selected row and column that was selected
 			selectedRow = displayTable.rowAtPoint(e.getPoint());
-			selectedCol = displayTable.columnAtPoint(e.getPoint());
 
 			// If there is a double click open the student profile;
 			if (e.getClickCount() == 2)

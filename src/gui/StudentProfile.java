@@ -435,7 +435,7 @@ public class StudentProfile extends JPanel {
      * Draws the background image onto main panel
      */
     public void paintComponent(Graphics g) {
-        g.drawImage(background, 0, 0, null);
+        g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
     }
 
     /**

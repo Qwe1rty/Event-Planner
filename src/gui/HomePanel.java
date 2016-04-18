@@ -4,20 +4,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -74,12 +69,6 @@ public class HomePanel extends JPanel {
 		settingsButton.addActionListener(new SettingsButtonListener());
 		exitButton.addActionListener(new ExitButtonListener());
 
-		// Remove the button borders
-		//		studentButton.setBorderPainted(false);
-		//		tableButton.setBorderPainted(false);
-		//		settingsButton.setBorderPainted(false);
-		//		exitButton.setBorderPainted(false);
-
 		// Add the buttons to the panel, each at their own location
 		c.gridx = 0;
 		c.gridy = 0;
@@ -96,17 +85,10 @@ public class HomePanel extends JPanel {
 		c.gridx = 1;
 		c.gridy = 1;
 		add(exitButton, c);
-
-		// Add panel to frame and set a max and min resizeable size
-//		frame.getContentPane().add(main);
-//
-//		frame.setMaximumSize(size);
-//		frame.setMinimumSize(new Dimension(700,700));
-//		frame.setVisible(true);
 	}	
 
 	public void paintComponent(Graphics g) {
-		g.drawImage(background, 0, 0, null);
+		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 	}
 
 	class StudentButtonListener implements ActionListener
@@ -117,8 +99,6 @@ public class HomePanel extends JPanel {
 		public void actionPerformed(ActionEvent arg0)
 		{
 			EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
-			//removeAll();
-			//repaint();
 		}
 	}
 
@@ -130,8 +110,6 @@ public class HomePanel extends JPanel {
 		public void actionPerformed(ActionEvent arg0)
 		{
 			EventPlanner.setPanel(EventPlanner.Panel.TABLE_DISPLAY);
-//			removeAll();
-//			repaint();
 		}
 	}
 	class SettingsButtonListener implements ActionListener
@@ -142,8 +120,6 @@ public class HomePanel extends JPanel {
 		public void actionPerformed(ActionEvent arg0)
 		{
 			EventPlanner.setPanel(EventPlanner.Panel.SETTINGS);
-			//removeAll();
-			//repaint();
 		}
 	}
 	class ExitButtonListener implements ActionListener

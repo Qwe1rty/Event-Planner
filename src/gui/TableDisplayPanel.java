@@ -1,12 +1,5 @@
 package gui;
 
-import gui.DisplayStudentPanel.SearchBarFocusListener;
-import gui.DisplayStudentPanel.SearchBarKeyListener;
-import gui.DisplayStudentPanel.SearchButtonActionListener;
-import gui.DisplayStudentPanel.StudentTableModel;
-import gui.DisplayStudentPanel.TableMouseListener;
-import gui.SettingsPanel.EditMouseListener;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -31,16 +24,12 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import data.Food;
 import data.LinkedList;
 import data.Parameter;
 import data.Settings;
@@ -53,46 +42,48 @@ import data.Student;
  */
 public class TableDisplayPanel extends JPanel
 {
-	private static final String BACK_BUTTON_TEXT = "Back";
-	private static final String REMOVE_BUTTON_TEXT = "Delete";
-	private static final String ADD_BUTTON_TEXT = "Add";
-	private final String SEARCH_BUTTON_TEXT = "Search";
+	// Names for the columns of the table
+	private final String STUDENT_NO_COLUMN_HEADER = "Student No.";
+	private final String FIRST_NAME_COLUMN_HEADER = "First Name";
+	private final String LAST_NAME_COLUMN_HEADER = "Last Name";
+	private final String PAYMENT_COLUMN_HEADER = "Payment";
+	private final String FOOD_CHOICE_COLUMN_HEADER = "Food Choice";
+	private final String TABLE_NO_COLUMN_HEADER = "Table No.";
+	
+	// Button text
+	private final String BACK_BUTTON_TEXT = "Back";
+	private final String REMOVE_BUTTON_TEXT = "Delete";
+	private final String ADD_BUTTON_TEXT = "Add";
 
-	private static final int TEXT_AREA_ROWS = 10;
-	private static final int TEXT_AREA_COLS = 35;
-
-	private static final int TEXT_FIELD_ROWS = 21;
-	private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
-	private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
-	private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
+	// Fonts
+	private final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
+	private final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
+	private final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
 	private final Font SEARCH_FONT = new Font("Tw Cen MT", Font.PLAIN, 30);
 
-	private final String[] COLUMN_NAMES = { "Student No.", "First Name",
-			"Last Name", "Payment", "Food Choice", "Table No." };
+	// The array of names for the columns
+	private final String[] COLUMN_NAMES = { STUDENT_NO_COLUMN_HEADER,
+			FIRST_NAME_COLUMN_HEADER, LAST_NAME_COLUMN_HEADER,
+			PAYMENT_COLUMN_HEADER,
+			FOOD_CHOICE_COLUMN_HEADER, TABLE_NO_COLUMN_HEADER };
 
-	private final Dimension COMBO_SIZE = new Dimension(340, 30);
+	// Dimensions and sizes
 	private final Dimension BUTTON_SIZE = new Dimension(108, 50);
 	private final int SEARCH_FIELD_ROWS = 20;
 
-	private JButton deleteButton;
-	private JButton addButton;
-	private JButton backButton;
-	private JButton searchButton;
+	private JButton deleteButton, addButton, backButton;
 
 	private Image background;
 	private JPanel nestedPanel;
 
 	private Vector<Vector<String>> tables;
 	private Vector<String> columnNames;
-	private JTable availibleTables;
-	private JScrollPane availibleTablesScrollPane;
+	private JTable availibleTables, studentDisplay, tableDisplay;
+	private JScrollPane availibleTablesScrollPane, studentDisplayScrollPane,
+			tableDisplayScrollPane;
 
 	private Object[][] placeholderData = new Object[0][0];
-	private JTable studentDisplay;
-	private JScrollPane studentDisplayScrollPane;
-	private JTable tableDisplay;
-	private JScrollPane tableDisplayScrollPane;
-	
+
 	// Variables used to search for a student
 	private final String[] SEARCH_OPTIONS = { "All", "Student ID",
 			"First Name", "Last Name", "Food Choice", "Allergies", "Table No.",
@@ -101,12 +92,25 @@ public class TableDisplayPanel extends JPanel
 	private String searchItem;
 	private JTextField searchBar;
 	private JComboBox<String> searchOptions;
-	
-	//A list of the displayed students
+
+	// A list of the displayed students
 	private LinkedList<Student> displayedStudents;
 
 	private int selectedRowOnUnassigned, selectedRowOnAssigned;
 	private int currentSelectedTable;
+	
+	/**
+	 * Used to represent the values in the column headers
+	 */
+	private enum Header {
+		ID, FIRST_NAME, LAST_NAME, PAID, FOOD_CHOICE, TABLE_NO
+	};
+
+	/**
+	 * Used to keep track of what was the last selected column header in order
+	 * to know whether to sort ascending or descending
+	 */
+	private Header selectedHeader;
 
 	public TableDisplayPanel()
 	{
@@ -122,7 +126,7 @@ public class TableDisplayPanel extends JPanel
 			ioe.printStackTrace();
 		}
 
-		// Set the layout of the nested panel to follow grid bag layotu
+		// Set the layout of the nested panel to follow grid bag layout
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		nestedPanel = new JPanel(layout);
@@ -174,22 +178,14 @@ public class TableDisplayPanel extends JPanel
 		c.gridy = 0;
 		nestedPanel.add(deleteButton, c);
 
-		// Search Button
-//		searchButton = new JButton(SEARCH_BUTTON_TEXT);
-//		searchButton.addActionListener(new SearchButtonActionListener());
-//		searchButton.setBackground(new Color(3, 159, 244));
-//		searchButton.setPreferredSize(BUTTON_SIZE);
-//		searchButton.setForeground(Color.WHITE);
-//		searchButton.setFont(BUTTON_FONT);
-		
 		// Advanced search options
 		searchOptions = new JComboBox<String>(SEARCH_OPTIONS);
 		searchOptions.setFont(FIELD_FONT);
-		
+
 		// Position the search options next to the search bar
 		c.gridx = 3;
 		c.gridy = 0;
-		c.insets = new Insets (0,180,0,7);
+		c.insets = new Insets(0, 180, 0, 7);
 		nestedPanel.add(searchOptions, c);
 
 		// Search bar
@@ -200,20 +196,13 @@ public class TableDisplayPanel extends JPanel
 		searchBar.setText(PRE_SEARCH_TEXT);
 		searchBar.setForeground(Color.GRAY);
 		searchBar.setFont(SEARCH_FONT);
-		
+
 		// Position the search bar next to the search options
 		c.gridx = 4;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.WEST;
-		c.insets = new Insets (2,0,0,0);
+		c.insets = new Insets(2, 0, 0, 0);
 		nestedPanel.add(searchBar, c);
-		
-		
-		// Position the search button next to the delete button
-//		c.anchor = GridBagConstraints.WEST;
-//		c.gridx = 3;
-//		c.gridy = 0;
-//		nestedPanel.add(searchButton, c);
 
 		// Create new table names
 		tables = new Vector<>();
@@ -276,6 +265,8 @@ public class TableDisplayPanel extends JPanel
 		studentDisplay.setPreferredScrollableViewportSize(new Dimension(880,
 				250));
 		studentDisplay.addMouseListener(unassignedStudentMouseListener);
+		studentDisplay.getTableHeader().addMouseListener(
+				new TableColumnMouseListener());
 		studentDisplay.getTableHeader().setReorderingAllowed(false);
 		studentDisplay.setRowHeight(30);
 		studentDisplay.setFont(FIELD_FONT);
@@ -297,7 +288,7 @@ public class TableDisplayPanel extends JPanel
 						.getPoint());
 			}
 		};
-		
+
 		// Create a table that displays students that are at the current table
 		// selected
 		StudentTableModel atTable = new StudentTableModel(placeholderData,
@@ -318,8 +309,7 @@ public class TableDisplayPanel extends JPanel
 		nestedPanel.add(tableDisplayScrollPane, c);
 
 		add(nestedPanel);
-		
-		
+
 		// By default have the first table
 		currentSelectedTable = 1;
 
@@ -330,7 +320,7 @@ public class TableDisplayPanel extends JPanel
 			displayedStudents.append(Student.getStudent(i));
 		}
 	}
-	
+
 	/**
 	 * Call before changing this panel to the main frame. Refreshes the items in
 	 * the food drop down box
@@ -374,7 +364,7 @@ public class TableDisplayPanel extends JPanel
 						student.getFood().toString(), table });
 			}
 		}
-		
+
 		// Remove all the availible tables from the table
 		DefaultTableModel tableTableModel = (DefaultTableModel) availibleTables
 				.getModel();
@@ -399,92 +389,13 @@ public class TableDisplayPanel extends JPanel
 	 */
 	public void paintComponent(Graphics g)
 	{
-		// TODO 4/15/16 change paint component to resize the BG depending on screen size
-		g.drawImage(background, 0, 0, null);
+		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 	}
 
-	/**
-	 * Call before changing this panel to the main frame. Refreshes the number
-	 * of tables, and the current students in the system
-	 */
-	public void refresh()
-	{
-		// Remove all the availible tables from the table
-		DefaultTableModel tableTableModel = (DefaultTableModel) availibleTables
-				.getModel();
-		System.out.println(availibleTables.getRowCount() + "ROWS");
-		while (availibleTables.getRowCount() > 0)
-		{
-			tableTableModel.removeRow(0);
-			System.out.println("REMOVING");
-		}
-		// Add the updated number of tables to the table
-		for (int n = 1; n < Settings.getNumTables() + 1; n++)
-		{
-			Vector<String> rowData = new Vector<>();
-			rowData.addElement("Table " + n);
-			System.out.println(rowData);
-			tableTableModel.addRow(rowData);
-		}
-
-		// Remove all students from the unassigned students table
-		DefaultTableModel studentTableModel = (DefaultTableModel) studentDisplay
-				.getModel();
-		while (studentDisplay.getRowCount() > 0)
-		{
-			studentTableModel.removeRow(0);
-		}
-		System.out.println("REFREH");
-		// Add the updated students to the table (only unassigned students)
-		for (int i = 0; i < Student.listSize(); ++i)
-		{
-			Student student = Student.getStudent(i);
-			System.out.println(student.getTableNum());
-			// Only add a student to the unassigned panel if they are unassigned
-			if (student.getTableNum() == 0)
-			{
-				System.out.println("HELLO");
-				String paid = student.isPaid() ? "Yes" : "No";
-				int tableNumber = student.getTableNum();
-				String table = tableNumber == 0 ? "Unassigned" : Integer
-						.toString(tableNumber);
-				studentTableModel.addRow(new Object[] { student.getID(),
-						student.getFirstname(), student.getLastname(), paid,
-						student.getFood().toString(), table });
-			}
-		}
-		
-		// Remove all students from the current table display
-		DefaultTableModel currentStudentsTableModel = (DefaultTableModel) tableDisplay.getModel();
-		while (tableDisplay.getRowCount() > 0)
-		{
-			currentStudentsTableModel.removeRow(0);
-		}
-		System.out.println("REFREH");
-		// Add the updated students to the table (only unassigned students)
-		for (int i = 0; i < Student.listSize(); ++i)
-		{
-			Student student = Student.getStudent(i);
-			System.out.println(student.getTableNum());
-			// Only add a student to the unassigned panel if they are unassigned
-			if (student.getTableNum() == currentSelectedTable)
-			{
-				System.out.println("HELLO");
-				String paid = student.isPaid() ? "Yes" : "No";
-				int tableNumber = student.getTableNum();
-				String table = tableNumber == 0 ? "Unassigned" : Integer
-						.toString(tableNumber);
-				currentStudentsTableModel.addRow(new Object[] { student.getID(),
-						student.getFirstname(), student.getLastname(), paid,
-						student.getFood().toString(), table });
-			}
-		}
-	}
-	
 	/**
 	 * Refreshes everything on the page except for the table display
 	 */
-	public void refreshEveryThingButTableDisplay ()
+	public void refreshEveryThingButTableDisplay()
 	{
 		// Remove all students from the unassigned students table
 		DefaultTableModel studentTableModel = (DefaultTableModel) studentDisplay
@@ -512,9 +423,10 @@ public class TableDisplayPanel extends JPanel
 						student.getFood().toString(), table });
 			}
 		}
-		
+
 		// Remove all students from the current table display
-		DefaultTableModel currentStudentsTableModel = (DefaultTableModel) tableDisplay.getModel();
+		DefaultTableModel currentStudentsTableModel = (DefaultTableModel) tableDisplay
+				.getModel();
 		while (tableDisplay.getRowCount() > 0)
 		{
 			currentStudentsTableModel.removeRow(0);
@@ -533,7 +445,8 @@ public class TableDisplayPanel extends JPanel
 				int tableNumber = student.getTableNum();
 				String table = tableNumber == 0 ? "Unassigned" : Integer
 						.toString(tableNumber);
-				currentStudentsTableModel.addRow(new Object[] { student.getID(),
+				currentStudentsTableModel.addRow(new Object[] {
+						student.getID(),
 						student.getFirstname(), student.getLastname(), paid,
 						student.getFood().toString(), table });
 			}
@@ -624,27 +537,30 @@ public class TableDisplayPanel extends JPanel
 		{
 			// When add is pressed, remove the student from the unassigned table
 			// and add to the current selected table
-			
 
-			
-			 String id = (String) studentDisplay.getValueAt(selectedRowOnUnassigned, 0);
-             String firstName = (String) studentDisplay.getValueAt(selectedRowOnUnassigned, 1);
-             String lastName = (String) studentDisplay.getValueAt(selectedRowOnUnassigned, 2);
-             System.out.println("ID " + id + " firstname " + firstName);
-             
-             //Go through all the students and see if that one is the same as the one selected
-             for (int i = 0; i < Student.listSize(); ++i) {
-                 Student student = Student.getStudent(i);
-                 if (student.getID().equalsIgnoreCase(id) &&
-                         student.getFirstname().equalsIgnoreCase(firstName) &&
-                         student.getLastname().equalsIgnoreCase(lastName)) {
-                     //This is the student, change their table
-         			student.setTableNum(currentSelectedTable);
-                     break;
-                 }
-             }
-			
-			
+			String id = (String) studentDisplay.getValueAt(
+					selectedRowOnUnassigned, 0);
+			String firstName = (String) studentDisplay.getValueAt(
+					selectedRowOnUnassigned, 1);
+			String lastName = (String) studentDisplay.getValueAt(
+					selectedRowOnUnassigned, 2);
+			System.out.println("ID " + id + " firstname " + firstName);
+
+			// Go through all the students and see if that one is the same as
+			// the one selected
+			for (int i = 0; i < Student.listSize(); ++i)
+			{
+				Student student = Student.getStudent(i);
+				if (student.getID().equalsIgnoreCase(id) &&
+						student.getFirstname().equalsIgnoreCase(firstName) &&
+						student.getLastname().equalsIgnoreCase(lastName))
+				{
+					// This is the student, change their table
+					student.setTableNum(currentSelectedTable);
+					break;
+				}
+			}
+
 			refreshEveryThingButTableDisplay();
 		}
 	}
@@ -661,27 +577,33 @@ public class TableDisplayPanel extends JPanel
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			 String id = (String) tableDisplay.getValueAt(selectedRowOnAssigned, 0);
-             String firstName = (String) tableDisplay.getValueAt(selectedRowOnAssigned, 1);
-             String lastName = (String) tableDisplay.getValueAt(selectedRowOnAssigned, 2);
-             System.out.println("ID " + id + " firstname " + firstName);
-             
-             //Go through all the students and see if that one is the same as the one selected
-             for (int i = 0; i < Student.listSize(); ++i) {
-                 Student student = Student.getStudent(i);
-                 if (student.getID().equalsIgnoreCase(id) &&
-                         student.getFirstname().equalsIgnoreCase(firstName) &&
-                         student.getLastname().equalsIgnoreCase(lastName)) {
-                     //This is the student, change their table
-         			student.setTableNum(0);
-                     break;
-                 }
-             }
-             
-         	refreshEveryThingButTableDisplay();
+			String id = (String) tableDisplay.getValueAt(selectedRowOnAssigned,
+					0);
+			String firstName = (String) tableDisplay.getValueAt(
+					selectedRowOnAssigned, 1);
+			String lastName = (String) tableDisplay.getValueAt(
+					selectedRowOnAssigned, 2);
+			System.out.println("ID " + id + " firstname " + firstName);
+
+			// Go through all the students and see if that one is the same as
+			// the one selected
+			for (int i = 0; i < Student.listSize(); ++i)
+			{
+				Student student = Student.getStudent(i);
+				if (student.getID().equalsIgnoreCase(id) &&
+						student.getFirstname().equalsIgnoreCase(firstName) &&
+						student.getLastname().equalsIgnoreCase(lastName))
+				{
+					// This is the student, change their table
+					student.setTableNum(0);
+					break;
+				}
+			}
+
+			refreshEveryThingButTableDisplay();
 		}
 	}
-	
+
 	/**
 	 * Handles graphical changes when the search bar loses or gains focus
 	 * @author Matthew Sun
@@ -707,7 +629,7 @@ public class TableDisplayPanel extends JPanel
 			searchBar.setForeground(Color.GRAY);
 		}
 	}
-	
+
 	/**
 	 * Does a live instant search while user types search keywords
 	 * @author Matthew Sun
@@ -715,10 +637,10 @@ public class TableDisplayPanel extends JPanel
 	 */
 	class SearchBarKeyListener implements KeyListener
 	{
-	
+
 		public void keyPressed(KeyEvent arg0)
 		{
-			
+
 		}
 
 		/**
@@ -726,10 +648,11 @@ public class TableDisplayPanel extends JPanel
 		 */
 		public void keyReleased(KeyEvent arg0)
 		{
-			// Get a live update on what is being searched (everytime a key is released)
+			// Get a live update on what is being searched (everytime a key is
+			// released)
 			searchItem = searchBar.getText();
 			System.out.println(searchItem);
-			
+
 			// There is a search
 			if (searchItem.length() > 0)
 			{
@@ -777,7 +700,7 @@ public class TableDisplayPanel extends JPanel
 					searchResults = Student.search(Parameter.PAID,
 							searchItem);
 				}
-				
+
 				// Update the displayed list based on search results
 				displayedStudents = searchResults;
 				// Update the table
@@ -792,7 +715,122 @@ public class TableDisplayPanel extends JPanel
 		public void keyTyped(KeyEvent e)
 		{
 			// TODO Auto-generated method stub
-			
+
+		}
+	}
+	
+	/**
+	 * Listens for mouse presses on the header of the displayed table. Which
+	 * ever column is presses is how to table is sorted
+	 * 
+	 * @author Connor Murphy
+	 *
+	 */
+	class TableColumnMouseListener extends MouseAdapter
+	{
+		@Override
+		public void mouseClicked(MouseEvent e)
+		{
+			// Find the String representation of wich column header was clicked
+			int headerIndex = studentDisplay.getTableHeader().columnAtPoint(
+					e.getPoint());
+			String value = (String) studentDisplay.getColumnModel()
+					.getColumn(headerIndex).getHeaderValue();
+
+			// Find which column is selected. If the column was already
+			// selected, sort by descending and sort by ascending if not. To
+			// make
+			// things easier, if a column is sorted as descending it is not
+			// recorded as selected to be sorted by ascending later
+			if (value.equalsIgnoreCase(STUDENT_NO_COLUMN_HEADER))
+			{
+				if (selectedHeader == Header.ID)
+				{
+					selectedHeader = null;
+					Student.sort(Parameter.STUDENT_ID, false);
+				}
+				else
+				{
+					selectedHeader = Header.ID;
+					Student.sort(Parameter.STUDENT_ID, true);
+				}
+			}
+			else if (value.equalsIgnoreCase(FIRST_NAME_COLUMN_HEADER))
+			{
+				if (selectedHeader == Header.FIRST_NAME)
+				{
+					selectedHeader = null;
+					Student.sort(Parameter.FIRSTNAME, false);
+				}
+				else
+				{
+					selectedHeader = Header.FIRST_NAME;
+					Student.sort(Parameter.FIRSTNAME, true);
+				}
+			}
+			else if (value.equalsIgnoreCase(LAST_NAME_COLUMN_HEADER))
+			{
+				if (selectedHeader == Header.LAST_NAME)
+				{
+					selectedHeader = null;
+					Student.sort(Parameter.LASTNAME, false);
+				}
+				else
+				{
+					selectedHeader = Header.LAST_NAME;
+					Student.sort(Parameter.LASTNAME, true);
+				}
+			}
+			else if (value.equalsIgnoreCase(PAYMENT_COLUMN_HEADER))
+			{
+				if (selectedHeader == Header.PAID)
+				{
+					selectedHeader = null;
+					Student.sort(Parameter.PAID, false);
+				}
+				else
+				{
+					selectedHeader = Header.PAID;
+					Student.sort(Parameter.PAID, true);
+				}
+			}
+			else if (value.equalsIgnoreCase(FOOD_CHOICE_COLUMN_HEADER))
+			{
+				if (selectedHeader == Header.FOOD_CHOICE)
+				{
+					selectedHeader = null;
+					Student.sort(Parameter.FOODTYPE, false);
+				}
+				else
+				{
+					selectedHeader = Header.FOOD_CHOICE;
+					Student.sort(Parameter.FOODTYPE, true);
+				}
+			}
+			else if (value.equalsIgnoreCase(TABLE_NO_COLUMN_HEADER))
+			{
+				if (selectedHeader == Header.TABLE_NO)
+				{
+					selectedHeader = null;
+					Student.sort(Parameter.TABLE_NUMBER, false);
+				}
+				else
+				{
+					selectedHeader = Header.TABLE_NO;
+					Student.sort(Parameter.TABLE_NUMBER, true);
+				}
+			}
+			// Update the displayed list
+			while (displayedStudents.size() > 0)
+				displayedStudents.remove(0);
+
+			for (int i = 0; i < Student.listSize(); ++i)
+			{
+				displayedStudents.append(Student.getStudent(i));
+			}
+
+			// Update the table to show the sorted results
+			refresh(true);
 		}
 	}
 }
