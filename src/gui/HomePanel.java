@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -129,6 +130,7 @@ public class HomePanel extends JPanel {
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
+			EventPlanner.FRAME.dispatchEvent(new WindowEvent(EventPlanner.FRAME, WindowEvent.WINDOW_CLOSING));
 			EventPlanner.FRAME.dispose();		
 		}
 	}
