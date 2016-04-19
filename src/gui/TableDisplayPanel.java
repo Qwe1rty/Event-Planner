@@ -24,6 +24,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -376,38 +377,46 @@ public class TableDisplayPanel extends JPanel
 
 		}
 		// Add the updated number of tables to the table
-		for (int n = 1; n < Settings.getNumTables() + 1; n++)
+		for (int n = 1; n < Table.listSize() + 1; n++)
 		{
 			Vector<String> rowData = new Vector<>();
-			rowData.addElement("Table " + n);
+				rowData.addElement("Table " + n);
 
 			tableTableModel.addRow(rowData);
 		}
 	}
 
+	public void indicateFullTables ()
+	{
+		// Remove all the availible tables from the table
+		DefaultTableModel tableTableModel = (DefaultTableModel) availibleTables
+				.getModel();
+
+		while (availibleTables.getRowCount() > 0)
+		{
+			tableTableModel.removeRow(0);
+
+		}
+		// Add the updated number of tables to the table
+		for (int n = 0; n < Table.listSize(); n++)
+		{
+			Vector<String> rowData = new Vector<>();
+			if (Table.getTable(n).isFull())
+				rowData.addElement("Table " + (n + 1) + " (FULL)");
+			else
+				rowData.addElement("Table " + (n + 1));
+				
+
+			tableTableModel.addRow(rowData);
+		}
+	}
+	
 	/**
 	 * Draws the background image onto main panel
 	 */
 	public void paintComponent(Graphics g)
 	{
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
-	}
-	
-	/**
-	 * Gives a highlight indicator on the tables that are currently full
-	 */
-	public void highlightFullTables ()
-	{
-		// Go through each table, checking if they are full
-		for (int n = 0 ; n < Table.listSize() ; n ++)
-		{
-			System.out.print("TABLE NUM " + n);
-			if (Table.getTable(n).isFull())
-				System.out.println("FULL");
-			else
-				System.out.println("NOT FULL");
-		}
-		System.out.println("");
 	}
 
 	/**
@@ -553,37 +562,46 @@ public class TableDisplayPanel extends JPanel
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			if (selectedRowOnUnassigned > -1 && selectedRowOnUnassigned < studentDisplay.getRowCount())
+			// If table is open
+			if (!Table.getTable(currentSelectedTable - 1).isFull())
 			{
-			
-			
-				// Selected student data
-				String id = (String) studentDisplay.getValueAt(
-						selectedRowOnUnassigned, 0);
-				String firstName = (String) studentDisplay.getValueAt(
-						selectedRowOnUnassigned, 1);
-				String lastName = (String) studentDisplay.getValueAt(
-						selectedRowOnUnassigned, 2);
-	
-				// Go through all the students and see if that one is the same as
-				// the one selected
-				for (int i = 0; i < Student.listSize(); ++i)
+				if (selectedRowOnUnassigned > -1 && selectedRowOnUnassigned < studentDisplay.getRowCount())
 				{
-					Student student = Student.getStudent(i);
-					if (student.getID().equalsIgnoreCase(id) &&
-							student.getFirstname().equalsIgnoreCase(firstName) &&
-							student.getLastname().equalsIgnoreCase(lastName))
+					// Selected student data
+					String id = (String) studentDisplay.getValueAt(
+							selectedRowOnUnassigned, 0);
+					String firstName = (String) studentDisplay.getValueAt(
+							selectedRowOnUnassigned, 1);
+					String lastName = (String) studentDisplay.getValueAt(
+							selectedRowOnUnassigned, 2);
+		
+					// Go through all the students and see if that one is the same as
+					// the one selected
+					for (int i = 0; i < Student.listSize(); ++i)
 					{
-						// This is the student, change their table
-						student.setTableNum(currentSelectedTable);
-						Table.addStudent(currentSelectedTable - 1, student);
-						break;
+						Student student = Student.getStudent(i);
+						if (student.getID().equalsIgnoreCase(id) &&
+								student.getFirstname().equalsIgnoreCase(firstName) &&
+								student.getLastname().equalsIgnoreCase(lastName))
+						{
+							// This is the student, change their table
+							student.setTableNum(currentSelectedTable);
+							Table.addStudent(currentSelectedTable - 1, student);
+							break;
+						}
 					}
+					
+					if (Table.getTable(currentSelectedTable - 1).isFull())
+						indicateFullTables();
+	
+					refreshEveryThingButTableDisplay();
 				}
-				
-				
-				highlightFullTables();
-				refreshEveryThingButTableDisplay();
+			}
+			// Table is full
+			else
+			{
+				JOptionPane.showMessageDialog(EventPlanner.FRAME, "Table is Full",
+						"Invalid Table", JOptionPane.ERROR_MESSAGE);
 			}
 			
 		}
@@ -601,8 +619,7 @@ public class TableDisplayPanel extends JPanel
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			if (selectedRowOnAssigned > -1 && selectedRowOnAssigned < tableDisplay.getRowCount())
-			{
+			
 				String id = (String) tableDisplay.getValueAt(selectedRowOnAssigned,
 						0);
 				String firstName = (String) tableDisplay.getValueAt(
@@ -625,8 +642,9 @@ public class TableDisplayPanel extends JPanel
 						break;
 					}
 				}
+				indicateFullTables();
 				refreshEveryThingButTableDisplay();
-			}
+			
 		}
 	}
 
