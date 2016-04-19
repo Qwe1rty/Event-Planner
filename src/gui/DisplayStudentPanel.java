@@ -241,7 +241,7 @@ public class DisplayStudentPanel extends JPanel
 		add(nestedPanel);
 
 		// By default have the first row and column selected
-		selectedRow = 0;
+		selectedRow = -1;
 		selectedHeader = null;
 
 		// Create a list of students that are to be displayed
