@@ -20,6 +20,7 @@ import data.Food;
 import data.LinkedList;
 import data.Settings;
 import data.Student;
+import data.Table;
 import data.Student.InvalidFoodException;
 import data.Student.InvalidStudentIDException;
 
@@ -562,7 +563,7 @@ public class StudentProfile extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (!hasGuestCheckBox.isSelected())
+			if (!student.hasGuest())
 				JOptionPane.showMessageDialog(EventPlanner.FRAME, "This student doesn't have a guest.",
 						"No Guest", JOptionPane.ERROR_MESSAGE);
 			else
@@ -594,40 +595,116 @@ public class StudentProfile extends JPanel {
      * When the user selects that they are finished viewing this students
      * profile, this class updates the new data for the student
      *
-     * @author Connor Murphy
+     * @author Connor Murphy, Matthew Sun
      */
     class FinishButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
-                student.setStudentId(studentIdTextField.getText());
-            } catch (Student.InvalidStudentIDException ex) {
-                // If the id is invalid, do not update it
-            }
-            try {
-                student.setFood((String) foodChoiceComboBox.getSelectedItem());
-            } catch (Student.InvalidFoodException ex) {
-                // If the food is invalid, do not update it
-            }
-            try {
-                student.setTableNum(Integer.parseInt((String) tableNumComboBox
-                        .getSelectedItem()));
-            } catch (NumberFormatException ex) {
-                // If the table number is invalid the selected option is "unassigned" meaning a table number of 0
-                student.setTableNum(0);
-            }
+			String missingComponents = "";
+			String invalidComponents = "";
 
-            student.setLastname(lastNameTextField.getText());
-            student.setFirstname(firstNameTextField.getText());
+			String firstName = firstNameTextField.getText();
+			if (firstName.length() > 0) {
+				student.setFirstname(firstName);
+			} else {
+				missingComponents += "First Name\n";
+			}
 
-            student.setPaidBy(paidByTextField.getText());
-            student.setAllergies(allergiesTextArea.getText());
-            
-            student.setFormSubmitted(formSubmittedCheckBox.isSelected());
-            student.setGuest(hasGuestCheckBox.isSelected());
+			String lastName = lastNameTextField.getText();
+			if (lastName.length() > 0) {
+				student.setLastname(lastName);
+			} else {
+				missingComponents += "Last Name\n";
+			}
 
-            //Show the display student panel when done
-            EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT, false);
+			try {
+				String id = studentIdTextField.getText();
+				if (id.length() > 0) {
+					student.setStudentId(id);
+				} else {
+					missingComponents += "Student Number\n";
+				}
+			} catch (Student.InvalidStudentIDException ex) {
+				invalidComponents += "Student Number\n";
+			}
+
+			try {
+				String food = (String) foodChoiceComboBox.getSelectedItem();
+				if (food != null && food.length() > 0) {
+					student.setFood(food);
+				} else {
+					missingComponents += "FoodChoice\n";
+				}
+			} catch (Student.InvalidFoodException ex) {
+				invalidComponents += "Food Choice\n";
+			}
+			
+			if (formSubmittedCheckBox.isSelected())
+				student.setFormSubmitted(true);
+			
+			if (hasGuestCheckBox.isSelected())
+				student.setGuest(true);
+			
+			String initials = initialsTextField.getText();
+			if (initials.length() > 0)
+				student.setInitials(initials);
+			else
+				missingComponents += "Your Initials\n";
+
+
+			// Not necessary so dont check
+			student.setPhoneNum(phoneNumTextField.getText());
+
+			// These are not necessary so there is no need to check for validity
+			student.setPaidBy(paidByTextField.getText());
+			if (student.getPaidBy().equals(""))
+				student.setPaid(false);
+			else
+				student.setPaid(true);
+		
+			try
+			{
+				int tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
+				// Table isn't full, add
+				if (!Table.getTable(tableNum - 1).isFull())
+					student.setTableNum(tableNum);
+				// Full table
+				else
+				{
+					 invalidComponents += "Table is Full\n";
+				}
+			}
+			catch(NumberFormatException ex)
+			{
+				//Unassigned table
+				student.setTableNum(0);
+			}
+			
+
+			// These are not necessary so there is no need to check for validity
+			student.setAllergies(allergiesTextArea.getText());
+			student.setInfo(moreInfoTextArea.getText());
+
+			boolean valid = true;
+			// Ensure the student has at least the minimal information and
+			// display a warning if they are errors
+			if (missingComponents.length() > 0) {
+				valid = false;
+				JOptionPane.showMessageDialog(EventPlanner.FRAME, "Missing Entries: \n"
+						+ missingComponents + "Please go back and correct.",
+						"Missing Entries", JOptionPane.ERROR_MESSAGE);
+			}
+			if (invalidComponents.length() > 0) {
+				valid = false;
+				JOptionPane.showMessageDialog(EventPlanner.FRAME, "Invalid Entries: \n"
+						+ invalidComponents + "Please go back and correct.",
+						"Invalid Entries", JOptionPane.ERROR_MESSAGE);
+			}
+
+			// Let the user confirm only if the info entered is valid
+			if (valid) {
+				EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
+			}
         }
     }
 }

@@ -605,7 +605,14 @@ public class StudentPanel extends JPanel {
 			try
 			{
 				int tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
-				student.setTableNum(tableNum);
+				// Table isn't full, add
+				if (!Table.getTable(tableNum - 1).isFull())
+					student.setTableNum(tableNum);
+				// Full table
+				else
+				{
+					 invalidComponents += "Table is Full\n";
+				}
 			}
 			catch(NumberFormatException ex)
 			{
@@ -623,13 +630,13 @@ public class StudentPanel extends JPanel {
 			// display a warning if they are errors
 			if (missingComponents.length() > 0) {
 				valid = false;
-				JOptionPane.showMessageDialog(null, "Missing Entries: \n"
+				JOptionPane.showMessageDialog(EventPlanner.FRAME, "Missing Entries: \n"
 						+ missingComponents + "Please go back and correct.",
 						"Missing Entries", JOptionPane.ERROR_MESSAGE);
 			}
 			if (invalidComponents.length() > 0) {
 				valid = false;
-				JOptionPane.showMessageDialog(null, "Invalid Entries: \n"
+				JOptionPane.showMessageDialog(EventPlanner.FRAME, "Invalid Entries: \n"
 						+ invalidComponents + "Please go back and correct.",
 						"Invalid Entries", JOptionPane.ERROR_MESSAGE);
 			}
