@@ -88,5 +88,5 @@ public class Food {
 	 * @author Caleb Choi
 	 */
 	public static void clearList() {FOODLIST = new LinkedList<Food>();}
-
+	
 }

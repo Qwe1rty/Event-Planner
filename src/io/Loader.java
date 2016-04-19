@@ -29,7 +29,6 @@ import data.Student.InvalidStudentIDException;
  * A class that loads the data from the .event files saved by the program
  * @author Caleb Choi
  * @version 1.0
- *
  */
 public final class Loader {
 

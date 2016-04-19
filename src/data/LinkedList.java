@@ -104,7 +104,6 @@ public class LinkedList<E> {
 		insert(b, ia);
 			
 		return true;
-		
 	}
 	
 	/**

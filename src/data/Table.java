@@ -40,7 +40,7 @@ public class Table {
     }
 
     // LinkedList wrapper functions for students within tables in global table list
-    // There isn't really a way to modify tables without doing this, which sucked
+    // There isn't really a way to modify tables without doing this, which is why this is disgusting
     public static void addStudent(int index, Student student) {
         Table table = TABLE_LIST.get(index);
         table.appendStudent(student);
@@ -80,21 +80,20 @@ public class Table {
     public static void setLimit(int limit) {
         int size = listSize();
 
-        //Discard invalid input
-        if (limit < 0) {
-            return;
-        }
-        //Add tables to reach the table limit
-        else if (limit - size > 0) {
-            int tablesToAdd = limit - size;
-            for (int i = 0; i < tablesToAdd; i++) {
-                addTable(new Table());
-            }
-        } else {
-            for (int i = size - 1; i > limit; i--) {
+        // Discards invalid input
+        if (limit < 0) return;
+        
+        // If limit is above current size, tables are added to match the new limit
+        else if (limit > size)
+            for (int i = 0; i < limit - size; i++) 
+            	addTable(new Table());
+        
+        // If limit is less than current size, tables are removed to match the new limit.
+        // The tables near the end will be removed first
+        else
+            for (int i = size - 1; i >= limit; i--)
                 TABLE_LIST.remove(i);
-            }
-        }
+        
     }
 
     // *** Instance methods ***
@@ -126,8 +125,6 @@ public class Table {
     }
 
     public boolean isFull() {
-        //TODO: remove sysout
-        System.out.println("Table size " + Settings.getTableSize());
         return students.size() >= Settings.getTableSize();
     }
 //	private boolean swapStudent(int indexa, int indexb) {
