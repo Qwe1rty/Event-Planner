@@ -37,7 +37,6 @@ public class Student {
     private String info; // -o
 
     // *** CONSTRUCTORS ***
-
     /**
      * A constructor for fully declared students. For optional values, if you want to make them
      * invalid/empty, set them as null (or 0 for table #)
@@ -263,53 +262,48 @@ public class Student {
 
         // Through full list of students
         for (int i = 0; i < STUDENT_LIST.size(); i++) {
+     	   
+     	  // Stores student
             Student student = STUDENT_LIST.get(i);
 
             // Filters by parameter. If search string matches, it's added to new list
-            if (param == Parameter.STUDENT_ID || param == null) // Search by student ID
-            {
+            if (param == Parameter.STUDENT_ID || param == null) { // Search by student ID
                 if (student.getID() != null && student.getID().toLowerCase().contains(search)) {
                     newList.append(student);
                 }
-            } else if (param == Parameter.FIRSTNAME || param == null) // Search by student firstnames
-            {
+            } else if (param == Parameter.FIRSTNAME || param == null) { // Search by student firstnames
                 if (student.getFirstname().toLowerCase().contains(search)) {
                     newList.append(student);
                 }
-            } else if (param == Parameter.LASTNAME || param == null) // Search by student lastnames
-            {
+            } else if (param == Parameter.LASTNAME || param == null) { // Search by student lastnames
                 if (student.getLastname().toLowerCase().contains(search)) {
                     newList.append(student);
                 }
-            } else if (param == Parameter.ALLERGIES || param == null) // Search by student allergies
-            {
+            } else if (param == Parameter.ALLERGIES || param == null) { // Search by student allergies
                 if (student.getAllergies() != null && student.getAllergies().toLowerCase().contains(search)) {
                     newList.append(student);
                 }
-            } else if (param == Parameter.FOODTYPE || param == null) // Search by student foodtypes
-            {
+            } else if (param == Parameter.FOODTYPE || param == null) { // Search by student foodtypes
                 if (student.getFood().toString().toLowerCase().contains(search)) {
                     newList.append(student);
                 }
-            } else if (param == Parameter.TABLE_NUMBER || param == null) // Search by student table numbers
-            {
+            } else if (param == Parameter.TABLE_NUMBER || param == null) { // Search by student table numbers
                 if (student.getTableNum() != 0 && String.valueOf(student.getTableNum()).contains(search)) {
                     newList.append(student);
                 }
             }
-            else if (param == Parameter.PAID || param == null)
-            {
+            else if (param == Parameter.PAID || param == null) { // Search by whether they've paid
                 if (Boolean.toString(student.isPaid()).contains(search)) {
                     newList.append(student);
                 }
             }
+            
         }
         // Returns new list
         return newList;
     }
 
     // *** GETTERS ***
-
     /**
      * Returns the student's ID
      *
@@ -419,7 +413,6 @@ public class Student {
     }
 
     // *** SETTERS ***
-
     /**
      * Sets the student's ID
      *
@@ -546,7 +539,6 @@ public class Student {
     }
 
     // *** EXCEPTIONS ***
-
     /**
      * An exception that is thrown when an invalid student ID is detected
      */
