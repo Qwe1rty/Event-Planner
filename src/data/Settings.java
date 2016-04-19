@@ -31,6 +31,7 @@ public final class Settings
 	public static void setNumTables(int numTables)
 	{
 		Settings.numTables = numTables;
+		Table.setLimit(numTables);
 	}
 
 	public static int getTableSize()
