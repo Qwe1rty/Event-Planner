@@ -495,12 +495,26 @@ public class StudentPanel extends JPanel {
 			} catch (Student.InvalidFoodException ex) {
 				invalidComponents += "Food Choice\n";
 			}
+			
+			if (formSubmittedCheckBox.isSelected())
+				student.setFormSubmitted(true);
+			else
+				missingComponents += "Form Submitted\n";
+			
+			String initials = initialsTextField.getText();
+
+
+
 
 			// Not necessary so dont check
 			student.setPhoneNum(phoneNumTextField.getText());
 
 			// These are not necessary so there is no need to check for validity
 			student.setPaidBy(paidByTextField.getText());
+			if (student.getPaidBy().equals(""))
+				student.setPaid(false);
+			else
+				student.setPaid(true);
 		
 			try
 			{
