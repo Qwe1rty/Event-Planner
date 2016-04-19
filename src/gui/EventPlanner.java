@@ -77,7 +77,7 @@ public class EventPlanner implements WindowListener {
 
         // Create the panels
         homePanel = new HomePanel();
-        settingsPanel = new SettingsPanel();
+
         studentPanel = new StudentPanel();
         studentDisplay = new DisplayStudentPanel();
         tableDisplay = new TableDisplayPanel();
@@ -105,10 +105,13 @@ public class EventPlanner implements WindowListener {
       //  Table.setLimit(10);
         Settings.setTableSize(1000);
 
+
         // Add food
         for (int i = 0; i < 10; ++i) {
             Food.appendFood(new Food(generateRandName(8)));
         }
+        
+        settingsPanel = new SettingsPanel();
 
         // Add test students
         for (int i = 0; i < 1000; ++i) {
@@ -117,7 +120,7 @@ public class EventPlanner implements WindowListener {
             boolean paid = rand.nextBoolean();
             boolean formSubmitted = rand.nextBoolean();
             boolean guest = rand.nextBoolean();
-            int tableNum = rand.nextInt(Settings.getNumTables() + 1);
+//            int tableNum = rand.nextInt(Settings.getNumTables() + 1);
 
             Student student = null;
 
@@ -129,7 +132,7 @@ public class EventPlanner implements WindowListener {
                             rand.nextInt(Food.listSize())).toString(),
                             paid, generateRandName(rand.nextInt(8)), formSubmitted,
                             generateRandName(rand.nextInt(100)),
-                            tableNum,
+                            0,
                             generateRandNumberString(10),
                             generateRandName(rand.nextInt(100)));
                 } catch (InvalidStudentIDException | InvalidFoodException e) {
@@ -143,7 +146,7 @@ public class EventPlanner implements WindowListener {
                             rand.nextInt(Food.listSize())).toString(),
                             paid, "", formSubmitted,
                             generateRandName(rand.nextInt(100)),
-                            tableNum,
+                            0,
                             generateRandNumberString(10),
                             generateRandName(rand.nextInt(100)));
                 } catch (InvalidStudentIDException | InvalidFoodException e) {
@@ -175,6 +178,7 @@ public class EventPlanner implements WindowListener {
         }
         return id;
     }
+    
 
     /**
      * Used to change the panel currently displayed to the user.
@@ -196,6 +200,8 @@ public class EventPlanner implements WindowListener {
             FRAME.add(studentDisplay);
         } else if (panel == Panel.TABLE_DISPLAY) {
             ((TableDisplayPanel) tableDisplay).refresh(true);
+            ((TableDisplayPanel) tableDisplay).highlightFullTables();
+
             FRAME.add(tableDisplay);
         }
         FRAME.revalidate();
