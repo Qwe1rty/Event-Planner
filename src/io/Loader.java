@@ -94,6 +94,8 @@ public final class Loader {
 				s.setFirstname(st.nextToken());
 				// Lastname
 				s.setLastname(st.nextToken());
+				// Initials
+				s.setInitials(st.nextToken());
 				// Food
 				try {s.setFood(st.nextToken());
 				} catch (InvalidFoodException e) {
@@ -229,6 +231,7 @@ public final class Loader {
 			student += Student.getStudent(i).getID() + ",";
 			student += Student.getStudent(i).getFirstname() + ",";
 			student += Student.getStudent(i).getLastname() + ",";
+			student += Student.getStudent(i).getInitials() + ",";
 			student += Student.getStudent(i).getFood().toString() + ",";
 			student += Student.getStudent(i).getPaidBy() + ",";
 			student += Student.getStudent(i).isPaid() + ",";
