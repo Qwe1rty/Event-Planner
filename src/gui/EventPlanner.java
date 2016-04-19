@@ -204,8 +204,6 @@ public class EventPlanner implements WindowListener {
             FRAME.add(studentDisplay);
         } else if (panel == Panel.TABLE_DISPLAY) {
             ((TableDisplayPanel) tableDisplay).refresh(true);
-            ((TableDisplayPanel) tableDisplay).highlightFullTables();
-
             FRAME.add(tableDisplay);
         }
         FRAME.revalidate();
