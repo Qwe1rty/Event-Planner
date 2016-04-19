@@ -78,6 +78,7 @@ public class Student {
 	public static void removeStudent(Student s) {STUDENT_LIST.remove(s);}
 	public static Student getStudent(int index) {return STUDENT_LIST.get(index);}
 	public static int listSize() {return STUDENT_LIST.size();}
+	public static void removeAll(){STUDENT_LIST.clear();}
 	/**
 	 * Sorts the global list of students by a given parameter. Ordering can be
 	 * selected. Sorting method is shellsort, with a gap of 1/2^k where k is the number

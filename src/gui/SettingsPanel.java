@@ -3,6 +3,7 @@ package gui;
 import data.Food;
 import data.LinkedList;
 import data.Settings;
+import data.Student;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -420,6 +421,8 @@ public class SettingsPanel extends JPanel
 			{
 				model.removeRow(0);
 			}
+
+			Student.removeAll();
 
 			//Reset number of tables and table size
 			Settings.setNumTables(0);
