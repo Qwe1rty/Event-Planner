@@ -31,6 +31,7 @@ public class Student {
     private boolean paid;
     private String paidBy;
     private boolean formSubmitted;
+    private boolean hasGuest;
     private String allergies; // -o
     private int tableNum; // -o; 0 means unassigned
     private String phoneNum; // -o
@@ -54,13 +55,14 @@ public class Student {
      * @param tableNum      Student's table number
      * @param phoneNum      Student's phone number
      * @param info          Student's additional information
+     * @param hasGuest 		Student's having guest status
      * @throws InvalidStudentIDException Thrown when an invalid student ID is detected
      * @throws InvalidFoodException      Thrown when an invalid food choice is detected
      */
     public Student(String ID, String firstname, String lastname, String initials,
                    Food food, boolean paid, String paidBy, boolean formSubmitted, String allergies,
-                   int tableNum, String phoneNum, String info) throws InvalidStudentIDException, InvalidFoodException {
-        this(ID, firstname, lastname, initials, food, paid, paidBy, formSubmitted);
+                   int tableNum, String phoneNum, String info, boolean hasGuest) throws InvalidStudentIDException, InvalidFoodException {
+        this(ID, firstname, lastname, initials, food, paid, paidBy, formSubmitted, hasGuest);
         if (allergies != null) setAllergies(allergies);
         setTableNum(tableNum);
         if (phoneNum != null) setPhoneNum(phoneNum);
@@ -78,12 +80,13 @@ public class Student {
      * @param paid          Student's paid status
      * @param paidBy        Person who paid student's ticket
      * @param formSubmitted Student's form submission status
+     * @param hasGuest 		Student's having guest status
      * @throws InvalidStudentIDException Thrown when an invalid student ID is detected
      * @throws InvalidFoodException      Thrown when an invalid food choice is detected
      */
     public Student(String studentId, String firstname, String lastname, String initials,
-                   Food food, boolean paid, String paidBy, boolean formSubmitted) throws InvalidStudentIDException, InvalidFoodException {
-        this(firstname, lastname, initials, food, paid, paidBy, formSubmitted);
+                   Food food, boolean paid, String paidBy, boolean formSubmitted, boolean hasGuest) throws InvalidStudentIDException, InvalidFoodException {
+        this(firstname, lastname, initials, food, paid, paidBy, formSubmitted, hasGuest);
         if (studentId == null) studentId = "000000000";
         else setStudentId(studentId);
     }
@@ -99,10 +102,11 @@ public class Student {
      * @param paid          Student's paid status
      * @param paidBy        Person who paid student's ticket
      * @param formSubmitted Student's form submission status
+     * @param hasGuest 		Student's having guest status
      * @throws InvalidFoodException Thrown when an invalid food choice is detected
      */
     public Student(String firstname, String lastname, String initials, Food food,
-                   boolean paid, String paidBy, boolean formSubmitted) throws InvalidFoodException {
+                   boolean paid, String paidBy, boolean formSubmitted, boolean hasGuest) throws InvalidFoodException {
         setFirstname(firstname);
         setLastname(lastname);
         setInitials(initials);
@@ -110,6 +114,7 @@ public class Student {
         setPaid(paid);
         setPaidBy(paidBy);
         setFormSubmitted(formSubmitted);
+        setGuest(hasGuest);
     }
 
     /**
@@ -417,6 +422,15 @@ public class Student {
     public boolean isFormSubmitted() {
         return formSubmitted;
     }
+    
+    /**
+     * Returns if student has a guest
+     * @return whether a student has a guest
+     */
+    public boolean hasGuest () 
+    {
+    	return hasGuest;
+    }
 
     // *** SETTERS ***
 
@@ -543,6 +557,15 @@ public class Student {
      */
     public void setFormSubmitted(boolean formSubmitted) {
         this.formSubmitted = formSubmitted;
+    }
+    
+    /**
+     * Sets whether or not the student has a guest
+     * @param hasGuest a boolean representing whether there's a guest
+     */
+    public void setGuest (boolean hasGuest)
+    {
+    	this.hasGuest = hasGuest;
     }
 
     // *** EXCEPTIONS ***
