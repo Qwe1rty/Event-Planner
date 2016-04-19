@@ -51,8 +51,12 @@ public class Student {
 	// Student with only mandatory fields
 	public Student(String studentId, String firstname, String lastname, String initials,
 			Food food, boolean paid, String paidBy, boolean formSubmitted) throws InvalidStudentIDException, InvalidFoodException {
+		this(firstname, lastname, initials, food, paid, paidBy, formSubmitted);
 		if (studentId == null) studentId = "000000000";
 		else setStudentId(studentId);
+	}
+	public Student(String firstname, String lastname, String initials, Food food, 
+			boolean paid, String paidBy, boolean formSubmitted) throws InvalidFoodException {
 		setFirstname(firstname);
 		setLastname(lastname);
 		setInitials(initials);
