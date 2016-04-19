@@ -20,6 +20,7 @@ import data.Food;
 import data.LinkedList;
 import data.Settings;
 import data.Student;
+import data.Table;
 
 /**
  * The student panel is a panel in which new students are added
@@ -186,7 +187,8 @@ public class StudentPanel extends JPanel {
 			// The unassigned table
 			tables[0] = "Unassigned";
 			for (int i = 1; i < numTables + 1; ++i) {
-				tables[i] = Integer.toString(i);
+				if (!Table.getTable( i - 1).isFull())
+					tables[i] = Integer.toString(i);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -417,10 +419,17 @@ public class StudentPanel extends JPanel {
 			// The unassigned table
 			tableNumComboBox.addItem("Unassigned");
 			for (int i = 1; i < numTables + 1; ++i) {
-				tableNumComboBox.addItem(Integer.toString(i));
+				if (!Table.getTable(i - 1).isFull())
+					tableNumComboBox.addItem(Integer.toString(i));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		for (int n = 0 ; n < Table.listSize() ; n ++)
+		{
+			if (!Table.getTable(n).isFull())
+				System.out.println("TABLE " + (n + 1) + " NOT FULL");
 		}
 	}
 
@@ -502,8 +511,10 @@ public class StudentPanel extends JPanel {
 				missingComponents += "Form Submitted\n";
 			
 			String initials = initialsTextField.getText();
-
-
+			if (initials.length() > 0)
+				student.setInitials(initials);
+			else
+				missingComponents += "Your Initials\n";
 
 
 			// Not necessary so dont check
