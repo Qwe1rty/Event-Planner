@@ -553,36 +553,38 @@ public class TableDisplayPanel extends JPanel
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-
-			
-			
-			// Selected student data
-			String id = (String) studentDisplay.getValueAt(
-					selectedRowOnUnassigned, 0);
-			String firstName = (String) studentDisplay.getValueAt(
-					selectedRowOnUnassigned, 1);
-			String lastName = (String) studentDisplay.getValueAt(
-					selectedRowOnUnassigned, 2);
-
-			// Go through all the students and see if that one is the same as
-			// the one selected
-			for (int i = 0; i < Student.listSize(); ++i)
+			if (selectedRowOnUnassigned > -1 && selectedRowOnUnassigned < studentDisplay.getRowCount())
 			{
-				Student student = Student.getStudent(i);
-				if (student.getID().equalsIgnoreCase(id) &&
-						student.getFirstname().equalsIgnoreCase(firstName) &&
-						student.getLastname().equalsIgnoreCase(lastName))
+			
+			
+				// Selected student data
+				String id = (String) studentDisplay.getValueAt(
+						selectedRowOnUnassigned, 0);
+				String firstName = (String) studentDisplay.getValueAt(
+						selectedRowOnUnassigned, 1);
+				String lastName = (String) studentDisplay.getValueAt(
+						selectedRowOnUnassigned, 2);
+	
+				// Go through all the students and see if that one is the same as
+				// the one selected
+				for (int i = 0; i < Student.listSize(); ++i)
 				{
-					// This is the student, change their table
-					student.setTableNum(currentSelectedTable);
-					Table.addStudent(currentSelectedTable - 1, student);
-					break;
+					Student student = Student.getStudent(i);
+					if (student.getID().equalsIgnoreCase(id) &&
+							student.getFirstname().equalsIgnoreCase(firstName) &&
+							student.getLastname().equalsIgnoreCase(lastName))
+					{
+						// This is the student, change their table
+						student.setTableNum(currentSelectedTable);
+						Table.addStudent(currentSelectedTable - 1, student);
+						break;
+					}
 				}
+				
+				
+				highlightFullTables();
+				refreshEveryThingButTableDisplay();
 			}
-			
-			
-			highlightFullTables();
-			refreshEveryThingButTableDisplay();
 			
 		}
 	}
@@ -599,30 +601,32 @@ public class TableDisplayPanel extends JPanel
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			String id = (String) tableDisplay.getValueAt(selectedRowOnAssigned,
-					0);
-			String firstName = (String) tableDisplay.getValueAt(
-					selectedRowOnAssigned, 1);
-			String lastName = (String) tableDisplay.getValueAt(
-					selectedRowOnAssigned, 2);
-
-
-			// Go through all the students and see if that one is the same as
-			// the one selected
-			for (int i = 0; i < Student.listSize(); ++i)
+			if (selectedRowOnAssigned > -1 && selectedRowOnAssigned < tableDisplay.getRowCount())
 			{
-				Student student = Student.getStudent(i);
-				if (student.getID().equalsIgnoreCase(id) &&
-						student.getFirstname().equalsIgnoreCase(firstName) &&
-						student.getLastname().equalsIgnoreCase(lastName))
+				String id = (String) tableDisplay.getValueAt(selectedRowOnAssigned,
+						0);
+				String firstName = (String) tableDisplay.getValueAt(
+						selectedRowOnAssigned, 1);
+				String lastName = (String) tableDisplay.getValueAt(
+						selectedRowOnAssigned, 2);
+	
+	
+				// Go through all the students and see if that one is the same as
+				// the one selected
+				for (int i = 0; i < Student.listSize(); ++i)
 				{
-					// This is the student, change their table
-					student.setTableNum(0);
-					break;
+					Student student = Student.getStudent(i);
+					if (student.getID().equalsIgnoreCase(id) &&
+							student.getFirstname().equalsIgnoreCase(firstName) &&
+							student.getLastname().equalsIgnoreCase(lastName))
+					{
+						// This is the student, change their table
+						student.setTableNum(0);
+						break;
+					}
 				}
+				refreshEveryThingButTableDisplay();
 			}
-
-			refreshEveryThingButTableDisplay();
 		}
 	}
 
