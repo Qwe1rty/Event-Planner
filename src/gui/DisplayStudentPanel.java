@@ -487,7 +487,7 @@ public class DisplayStudentPanel extends JPanel
 	 * @author Matthew Sun
 	 */
 	class AddButtonActionListener implements ActionListener
-	{
+	{ 
 		public void actionPerformed(ActionEvent e)
 		{
 			EventPlanner.setPanel(EventPlanner.Panel.STUDENT);
@@ -503,21 +503,25 @@ public class DisplayStudentPanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			// Get the student to remove
-			String id = (String) displayTable.getValueAt(selectedRow, 0);
-			String firstName = (String) displayTable.getValueAt(selectedRow, 1);
-			String lastName = (String) displayTable.getValueAt(selectedRow, 2);
-			
-			// Find the student to remove
-			for (int n = 0 ; n < Student.listSize() ; n ++)
+			if (selectedRow > -1 && selectedRow < displayTable.getRowCount())
 			{
-				Student currentStudent = Student.getStudent(n);
-				if (currentStudent.getID().equalsIgnoreCase(id) &&
-						currentStudent.getFirstname().equalsIgnoreCase(firstName) &&
-						currentStudent.getLastname().equalsIgnoreCase(lastName))
-					Student.removeStudent(currentStudent);
+				// Get the student to remove
+				String id = (String) displayTable.getValueAt(selectedRow, 0);
+				String firstName = (String) displayTable.getValueAt(selectedRow, 1);
+				String lastName = (String) displayTable.getValueAt(selectedRow, 2);
+				
+				// Find the student to remove
+				for (int n = 0 ; n < Student.listSize() ; n ++)
+				{
+					Student currentStudent = Student.getStudent(n);
+					if (currentStudent.getID().equalsIgnoreCase(id) &&
+							currentStudent.getFirstname().equalsIgnoreCase(firstName) &&
+							currentStudent.getLastname().equalsIgnoreCase(lastName))
+						Student.removeStudent(currentStudent);
+				}
+				selectedRow = -1;
+				refresh(true);
 			}
-			refresh(true);
 		}
 	}
 
