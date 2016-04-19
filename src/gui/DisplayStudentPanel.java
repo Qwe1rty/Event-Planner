@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import data.LinkedList;
@@ -230,6 +231,7 @@ public class DisplayStudentPanel extends JPanel
 		displayTable.setFont(FIELD_FONT);
 		displayTable.getTableHeader().setFont(TEXT_FONT);
 		displayTable.getTableHeader().setReorderingAllowed(false);
+		displayTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(displayTable);
 
 		c.gridx = 0;
@@ -351,7 +353,7 @@ public class DisplayStudentPanel extends JPanel
 	{
 
 		@Override
-		public void mouseClicked(MouseEvent e)
+		public void mouseReleased(MouseEvent e)
 		{
 			// Store the selected row and column that was selected
 			selectedRow = displayTable.rowAtPoint(e.getPoint());
@@ -503,23 +505,11 @@ public class DisplayStudentPanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			if (selectedRow > -1 && selectedRow < displayTable.getRowCount())
+			if (selectedRow >= 0 && selectedRow < displayTable.getRowCount())
 			{
-				// Get the student to remove
-				String id = (String) displayTable.getValueAt(selectedRow, 0);
-				String firstName = (String) displayTable.getValueAt(selectedRow, 1);
-				String lastName = (String) displayTable.getValueAt(selectedRow, 2);
-				
-				// Find the student to remove
-				for (int n = 0 ; n < Student.listSize() ; n ++)
-				{
-					Student currentStudent = Student.getStudent(n);
-					if (currentStudent.getID().equalsIgnoreCase(id) &&
-							currentStudent.getFirstname().equalsIgnoreCase(firstName) &&
-							currentStudent.getLastname().equalsIgnoreCase(lastName))
-						Student.removeStudent(currentStudent);
-				}
-				selectedRow = -1;
+				Student student = displayedStudents.get(selectedRow);
+				Student.removeStudent(student);
+				displayedStudents.remove(selectedRow);
 				refresh(true);
 			}
 		}
