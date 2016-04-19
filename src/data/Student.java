@@ -293,7 +293,13 @@ public class Student {
                 }
             } else if (param == Parameter.TABLE_NUMBER || param == null) // Search by student table numbers
             {
-                if (student.getTableNum() != 0 && String.valueOf(student.getTableNum()).toLowerCase().contains(search)) {
+                if (student.getTableNum() != 0 && String.valueOf(student.getTableNum()).contains(search)) {
+                    newList.append(student);
+                }
+            }
+            else if (param == Parameter.PAID || param == null)
+            {
+                if (Boolean.toString(student.isPaid()).contains(search)) {
                     newList.append(student);
                 }
             }
