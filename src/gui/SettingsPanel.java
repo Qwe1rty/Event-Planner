@@ -35,6 +35,7 @@ public class SettingsPanel extends JPanel
 	private static final String NUM_TABLES_TEXT = "Number of Tables:";
 	private static final String PPL_PER_TABLE_TEXT = "People per Table:";
 	private static final String CLEAR_DATA_TEXT = "Clear Data";
+	private final String SAVE_TEXT = "Save Data";
 
 	//The size of the text field
 	private static final int TEXT_FIELD_COLS = 3;
@@ -58,6 +59,7 @@ public class SettingsPanel extends JPanel
 	private JButton addFoodItemButton;
 	private JButton removeFoodItemButton;
 	private JButton clearDataButton;
+	private JButton saveButton;
 
 	//Labels for the table settings text fields
 	private JLabel numTables;
@@ -246,7 +248,7 @@ public class SettingsPanel extends JPanel
 		c.gridy = 6;
 		nestedPanel.add(pplPerTableField, c);
 
-		// Final buttons: clear data and finish
+		// Clear Data
 		clearDataButton = new JButton(CLEAR_DATA_TEXT);
 		clearDataButton.addActionListener(new ClearDataButtonActionListener());
 		clearDataButton.setBackground(new Color(243, 69, 65));
@@ -256,9 +258,22 @@ public class SettingsPanel extends JPanel
 
 		c.gridx = 0;
 		c.gridy = 7;
-		c.gridwidth = 7;
+		c.gridwidth = 4;
 		c.anchor = GridBagConstraints.CENTER;
 		nestedPanel.add(clearDataButton, c);
+		
+		// Save button
+		saveButton = new JButton(SAVE_TEXT);
+		saveButton.addActionListener(new SaveButtonListener());
+		saveButton.setBackground(new Color(243, 69, 65));
+		saveButton.setForeground(Color.WHITE);
+		saveButton.setFont(SMALLER_BUTTON_FONT);
+		saveButton.setPreferredSize(new Dimension(200, 50));
+		
+		c.gridx = 4;
+		c.gridy = 7;
+		c.gridwidth = 3;
+		nestedPanel.add(saveButton, c);
 
 		// Add all panels to the main panel
 		add(nestedPanel);
@@ -432,6 +447,17 @@ public class SettingsPanel extends JPanel
 			numTablesField.setText("");
 			pplPerTableField.setText("");
 
+		}
+	}
+	
+
+	class SaveButtonListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			// TODO Auto-generated method stub
+			
 		}
 	}
 }
