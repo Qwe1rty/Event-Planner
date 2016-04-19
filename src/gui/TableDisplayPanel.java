@@ -213,7 +213,7 @@ public class TableDisplayPanel extends JPanel {
         for (int n = 1; n < Settings.getNumTables() + 1; n++) {
             Vector<String> rowData = new Vector<>();
             rowData.addElement("Table " + n);
-            System.out.println(rowData);
+
             tables.addElement(rowData);
         }
 
@@ -281,7 +281,7 @@ public class TableDisplayPanel extends JPanel {
         // This object finds the row and column where the user has clicked
         MouseListener assignedStudentMouseListener = new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
-                selectedRowOnAssigned = studentDisplay.rowAtPoint(e
+                selectedRowOnAssigned = tableDisplay.rowAtPoint(e
                         .getPoint());
             }
         };
@@ -291,7 +291,7 @@ public class TableDisplayPanel extends JPanel {
         StudentTableModel atTable = new StudentTableModel(placeholderData,
                 COLUMN_NAMES);
         tableDisplay = new JTable(placeholderData, COLUMN_NAMES);
-
+        tableDisplay.addMouseListener(assignedStudentMouseListener);
         tableDisplay.setModel(atTable);
         tableDisplay
                 .setPreferredScrollableViewportSize(new Dimension(880, 230));
@@ -359,15 +359,15 @@ public class TableDisplayPanel extends JPanel {
             currentStudentsTableModel.removeRow(0);
         }
         //TODO: remove sysouts
-        System.out.println("REFREH");
+
         // Add the updated students to the table (only unassigned students)
         for (int i = 0; i < Student.listSize(); ++i) {
             Student student = Student.getStudent(i);
             //TODO: remove sysout
-            //System.out.println(student.getTableNum());
+
             // Only add a student to the unassigned panel if they are unassigned
             if (student.getTableNum() == currentSelectedTable) {
-                System.out.println("HELLO");
+
                 String paid = student.isPaid() ? "Yes" : "No";
                 int tableNumber = student.getTableNum();
                 String table = tableNumber == 0 ? "Unassigned" : Integer
@@ -424,14 +424,14 @@ public class TableDisplayPanel extends JPanel {
             studentTableModel.removeRow(0);
         }
         //TODO: remove sysouts
-        System.out.println("REFREH");
+
         // Add the updated students to the table (only unassigned students)
         for (int i = 0; i < Student.listSize(); ++i) {
             Student student = Student.getStudent(i);
-            System.out.println(student.getTableNum());
+
             // Only add a student to the unassigned panel if they are unassigned
             if (student.getTableNum() == 0) {
-                System.out.println("HELLO");
+
                 String paid = student.isPaid() ? "Yes" : "No";
                 int tableNumber = student.getTableNum();
                 String table = tableNumber == 0 ? "Unassigned" : Integer
@@ -449,7 +449,7 @@ public class TableDisplayPanel extends JPanel {
             currentStudentsTableModel.removeRow(0);
         }
         //TODO: remove sysouts
-        System.out.println("REFREH");
+
         // Add the updated students to the table (only unassigned students)
         for (int i = 0; i < Student.listSize(); ++i) {
             Student student = Student.getStudent(i);
@@ -457,7 +457,7 @@ public class TableDisplayPanel extends JPanel {
             //System.out.println(student.getTableNum());
             // Only add a student to the unassigned panel if they are unassigned
             if (student.getTableNum() == currentSelectedTable) {
-                System.out.println("HELLO");
+
                 String paid = student.isPaid() ? "Yes" : "No";
                 int tableNumber = student.getTableNum();
                 String table = tableNumber == 0 ? "Unassigned" : Integer
@@ -505,7 +505,6 @@ public class TableDisplayPanel extends JPanel {
 
             currentSelectedTable = availableTables.rowAtPoint(e.getPoint()) + 1;
             //TODO: remove sysouts
-            System.out.println("current selected table: " + currentSelectedTable);
 
             // Add all table members at the current selected table
             for (int i = 0; i < Student.listSize(); ++i) {
@@ -545,7 +544,6 @@ public class TableDisplayPanel extends JPanel {
          * Adds the selected student to the table if the table is not full
          */
         public void actionPerformed(ActionEvent arg0) {
-            System.out.println(" size" + Table.listSize());
             Table table = Table.getTable(currentSelectedTable - 1);
             if (!table.isFull()) {
                 // Selected student data
@@ -668,7 +666,7 @@ public class TableDisplayPanel extends JPanel {
             // Get a live update on what is being searched (everytime a key is
             // released)
             searchItem = searchBar.getText();
-            System.out.println(searchItem);
+
 
             // There is a search
             if (searchItem.length() > 0) {
