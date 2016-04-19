@@ -31,6 +31,7 @@ import data.Table;
 // TODO: change the class to be able to be used to add and edit students
 public class StudentPanel extends JPanel {
 	private static final String BACK_BUTTON_TEXT = "Back";
+	private final String GUEST_BUTTON_TEXT = "Show Guest";
 	private static final String FIRST_NAME_LABEL_TEXT = "First Name: ";
 	private static final String LAST_NAME_LABEL_TEXT = "Last Name: ";
 	private static final String STUDENT_ID_LABEL_TEXT = "Student Number: ";
@@ -40,12 +41,13 @@ public class StudentPanel extends JPanel {
 	private static final String INITIALS_LABEL_TEXT = "Initials: ";
 	private static final String FORM_SUBMITTED_LABEL_TEXT = "Form Submitted: ";
 	private static final String TABLE_NUM_LABEL_TEXT = "Table Number: ";
+	private final String GUEST_LABEL_TEXT = "Has Guest: ";
 	private static final String ALLERGIES_LABEL_TEXT = "Allergies";
 	private static final String MORE_INFO_LABEL_TEXT = "Additional Information";
 	private static final String CANCEL_BUTTON_TEXT = "Cancel";
 	private static final String CONFIRM_BUTTON_TEXT = "Confirm";
 
-	private static final int TEXT_AREA_ROWS = 10;
+	private static final int TEXT_AREA_ROWS = 8;
 	private static final int TEXT_AREA_COLS = 35;
 
 	private static final int TEXT_FIELD_ROWS = 21;
@@ -65,6 +67,7 @@ public class StudentPanel extends JPanel {
 	private JComboBox<String> tableNumComboBox;
 	private JTextField initialsTextField;
 	private JCheckBox formSubmittedCheckBox;
+	private JCheckBox hasGuestCheckBox;
 	
 	private JLabel firstNameLabel;
 	private JLabel lastNameLabel;
@@ -75,6 +78,7 @@ public class StudentPanel extends JPanel {
 	private JLabel tableNumLabel;
 	private JLabel initialsLabel;
 	private JLabel formSubmittedLabel;
+	private JLabel hasGuestLabel;
 
 	private JLabel allergiesLabel;
 	private JLabel moreInfoLabel;
@@ -85,6 +89,7 @@ public class StudentPanel extends JPanel {
 	private JButton cancelButton;
 	private JButton confirmButton;
 	private JButton backButton;
+	private JButton showGuest;
 
 	private Image background;
 	private JPanel fieldsPanel;
@@ -126,6 +131,23 @@ public class StudentPanel extends JPanel {
 		c.anchor = GridBagConstraints.WEST;
 		c.insets = new Insets(0, 0, 0, 100);
 		fieldsPanel.add(backButton, c);
+		
+//		// Show guest button
+//		showGuest = new JButton(GUEST_BUTTON_TEXT);
+//		showGuest.addActionListener(new ShowGuestButtonActionListener());
+//		showGuest.setBackground(new Color(3, 159, 244));
+//		showGuest.setForeground(Color.WHITE);
+//		showGuest.setFont(BUTTON_FONT);
+//		showGuest.setPreferredSize(new Dimension (150, 50));
+//		
+//		// Position the show guest button, east on screen
+//		c.gridx = 4;
+//		c.gridy = 0;
+//		c.gridwidth = 2;
+//		c.insets = new Insets (0, 0,0,0);
+//		c.anchor = GridBagConstraints.EAST;
+//		fieldsPanel.add(showGuest, c);
+//		c.gridwidth = 1;
 
 		// Set all field labels and fonts
 		firstNameLabel = new JLabel(FIRST_NAME_LABEL_TEXT);
@@ -203,13 +225,18 @@ public class StudentPanel extends JPanel {
 		initialsLabel = new JLabel(INITIALS_LABEL_TEXT);
 		initialsLabel.setFont(TEXT_FONT);
 		
-		initialsTextField = new JTextField(TEXT_FIELD_ROWS/3);
+		initialsTextField = new JTextField(TEXT_FIELD_ROWS);
 		initialsTextField.setFont(FIELD_FONT);
 		
 		formSubmittedLabel = new JLabel(FORM_SUBMITTED_LABEL_TEXT);
 		formSubmittedLabel.setFont(TEXT_FONT);
 		
 		formSubmittedCheckBox = new JCheckBox();
+		
+		hasGuestLabel = new JLabel (GUEST_LABEL_TEXT);
+		hasGuestLabel.setFont(TEXT_FONT);
+		
+		hasGuestCheckBox = new JCheckBox();
 		
 
 		// All label components are right aligned with some vertical spacing
@@ -237,6 +264,11 @@ public class StudentPanel extends JPanel {
 		c.gridy = 4;
 		c.gridwidth = 2;
 		fieldsPanel.add(tableNumLabel, c);
+		
+		c.gridx = 0;
+		c.gridy = 5;
+		c.gridwidth = 2;
+		fieldsPanel.add(formSubmittedLabel, c);
 
 		// Add all smaller components
 		// All field components are left aligned
@@ -286,6 +318,12 @@ public class StudentPanel extends JPanel {
 		c.gridy = 3;
 		fieldsPanel.add(paidByTextField, c);
 		
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = 2;
+		c.gridy = 4;
+		c.gridwidth = 1;
+		fieldsPanel.add(tableNumComboBox, c);
+		
 		c.anchor = GridBagConstraints.EAST;
 		c.gridx = 3;
 		c.gridy = 4;
@@ -295,24 +333,24 @@ public class StudentPanel extends JPanel {
 		c.gridx = 4;
 		c.gridy = 4;
 		fieldsPanel.add(initialsTextField, c);
-		
-		c.anchor = GridBagConstraints.CENTER;
-		c.gridx = 4;
-		c.gridy = 4;
-		c.insets = new Insets (10, 100, 0, 0);
-		fieldsPanel.add(formSubmittedLabel, c);
-		
-		c.anchor = GridBagConstraints.EAST;
-		c.gridx = 4;
-		c.gridy = 4;
-		c.insets = new Insets(10, 0, 0, 0);
-		fieldsPanel.add(formSubmittedCheckBox, c);
 
 		c.anchor = GridBagConstraints.WEST;
 		c.gridx = 2;
-		c.gridy = 4;
-		c.gridwidth = 1;
-		fieldsPanel.add(tableNumComboBox, c);
+		c.gridy = 5;
+		c.insets = new Insets(10, 0, 0, 0);
+		fieldsPanel.add(formSubmittedCheckBox, c);
+		
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx = 3;
+		c.gridy = 5;
+		fieldsPanel.add(hasGuestLabel, c);
+		
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = 4;
+		c.gridy = 5;
+		fieldsPanel.add(hasGuestCheckBox, c);
+
+
 
 		// Titles for the allergies and additional information text areas
 		allergiesLabel = new JLabel(ALLERGIES_LABEL_TEXT);
@@ -324,7 +362,7 @@ public class StudentPanel extends JPanel {
 		c.anchor = GridBagConstraints.CENTER;
 
 		c.gridx = 0;
-		c.gridy = 5;
+		c.gridy = 6;
 		fieldsPanel.add(allergiesLabel, c);
 
 		moreInfoLabel = new JLabel(MORE_INFO_LABEL_TEXT);
@@ -446,6 +484,7 @@ public class StudentPanel extends JPanel {
 		moreInfoTextArea.setText("");
 		initialsTextField.setText("");
 		formSubmittedCheckBox.setSelected(false);
+		hasGuestCheckBox.setSelected(false);
 	}
 
 	/**
@@ -457,6 +496,41 @@ public class StudentPanel extends JPanel {
 			EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
 		}
 	}
+	
+//	/**
+//	 * Shows a guest of the current student
+//	 * @author Matthew Sun
+//	 */
+//	private class ShowGuestButtonActionListener implements ActionListener {
+//		@Override
+//		public void actionPerformed(ActionEvent e)
+//		{
+//			// There is no guest
+//			if (!hasGuestCheckBox.isSelected())
+//				JOptionPane.showMessageDialog(EventPlanner.FRAME, "This student doesn't have a guest.",
+//						"No Guest", JOptionPane.ERROR_MESSAGE);
+//			else
+//			{
+//				// Look for the guest (same student number)
+//				for (int n = 0 ; n < Student.listSize() ; n ++)
+//				{
+//					Student guest = Student.getStudent(n);
+//					// Guest is found
+//					if (guest.getID().equals(studentIdTextField.getText()) && !guest.hasGuest())
+//					{
+//						System.out.println("GUEST FOUND");
+//						EventPlanner.showStudentProfile(new StudentProfile(guest));
+//					}
+//				}
+//				JOptionPane.showMessageDialog(EventPlanner.FRAME, "No guest found.",
+//						"No Guest", JOptionPane.ERROR_MESSAGE);
+//				
+//				
+//
+//			}
+//				
+//		}
+//	}
 
 	/**
 	 * Saves all the entered data into a new Student. Checks to ensure all the
@@ -507,8 +581,9 @@ public class StudentPanel extends JPanel {
 			
 			if (formSubmittedCheckBox.isSelected())
 				student.setFormSubmitted(true);
-			else
-				missingComponents += "Form Submitted\n";
+			
+			if (hasGuestCheckBox.isSelected())
+				student.setGuest(true);
 			
 			String initials = initialsTextField.getText();
 			if (initials.length() > 0)
