@@ -53,6 +53,18 @@ public class EventPlanner implements WindowListener {
      */
     public void run() {
 
+        //Load settings before frame appears
+        // TODO: use actual loader methods
+		/*
+		 * try { Loader.parseFile(); } catch (FileNotFoundException fnf) {
+		 * JOptionPane.showMessageDialog(FRAME, "The file was not found",
+		 * "File Not Found", JOptionPane.ERROR_MESSAGE); }
+		 */
+
+        // Table
+        Settings.setNumTables(10);
+        Settings.setTableSize(5);
+
         // System look and feel
 		/*
 		 * try {
@@ -93,17 +105,7 @@ public class EventPlanner implements WindowListener {
         FRAME.setMinimumSize(new Dimension(1240, 680));
         FRAME.setVisible(true);
 
-        // TODO: use actual loader methods
-		/*
-		 * try { Loader.parseFile(); } catch (FileNotFoundException fnf) {
-		 * JOptionPane.showMessageDialog(FRAME, "The file was not found",
-		 * "File Not Found", JOptionPane.ERROR_MESSAGE); }
-		 */
 
-        // Table
-        Settings.setNumTables(10);
-      //  Table.setLimit(10);
-        Settings.setTableSize(1000);
 
 
         // Add food
@@ -128,8 +130,9 @@ public class EventPlanner implements WindowListener {
                 try {
                     student = new Student(generateRandNumberString(9),
                             generateRandName(rand.nextInt(8)),
-                            generateRandName(rand.nextInt(8)), Food.get(
-                            rand.nextInt(Food.listSize())).toString(),
+                            generateRandName(rand.nextInt(8)),
+                            generateRandName(2),Food.get(
+                            rand.nextInt(Food.listSize())),
                             paid, generateRandName(rand.nextInt(8)), formSubmitted,
                             generateRandName(rand.nextInt(100)),
                             0,
@@ -142,8 +145,9 @@ public class EventPlanner implements WindowListener {
                 try {
                     student = new Student(generateRandNumberString(9),
                             generateRandName(rand.nextInt(8)),
-                            generateRandName(rand.nextInt(8)), Food.get(
-                            rand.nextInt(Food.listSize())).toString(),
+                            generateRandName(rand.nextInt(8)),
+                            generateRandName(2),Food.get(
+                            rand.nextInt(Food.listSize())),
                             paid, "", formSubmitted,
                             generateRandName(rand.nextInt(100)),
                             0,
