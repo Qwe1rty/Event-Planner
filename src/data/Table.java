@@ -44,18 +44,21 @@ public class Table {
     public static void addStudent(int index, Student student) {
         Table table = TABLE_LIST.get(index);
         table.appendStudent(student);
+        TABLE_LIST.remove(index);
         TABLE_LIST.insert(index, table);
     }
 
     public static void removeStudent(int tableIndex, int studentIndex) {
         Table table = TABLE_LIST.get(tableIndex);
         table.removeStudent(studentIndex);
+        TABLE_LIST.remove(tableIndex);
         TABLE_LIST.insert(tableIndex, table);
     }
 
     public static void insertStudent(int tableIndex, int studentIndex, Student student) {
         Table table = TABLE_LIST.get(tableIndex);
         table.insertStudent(studentIndex, student);
+        TABLE_LIST.remove(tableIndex);
         TABLE_LIST.insert(tableIndex, table);
     }
 
