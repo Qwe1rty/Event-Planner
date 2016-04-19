@@ -34,6 +34,7 @@ import data.LinkedList;
 import data.Parameter;
 import data.Settings;
 import data.Student;
+import data.Table;
 
 /**
  * Displays the table planning panel
@@ -302,7 +303,7 @@ public class TableDisplayPanel extends JPanel
 		tableDisplay.setFont(FIELD_FONT);
 		tableDisplay.setTableHeader(null);
 		tableDisplayScrollPane = new JScrollPane(tableDisplay);
-
+		
 		// Position this table below the unassigned students
 		c.gridx = 2;
 		c.gridy = 2;
@@ -390,6 +391,18 @@ public class TableDisplayPanel extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+	}
+	
+	/**
+	 * Gives a highlight indicator on the tables that are currently full
+	 */
+	public void highlightFullTables ()
+	{
+		// Go through each table, checking if they are full
+		for (int n = 0 ; n < Settings.getNumTables() ; n ++)
+		{
+
+		}
 	}
 
 	/**
@@ -535,9 +548,10 @@ public class TableDisplayPanel extends JPanel
 		 */
 		public void actionPerformed(ActionEvent arg0)
 		{
-			// When add is pressed, remove the student from the unassigned table
-			// and add to the current selected table
 
+			
+			
+			// Selected student data
 			String id = (String) studentDisplay.getValueAt(
 					selectedRowOnUnassigned, 0);
 			String firstName = (String) studentDisplay.getValueAt(
@@ -562,6 +576,7 @@ public class TableDisplayPanel extends JPanel
 			}
 
 			refreshEveryThingButTableDisplay();
+			highlightFullTables();
 		}
 	}
 
