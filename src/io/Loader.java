@@ -52,6 +52,8 @@ public final class Loader {
 	 */
 	public static void parseFile() throws FileNotFoundException {
 
+		currentFile = null;
+
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
 		int selection = fc.showOpenDialog(EventPlanner.FRAME);
@@ -136,7 +138,11 @@ public final class Loader {
 	 * @author Caleb Choi
 	 */
 	public static void saveFile() {
-		
+		//The user did not intially select a file to read from
+		if(currentFile == null) {
+			saveAsFile();
+			return;
+		}
 		// Checks if currentFile exists and overwrites it
 		if (currentFile.exists()) currentFile.delete();
 		try {currentFile.createNewFile();} catch (Exception e) {} // Exception should never happen
