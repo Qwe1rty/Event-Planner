@@ -97,7 +97,7 @@ public final class Loader {
 				// Food
 				try {s.setFood(st.nextToken());
 				} catch (InvalidFoodException e) {
-					try {s.setFood(null);} catch (Exception e1) {}
+					try {s.setFood((Food) null);} catch (Exception e1) {}
 				}
 				// Paid?
 				boolean paid = st.nextToken().equals("true");

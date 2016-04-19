@@ -26,6 +26,7 @@ public class Student {
 	private String ID;
 	private String lastname;
 	private String firstname;
+	private String initials;
 	private Food food;
 	private boolean paid;
 	private String paidBy;
@@ -38,32 +39,28 @@ public class Student {
 	// *** Constructors ***
 	// Fully declared student
 	// For optional values, if you want to make them invalid/empty, make then null (or 0 for table #)
-	public Student(String ID, String firstname, String lastname,
-			String food, boolean paid, String paidBy, boolean formSubmitted, String allergies,
+	public Student(String ID, String firstname, String lastname, String initials,
+			Food food, boolean paid, String paidBy, boolean formSubmitted, String allergies,
 			int tableNum, String phoneNum, String info) throws InvalidStudentIDException, InvalidFoodException {
-		this(ID, firstname, lastname, food, paid, paidBy, formSubmitted);
+		this(ID, firstname, lastname, initials, food, paid, paidBy, formSubmitted);
 		if (allergies != null) setAllergies(allergies);
 		setTableNum(tableNum);
 		if (phoneNum != null) setPhoneNum(phoneNum);
 		if (info != null) setInfo(info);
 	}
 	// Student with only mandatory fields
-	public Student(String studentId, String firstname, String lastname,
-			String food, boolean paid, String paidBy, boolean formSubmitted) throws InvalidStudentIDException, InvalidFoodException {
+	public Student(String studentId, String firstname, String lastname, String initials,
+			Food food, boolean paid, String paidBy, boolean formSubmitted) throws InvalidStudentIDException, InvalidFoodException {
+		this(firstname, lastname, initials, food, paid, paidBy, formSubmitted);
 		if (studentId == null) studentId = "000000000";
 		else setStudentId(studentId);
-		setFirstname(firstname);
-		setLastname(lastname);
-		setFood(food);
-		setPaid(paid);
-		setPaidBy(paidBy);
-		setFormSubmitted(formSubmitted);
 	}
 	// Constructor for guests
-	public Student(String firstname, String lastname, String food, 
+	public Student(String firstname, String lastname, String initials, Food food, 
 			boolean paid, String paidBy, boolean formSubmitted) throws InvalidFoodException {
 		setFirstname(firstname);
 		setLastname(lastname);
+		setInitials(initials);
 		setFood(food);
 		setPaid(paid);
 		setPaidBy(paidBy);
@@ -204,6 +201,7 @@ public class Student {
 	public String getID() {return ID;}
 	public String getLastname() {return lastname;}
 	public String getFirstname() {return firstname;}
+	public String getInitials() {return initials;}
 	public Food getFood() {return food;}
 	public boolean isPaid() {return paid;}
 	public String getPaidBy() {return paidBy;}
@@ -221,6 +219,11 @@ public class Student {
 	}
 	public void setLastname(String lastname) {this.lastname = lastname.trim();}
 	public void setFirstname(String firstname) {this.firstname = firstname.trim();}
+	public void setInitials(String initials) {this.initials = initials.trim();}
+	public void setFood(Food food) throws InvalidFoodException {
+		if (Food.isValidFood(food)) this.food = food;
+		else throw new InvalidFoodException("That type of food does not exist");
+	}
 	public void setFood(String food) throws InvalidFoodException {
 		if (Food.isValidFood(new Food(food))) this.food = new Food(food.trim());
 		else throw new InvalidFoodException("That type of food does not exist");
