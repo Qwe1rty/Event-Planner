@@ -21,10 +21,22 @@ import java.io.IOException;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import data.*;
+import data.LinkedList;
+import data.Parameter;
+import data.Settings;
+import data.Student;
+import data.Table;
 
 /**
  * Displays the table planning panel
@@ -220,6 +232,7 @@ public class TableDisplayPanel extends JPanel {
         availableTables.setRowHeight(30);
         availableTables.setFont(FIELD_FONT);
         availableTables.setTableHeader(null);
+        availableTables.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         availableTablesScrollPane = new JScrollPane(availableTables);
 
         // Position to the table below the buttons left of screen
@@ -233,7 +246,7 @@ public class TableDisplayPanel extends JPanel {
         // This object finds the row and column where the user has clicked
         MouseListener unassignedStudentMouseListener = new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseReleased(MouseEvent e) {
                 selectedRowOnUnassigned = studentDisplay.rowAtPoint(e
                         .getPoint());
             }
@@ -254,6 +267,7 @@ public class TableDisplayPanel extends JPanel {
         studentDisplay.getTableHeader().setReorderingAllowed(false);
         studentDisplay.setRowHeight(30);
         studentDisplay.setFont(FIELD_FONT);
+        studentDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         studentDisplay.getTableHeader().setFont(TEXT_FONT);
         studentDisplayScrollPane = new JScrollPane(studentDisplay);
 
@@ -266,7 +280,7 @@ public class TableDisplayPanel extends JPanel {
 
         // This object finds the row and column where the user has clicked
         MouseListener assignedStudentMouseListener = new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+            public void mouseReleased(MouseEvent e) {
                 selectedRowOnAssigned = studentDisplay.rowAtPoint(e
                         .getPoint());
             }
@@ -284,6 +298,7 @@ public class TableDisplayPanel extends JPanel {
         tableDisplay.setRowHeight(30);
         tableDisplay.setFont(FIELD_FONT);
         tableDisplay.setTableHeader(null);
+        tableDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tableDisplayScrollPane = new JScrollPane(tableDisplay);
 
         // Position this table below the unassigned students
@@ -303,10 +318,6 @@ public class TableDisplayPanel extends JPanel {
         }
     }
 
-    /**
-     * Call before changing this panel to the main frame. Refreshes the items in
-     * the food drop down box
-     */
     public void refresh(boolean updateFromGlobalStudentList) {
         // Remove all the items from the table
         DefaultTableModel model = (DefaultTableModel) studentDisplay.getModel();
@@ -340,23 +351,35 @@ public class TableDisplayPanel extends JPanel {
                         student.getFood().toString(), table});
             }
         }
-
-        // Remove all the availible tables from the table
-        DefaultTableModel tableTableModel = (DefaultTableModel) availableTables
+        
+     // Remove all students from the current table display
+        DefaultTableModel currentStudentsTableModel = (DefaultTableModel) tableDisplay
                 .getModel();
+        while (tableDisplay.getRowCount() > 0) {
+            currentStudentsTableModel.removeRow(0);
+        }
         //TODO: remove sysouts
-        System.out.println(availableTables.getRowCount() + "ROWS");
-        while (availableTables.getRowCount() > 0) {
-            tableTableModel.removeRow(0);
-            System.out.println("REMOVING");
+        System.out.println("REFREH");
+        // Add the updated students to the table (only unassigned students)
+        for (int i = 0; i < Student.listSize(); ++i) {
+            Student student = Student.getStudent(i);
+            //TODO: remove sysout
+            //System.out.println(student.getTableNum());
+            // Only add a student to the unassigned panel if they are unassigned
+            if (student.getTableNum() == currentSelectedTable) {
+                System.out.println("HELLO");
+                String paid = student.isPaid() ? "Yes" : "No";
+                int tableNumber = student.getTableNum();
+                String table = tableNumber == 0 ? "Unassigned" : Integer
+                        .toString(tableNumber);
+                currentStudentsTableModel.addRow(new Object[]{
+                        student.getID(),
+                        student.getFirstname(), student.getLastname(), paid,
+                        student.getFood().toString(), table});
+            }
         }
-        // Add the updated number of tables to the table
-        for (int n = 1; n < Settings.getNumTables() + 1; n++) {
-            Vector<String> rowData = new Vector<>();
-            rowData.addElement("Table " + n);
-            System.out.println(rowData);
-            tableTableModel.addRow(rowData);
-        }
+
+       indicateFullTables();
     }
 
     /**
@@ -366,15 +389,29 @@ public class TableDisplayPanel extends JPanel {
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
     }
 
-    /**
-     * Gives a highlight indicator on the tables that are currently full
-     */
-    public void highlightFullTables() {
-        // Go through each table, checking if they are full
-        for (int n = 0; n < Settings.getNumTables(); n++) {
+	public void indicateFullTables ()
+	{
+		// Remove all the availible tables from the table
+		DefaultTableModel tableTableModel = (DefaultTableModel) availableTables
+				.getModel();
 
-        }
-    }
+		while (availableTables.getRowCount() > 0)
+		{
+			tableTableModel.removeRow(0);
+
+		}
+		// Add the updated number of tables to the table
+		for (int n = 0; n < Table.listSize(); n++)
+		{
+			Vector<String> rowData = new Vector<>();
+			if (Table.getTable(n).isFull())
+				rowData.addElement("Table " + (n + 1) + " (FULL)");
+			else
+				rowData.addElement("Table " + (n + 1));
+
+			tableTableModel.addRow(rowData);
+		}
+	}
 
     /**
      * Refreshes everything on the page except for the table display
@@ -458,7 +495,7 @@ public class TableDisplayPanel extends JPanel {
         /**
          * Actions to take when the mouse clicks on a table (left JTable)
          */
-        public void mousePressed(MouseEvent e) {
+        public void mouseReleased(MouseEvent e) {
             // Remove all current elements in the current table display table
             DefaultTableModel currentMembers = (DefaultTableModel) tableDisplay
                     .getModel();
@@ -509,7 +546,7 @@ public class TableDisplayPanel extends JPanel {
          */
         public void actionPerformed(ActionEvent arg0) {
             System.out.println(" size" + Table.listSize());
-            Table table = Table.getTable(currentSelectedTable);
+            Table table = Table.getTable(currentSelectedTable - 1);
             if (!table.isFull()) {
                 // Selected student data
                 String id = (String) studentDisplay.getValueAt(
@@ -530,13 +567,12 @@ public class TableDisplayPanel extends JPanel {
 
                         // This is the student, change their table and update their table in the global list
                         student.setTableNum(currentSelectedTable);
-                        Table.addStudent(currentSelectedTable, student);
+                        Table.addStudent(currentSelectedTable - 1, student);
                         break;
                     }
                 }
+                refresh(false);
 
-                refreshEveryThingButTableDisplay();
-                highlightFullTables();
             } else {
                 //Show a warning message
                 JOptionPane.showMessageDialog(EventPlanner.FRAME, "The table is full!", "Full Table", JOptionPane.WARNING_MESSAGE);
@@ -580,12 +616,12 @@ public class TableDisplayPanel extends JPanel {
                         student.getLastname().equalsIgnoreCase(lastName)) {
                     // This is the student, change their table and remove them from their table on the global table list
                     student.setTableNum(0);
-                    Table.removeStudent(currentSelectedTable, selectedRowOnAssigned);
+                    Table.removeStudent(currentSelectedTable - 1, selectedRowOnAssigned);
                     break;
                 }
             }
 
-            refreshEveryThingButTableDisplay();
+            refresh(false);
         }
     }
 
