@@ -253,10 +253,10 @@ public class StudentProfile extends JPanel {
         initialsLabel = new JLabel(INITIALS_LABEL_TEXT);
         initialsLabel.setFont(TEXT_FONT);
 
-        initialsTextField = new JTextField(TEXT_FIELD_ROWS / 5);
+        initialsTextField = new JTextField(TEXT_FIELD_ROWS / 3);
         initialsTextField.setFont(FIELD_FONT);
         //TODO: add student initals
-        initialsTextField.setText("ADD INITIASL");
+        initialsTextField.setText(student.getInitials());
 
         formSubmittedLabel = new JLabel(FORM_SUBMITTED_LABEL_TEXT);
         formSubmittedLabel.setFont(TEXT_FONT);
@@ -351,11 +351,13 @@ public class StudentProfile extends JPanel {
         c.anchor = GridBagConstraints.CENTER;
         c.gridx = 4;
         c.gridy = 4;
+		c.insets = new Insets (10, 100, 0, 0);
         fieldsPanel.add(formSubmittedLabel, c);
 
         c.anchor = GridBagConstraints.EAST;
         c.gridx = 4;
         c.gridy = 4;
+		c.insets = new Insets(10, 0, 0, 0);
         fieldsPanel.add(formSubmittedCheckBox, c);
 
         c.anchor = GridBagConstraints.WEST;
@@ -464,7 +466,7 @@ public class StudentProfile extends JPanel {
             }
             String allergies = allergiesTextArea.getText();
             String moreInfo = moreInfoTextArea.getText();
-            String intitals = initialsTextField.getText();
+            String initials = initialsTextField.getText();
             boolean formSubmitted = formSubmittedCheckBox.isSelected();
 
             //Compare what is in with what the student has to see if something has changed
@@ -489,7 +491,10 @@ public class StudentProfile extends JPanel {
                 changed = true;
             } else if (formSubmitted != student.isFormSubmitted()) {
                 changed = true;
+            } else if (!initials.equals(student.getInitials())) {
+            	changed = true;
             }
+            
             //TODO: add initials to the list of checks
 
             // Show a confirm exit dialog if something has changed
