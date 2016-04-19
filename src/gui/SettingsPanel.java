@@ -216,12 +216,15 @@ public class SettingsPanel extends JPanel
 		numTables.setFont(TEXT_FONT);
 
 		pplPerTable = new JLabel(PPL_PER_TABLE_TEXT);
+
 		pplPerTable.setFont(TEXT_FONT);
 
 		numTablesField = new JTextField(TEXT_FIELD_COLS);
+		numTablesField.setText(Integer.toString(Settings.getNumTables()));
 		numTablesField.setFont(FIELD_FONT);
 
 		pplPerTableField = new JTextField(TEXT_FIELD_COLS);
+		pplPerTableField.setText(Integer.toString(Settings.getTableSize()));
 		pplPerTableField.setFont(FIELD_FONT);
 
 		c.insets = new Insets(5, 0, 5, 5);
