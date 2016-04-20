@@ -39,34 +39,34 @@ import data.Table;
 public class StudentProfile extends JPanel {
 
     //Constant values for labels' and buttons' text
-    private static final String BACK_BUTTON_TEXT = "Back";
+    private final String BACK_BUTTON_TEXT = "Back";
 	private final String GUEST_BUTTON_TEXT = "Show Guest";
-    private static final String FIRST_NAME_LABEL_TEXT = "First Name: ";
-    private static final String LAST_NAME_LABEL_TEXT = "Last Name: ";
-    private static final String STUDENT_ID_LABEL_TEXT = "Student Number: ";
-    private static final String FOOD_CHOICE_LABEL_TEXT = "    Food Choice: ";
-    private static final String PHONE_NUM_LABEL_TEXT = "Phone Number: ";
-    private static final String PAID_BY_LABEL_TEXT = "Paid By: ";
-    private static final String TABLE_NUM_LABEL_TEXT = "Table Number: ";
+    private final String FIRST_NAME_LABEL_TEXT = "First Name: ";
+    private final String LAST_NAME_LABEL_TEXT = "Last Name: ";
+    private final String STUDENT_ID_LABEL_TEXT = "Student Number: ";
+    private final String FOOD_CHOICE_LABEL_TEXT = "    Food Choice: ";
+    private final String PHONE_NUM_LABEL_TEXT = "Phone Number: ";
+    private final String PAID_BY_LABEL_TEXT = "Paid By: ";
+    private final String TABLE_NUM_LABEL_TEXT = "Table Number: ";
 	private final String GUEST_LABEL_TEXT = "Has Guest: ";
-    private static final String ALLERGIES_LABEL_TEXT = "Allergies";
-    private static final String MORE_INFO_LABEL_TEXT = "Additional Information";
-    private static final String CANCEL_BUTTON_TEXT = "Cancel";
-    private static final String CONFIRM_BUTTON_TEXT = "Confirm";
-    private static final String INITIALS_LABEL_TEXT = "Initials: ";
-    private static final String FORM_SUBMITTED_LABEL_TEXT = "Form Submitted: ";
+    private final String ALLERGIES_LABEL_TEXT = "Allergies";
+    private final String MORE_INFO_LABEL_TEXT = "Additional Information";
+    private final String CANCEL_BUTTON_TEXT = "Cancel";
+    private final String CONFIRM_BUTTON_TEXT = "Confirm";
+    private final String INITIALS_LABEL_TEXT = "Initials: ";
+    private final String FORM_SUBMITTED_LABEL_TEXT = "Form Submitted: ";
 
     //Size of text areas
-    private static final int TEXT_AREA_ROWS = 8;
-    private static final int TEXT_AREA_COLS = 35;
+    private final int TEXT_AREA_ROWS = 8;
+    private final int TEXT_AREA_COLS = 35;
 
     //Size of text fields
-    private static final int TEXT_FIELD_ROWS = 21;
+    private final int TEXT_FIELD_ROWS = 21;
 
     //Fonts for all the gui elements shown
-    private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
-    private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
-    private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
+    private final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
+    private final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
+    private final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
 
     //Sizes for combo boxes and buttons
     private final Dimension COMBO_SIZE = new Dimension(340, 30);
@@ -171,7 +171,6 @@ public class StudentProfile extends JPanel {
 		
 		// Position the show guest button, east on screen
 		c.gridx = 4;
-		c.gridy = 0;
 		c.gridwidth = 2;
 		c.insets = new Insets (0, 0,0,0);
 		c.anchor = GridBagConstraints.EAST;
@@ -310,24 +309,16 @@ public class StudentProfile extends JPanel {
         c.gridwidth = 2;
         fieldsPanel.add(firstNameLabel, c);
 
-        c.gridx = 0;
-        c.gridy = 2;
-        c.gridwidth = 2;
+        c.gridy ++;
         fieldsPanel.add(studentIdLabel, c);
 
-        c.gridx = 0;
-        c.gridy = 3;
-        c.gridwidth = 2;
+        c.gridy ++;
         fieldsPanel.add(phoneNumLabel, c);
 
-        c.gridx = 0;
-        c.gridy = 4;
-        c.gridwidth = 2;
+        c.gridy ++;
         fieldsPanel.add(tableNumLabel, c);
         
-        c.gridx = 0;
-        c.gridy = 5;
-        c.gridwidth = 2;
+        c.gridy ++;
         fieldsPanel.add(formSubmittedLabel, c);
 
         // Add all smaller components
@@ -339,76 +330,60 @@ public class StudentProfile extends JPanel {
         fieldsPanel.add(firstNameTextField, c);
 
         c.anchor = GridBagConstraints.EAST;
-        c.gridx = 3;
-        c.gridy = 1;
+        c.gridx ++;
         fieldsPanel.add(lastNameLabel, c);
 
         c.anchor = GridBagConstraints.WEST;
-        c.gridx = 4;
-        c.gridy = 1;
+        c.gridx ++;
         fieldsPanel.add(lastNameTextField, c);
 
         c.gridx = 2;
-        c.gridy = 2;
-        c.gridwidth = 1;
+        c.gridy ++;
         fieldsPanel.add(studentIdTextField, c);
 
         c.anchor = GridBagConstraints.EAST;
-        c.gridx = 3;
+        c.gridx ++;
         c.gridy = 2;
         fieldsPanel.add(foodChoiceLabel, c);
 
         c.anchor = GridBagConstraints.WEST;
-        c.gridx = 4;
-        c.gridy = 2;
+        c.gridx ++;
         fieldsPanel.add(foodChoiceComboBox, c);
 
         c.gridx = 2;
-        c.gridy = 3;
-        c.gridwidth = 1;
+        c.gridy ++;
         fieldsPanel.add(phoneNumTextField, c);
 
         c.anchor = GridBagConstraints.EAST;
-        c.gridx = 3;
-        c.gridy = 3;
+        c.gridx ++;
         fieldsPanel.add(paidByLabel, c);
 
         c.anchor = GridBagConstraints.WEST;
-        c.gridx = 4;
-        c.gridy = 3;
+        c.gridx ++;
         fieldsPanel.add(paidByTextField, c);
 
         c.anchor = GridBagConstraints.EAST;
         c.gridx = 3;
-        c.gridy = 4;
+        c.gridy ++;
         fieldsPanel.add(initialsLabel, c);
 
         c.anchor = GridBagConstraints.WEST;
-        c.gridx = 4;
-        c.gridy = 4;
+        c.gridx ++;
         fieldsPanel.add(initialsTextField, c);
 
-
-        c.anchor = GridBagConstraints.WEST;
         c.gridx = 2;
-        c.gridy = 4;
-        c.gridwidth = 1;
         fieldsPanel.add(tableNumComboBox, c);
         
-		c.anchor = GridBagConstraints.WEST;
-		c.gridx = 2;
-		c.gridy = 5;
+		c.gridy ++;
 		c.insets = new Insets(10, 0, 0, 0);
 		fieldsPanel.add(formSubmittedCheckBox, c);
 		
 		c.anchor = GridBagConstraints.EAST;
 		c.gridx = 3;
-		c.gridy = 5;
 		fieldsPanel.add(hasGuestLabel, c);
 		
 		c.anchor = GridBagConstraints.WEST;
-		c.gridx = 4;
-		c.gridy = 5;
+		c.gridx ++;
 		fieldsPanel.add(hasGuestCheckBox, c);
 
         // Titles for the allergies and additional information text areas
@@ -492,7 +467,7 @@ public class StudentProfile extends JPanel {
      *
      * @author Connor Murphy
      */
-    class BackButtonActionListener implements ActionListener {
+     private class BackButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             //Get what is in the text fields
@@ -607,7 +582,7 @@ public class StudentProfile extends JPanel {
      *
      * @author Connor Murphy, Matthew Sun
      */
-    class FinishButtonActionListener implements ActionListener {
+	private class FinishButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             String missingComponents = "";
