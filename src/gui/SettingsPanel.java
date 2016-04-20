@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.ColorModel;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
@@ -136,6 +137,20 @@ public class SettingsPanel extends JPanel {
         c.gridy = 0;
         c.insets = new Insets(0, 0, 0, 90);
         nestedPanel.add(backButton, c);
+        
+        //Load button
+        loadButton = new JButton(LOAD_TEXT);
+        loadButton.addActionListener(new LoadButtonListener());
+        loadButton.setBackground(new Color(3, 159, 244));
+        loadButton.setForeground(Color.WHITE);
+        loadButton.setFont(SMALLER_BUTTON_FONT);
+        loadButton.setPreferredSize(new Dimension(200, 50));
+
+        c.gridx = 6;
+        c.gridy = 0;
+        c.insets = new Insets(0, 0, 0, 0);
+        c.anchor = GridBagConstraints.EAST;
+        nestedPanel.add(loadButton, c);
 
         // Title
         c.insets = new Insets(0, 0, 0, 0);
@@ -272,23 +287,6 @@ public class SettingsPanel extends JPanel {
         c.insets = new Insets(10, 10, 10, 10);
         c.anchor = GridBagConstraints.EAST;
         nestedPanel.add(saveButton, c);
-
-        //Load button
-        loadButton = new JButton(LOAD_TEXT);
-        loadButton.addActionListener(new LoadButtonListener());
-        loadButton.setBackground(new Color(56, 186, 125));
-        loadButton.setForeground(Color.WHITE);
-        loadButton.setFont(SMALLER_BUTTON_FONT);
-        loadButton.setPreferredSize(new Dimension(200, 50));
-
-        //TODO: ensure these are the correct coordinates
-
-      /*  c.gridx = 4;
-        c.gridy = 7;
-        c.gridwidth = 4;
-        c.insets = new Insets(10, 10, 10, 10);
-        c.anchor = GridBagConstraints.CENTER;
-        nestedPanel.add(loadButton, c);*/
 
         // Clear Data
         clearDataButton = new JButton(CLEAR_DATA_TEXT);
