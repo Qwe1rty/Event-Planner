@@ -21,7 +21,7 @@ public class Student {
 	// Global list of students
 	private static LinkedList<Student> STUDENT_LIST = new LinkedList<Student>();
 
-	// Instance fields
+	// Instance fields. -o indicates that it is an optional field
 	private String ID;
 	private String lastname;
 	private String firstname;
