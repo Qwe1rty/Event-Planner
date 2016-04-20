@@ -55,7 +55,6 @@ public final class Loader {
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
 		int selection = fc.showOpenDialog(EventPlanner.FRAME);
-		System.out.println(selection);
 		if (selection != JFileChooser.APPROVE_OPTION) return;
 
 		// Sets the currently loaded file
@@ -68,9 +67,7 @@ public final class Loader {
 			//Settings.setLocation(br.readLine());
 			try {
 				Settings.setNumTables(Integer.parseInt(br.readLine()));
-			}
-			catch (NumberFormatException nfe)
-			{
+			} catch (NumberFormatException nfe) {
 				Settings.setNumTables(0);
 			}
 			Table.setLimit(Settings.getNumTables());
@@ -173,9 +170,7 @@ public final class Loader {
 
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
-		int selection = fc.showOpenDialog(EventPlanner.FRAME);
-		System.out.println(selection);
-		System.out.println(JFileChooser.APPROVE_OPTION);
+		int selection = fc.showSaveDialog(EventPlanner.FRAME);
 		if (selection != JFileChooser.APPROVE_OPTION) return;
 
 		// Gets the path of the chosen file. Checks if file extension needs to be added
