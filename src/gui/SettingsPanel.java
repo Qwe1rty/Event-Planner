@@ -376,9 +376,9 @@ public class SettingsPanel extends JPanel {
 			String perTable = pplPerTableField.getText();
 
 			// Only if integers are in the fields, change the current global values
-			if (isInteger(numTables) && (Integer.parseInt(numTables) > 0))
+			if (isInteger(numTables) && (Integer.parseInt(numTables) >= 0))
 				Settings.setNumTables(Integer.parseInt(numTables));
-			if (isInteger(perTable) && (Integer.parseInt(perTable) > 0))
+			if (isInteger(perTable) && (Integer.parseInt(perTable) >= 0))
 				Settings.setTableSize(Integer.parseInt(perTable));
 			// Switch to the home panel
 			EventPlanner.setPanel(EventPlanner.Panel.HOME);
