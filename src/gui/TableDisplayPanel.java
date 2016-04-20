@@ -482,6 +482,11 @@ public class TableDisplayPanel extends JPanel {
          */
         public void actionPerformed(ActionEvent arg0) {
             Table table = Table.getTable(currentSelectedTable - 1);
+            if(table == null)
+            {
+            	//There have been no created tables so do nothing
+            	return;
+            }
             if (!table.isFull()) {
                 // Selected student data
                 String id = (String) studentDisplay.getValueAt(
