@@ -65,8 +65,14 @@ public final class Loader {
 		try (BufferedReader br = new BufferedReader(new FileReader(currentFile))) {
 
 			// Read the global data
-			Settings.setLocation(br.readLine());
-			Settings.setNumTables(Integer.parseInt(br.readLine()));
+			//Settings.setLocation(br.readLine());
+			try {
+				Settings.setNumTables(Integer.parseInt(br.readLine()));
+			}
+			catch (NumberFormatException nfe)
+			{
+				Settings.setNumTables(0);
+			}
 			Table.setLimit(Settings.getNumTables());
 			Settings.setTableSize(Integer.parseInt(br.readLine()));
 			Settings.setTicketCost(Double.parseDouble(br.readLine()));
@@ -210,7 +216,7 @@ public final class Loader {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
 		// Prints global data
-		bw.write(Settings.getLocation()); bw.newLine();
+		//bw.write(Settings.getLocation()); bw.newLine();
 		bw.write(Settings.getNumTables()); bw.newLine();
 		bw.write(Settings.getTableSize()); bw.newLine();
 		bw.write(String.valueOf(Settings.getTicketCost())); bw.newLine();

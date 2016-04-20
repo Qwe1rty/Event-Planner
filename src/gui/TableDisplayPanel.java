@@ -87,9 +87,16 @@ public class TableDisplayPanel extends JPanel {
     private Object[][] placeholderData = new Object[0][0];
 
     // Variables used to search for a student
-    private final String[] SEARCH_OPTIONS = {"All", "Student ID",
-            "First Name", "Last Name", "Food Choice", "Allergies", "Table No.",
-            "Paid"};
+    private final String ALL_SEARCH_OPTION = "All";
+    private final String STUDENT_ID_SEARCH_OPTION = "Student ID";
+    private final String FIRST_NAME_SEARCH_OPTION = "First Name";
+    private final String LAST_NAME_SEARCH_OPTION = "Last Name";
+    private final String FOOD_CHOICE_SEARCH_OPTION = "Food Choice";
+    private final String TABLE_NO_SEARCH_OPTION = "Table No.";
+    private final String PAID_SEARCH_OPTION = "Paid";
+    private final String[] SEARCH_OPTIONS = {ALL_SEARCH_OPTION, STUDENT_ID_SEARCH_OPTION,
+            FIRST_NAME_SEARCH_OPTION, LAST_NAME_SEARCH_OPTION, FOOD_CHOICE_SEARCH_OPTION, TABLE_NO_SEARCH_OPTION,
+            PAID_SEARCH_OPTION};
     private final String PRE_SEARCH_TEXT = "Search...";
     private String searchItem;
     private JTextField searchBar;
@@ -107,8 +114,6 @@ public class TableDisplayPanel extends JPanel {
     private enum Header {
         ID, FIRST_NAME, LAST_NAME, PAID, FOOD_CHOICE, TABLE_NO
     }
-
-    ;
 
     /**
      * Used to keep track of what was the last selected column header in order
@@ -324,11 +329,9 @@ public class TableDisplayPanel extends JPanel {
         while (studentDisplay.getRowCount() > 0) {
             model.removeRow(0);
         }
-
         if (updateFromGlobalStudentList) {
             // Remove students from displayed list
-            while (displayedStudents.size() > 0)
-                displayedStudents.remove(0);
+            displayedStudents.clear();
 
             // Add students to the list of displayed students
             for (int i = 0; i < Student.listSize(); ++i) {
@@ -662,42 +665,40 @@ public class TableDisplayPanel extends JPanel {
         /**
          * Performs a live instant search that updates the display table
          */
-        public void keyReleased(KeyEvent arg0) {
-            // Get a live update on what is being searched (everytime a key is
+        public void keyReleased(KeyEvent e) {
+            // Get a live update on what is being searched (every time a key is
             // released)
             searchItem = searchBar.getText();
-
 
             // There is a search
             if (searchItem.length() > 0) {
                 LinkedList<Student> searchResults = new LinkedList<>();
                 // Find which parameter is selected and search by it
-                if (searchOptions.getSelectedItem().equals(
-                        "Student ID")) {
+                if (searchOptions.getSelectedItem().equals(ALL_SEARCH_OPTION)) {
+                    searchResults = Student.search(null,
+                            searchItem);
+                } else if (searchOptions.getSelectedItem().equals(
+                        STUDENT_ID_SEARCH_OPTION)) {
                     searchResults = Student.search(Parameter.STUDENT_ID,
                             searchItem);
                 } else if (searchOptions.getSelectedItem().equals(
-                        "First Name")) {
+                        FIRST_NAME_SEARCH_OPTION)) {
                     searchResults = Student.search(Parameter.FIRSTNAME,
                             searchItem);
                 } else if (searchOptions.getSelectedItem().equals(
-                        "Last Name")) {
+                        LAST_NAME_SEARCH_OPTION)) {
                     searchResults = Student.search(Parameter.LASTNAME,
                             searchItem);
                 } else if (searchOptions.getSelectedItem().equals(
-                        "Food Type")) {
+                        FOOD_CHOICE_SEARCH_OPTION)) {
                     searchResults = Student.search(Parameter.FOODTYPE,
                             searchItem);
                 } else if (searchOptions.getSelectedItem().equals(
-                        "Allergies")) {
-                    searchResults = Student.search(Parameter.ALLERGIES,
-                            searchItem);
-                } else if (searchOptions.getSelectedItem().equals(
-                        "Table No.")) {
+                        TABLE_NO_SEARCH_OPTION)) {
                     searchResults = Student.search(Parameter.TABLE_NUMBER,
                             searchItem);
                 } else if (searchOptions.getSelectedItem()
-                        .equals("Paid")) {
+                        .equals(PAID_SEARCH_OPTION)) {
                     searchResults = Student.search(Parameter.PAID,
                             searchItem);
                 }
