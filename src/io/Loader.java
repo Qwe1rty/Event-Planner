@@ -212,12 +212,12 @@ public final class Loader {
 
 		// Prints global data
 		//bw.write(Settings.getLocation()); bw.newLine();
-		bw.write(Settings.getNumTables()); bw.newLine();
-		bw.write(Settings.getTableSize()); bw.newLine();
+		bw.write(String.valueOf(Settings.getNumTables())); bw.newLine();
+		bw.write(String.valueOf(Settings.getTableSize())); bw.newLine();
 		bw.write(String.valueOf(Settings.getTicketCost())); bw.newLine();
 
 		// Prints all foods
-		bw.write(Food.listSize()); bw.newLine();
+		bw.write(String.valueOf(Food.listSize())); bw.newLine();
 		for (int i = 0; i < Food.listSize(); i++) {
 			try {
 				bw.write(Food.get(i).toString());
@@ -226,7 +226,7 @@ public final class Loader {
 		}
 
 		// Write total number of students
-		bw.write(Settings.getNumStudents()); bw.newLine();
+		bw.write(String.valueOf(Settings.getNumStudents())); bw.newLine();
 
 		// Add all students to file
 		for (int i = 0; i < Student.listSize(); i++) {
