@@ -45,7 +45,9 @@ public final class Loader {
 	 * 
 	 * @return null If the load was successful, returns a linked list with students' data.
 	 * 		Otherwise, null will be returned
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException Thrown if file is not found
+	 * @throws NumberFormatException Thrown if there is a integer to String parsing error
+	 * @throws IOException Thrown if there is a parsing error
 	 * @author Caleb Choi
 	 */
 	public static boolean parseFile() throws FileNotFoundException, IOException, NumberFormatException {
@@ -203,8 +205,8 @@ public final class Loader {
 	 * Writes all data into selected file.
 	 * 
 	 * @param file File to write to
+	 * @throws IOException Thrown is there is an IO error
 	 * @author Caleb Choi
-	 * @throws IOException 
 	 */
 	private static void writeFile(File file) throws IOException {
 
