@@ -64,7 +64,6 @@ public class DisplayStudentPanel extends JPanel {
     private final Dimension BUTTON_SIZE = new Dimension(108, 50);
 
     // The size of a text field
-    private final int TEXT_FIELD_ROWS = 10;
     private final int SEARCH_FIELD_ROWS = 20;
 
     // The array of names for the columns
@@ -77,7 +76,6 @@ public class DisplayStudentPanel extends JPanel {
     private JButton backButton;
     private JButton addButton;
     private JButton deleteButton;
-    private JButton searchButton;
 
     // Variables used to search for a student
     private final String ALL_SEARCH_OPTION = "All";
@@ -173,8 +171,7 @@ public class DisplayStudentPanel extends JPanel {
         addButton.setFont(BUTTON_FONT);
 
         // Position the add button right of the back button
-        c.gridx = 1;
-        c.gridy = 0;
+        c.gridx ++;
         nestedPanel.add(addButton, c);
 
         // Delete Button
@@ -186,8 +183,7 @@ public class DisplayStudentPanel extends JPanel {
         deleteButton.setFont(BUTTON_FONT);
 
         // Position the add button right of the back button
-        c.gridx = 2;
-        c.gridy = 0;
+        c.gridx ++;
         nestedPanel.add(deleteButton, c);
 
         // Advanced search options
@@ -195,8 +191,7 @@ public class DisplayStudentPanel extends JPanel {
         searchOptions.setFont(FIELD_FONT);
 
         // Position the search options next to the search bar
-        c.gridx = 3;
-        c.gridy = 0;
+        c.gridx ++;
         c.insets = new Insets(0, 200, 0, 1);
         nestedPanel.add(searchOptions, c);
 
@@ -210,8 +205,7 @@ public class DisplayStudentPanel extends JPanel {
         searchBar.setFont(SEARCH_FONT);
 
         // Position the search bar next to the search options
-        c.gridx = 4;
-        c.gridy = 0;
+        c.gridx ++;
         c.insets = new Insets(2, 0, 0, 0);
         nestedPanel.add(searchBar, c);
 
