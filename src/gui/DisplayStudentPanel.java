@@ -297,7 +297,7 @@ public class DisplayStudentPanel extends JPanel {
      *
      * @author Connor Murphy
      */
-    class StudentTableModel extends DefaultTableModel {
+    private class StudentTableModel extends DefaultTableModel {
         /**
          * Creates a new table model
          *
@@ -326,7 +326,7 @@ public class DisplayStudentPanel extends JPanel {
      *
      * @author Connor Murphy
      */
-    class BackButtonActionListener implements ActionListener {
+    private class BackButtonActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             EventPlanner.setPanel(EventPlanner.Panel.HOME);
         }
@@ -337,7 +337,7 @@ public class DisplayStudentPanel extends JPanel {
      *
      * @author Matthew Sun
      */
-    class TableMouseListener extends MouseAdapter {
+    private class TableMouseListener extends MouseAdapter {
 
         @Override
         public void mouseReleased(MouseEvent e) {
@@ -360,7 +360,7 @@ public class DisplayStudentPanel extends JPanel {
      *
      * @author Connor Murphy
      */
-    class TableColumnMouseListener extends MouseAdapter {
+    private class TableColumnMouseListener extends MouseAdapter {
         @Override
         public void mouseReleased(MouseEvent e) {
             // Find the String representation of which column header was clicked
@@ -440,7 +440,7 @@ public class DisplayStudentPanel extends JPanel {
      *
      * @author Matthew Sun
      */
-    class AddButtonActionListener implements ActionListener {
+    private class AddButtonActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             EventPlanner.setPanel(EventPlanner.Panel.STUDENT);
         }
@@ -452,7 +452,7 @@ public class DisplayStudentPanel extends JPanel {
      *
      * @author Matthew Sun
      */
-    class DeleteButtonActionListener implements ActionListener {
+    private class DeleteButtonActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (selectedRow >= 0 && selectedRow < displayTable.getRowCount()) {
                 Student student = displayedStudents.get(selectedRow);
@@ -469,7 +469,7 @@ public class DisplayStudentPanel extends JPanel {
      * @author Matthew Sun
      * @version 4/17/16
      */
-    class SearchBarFocusListener implements FocusListener {
+    private class SearchBarFocusListener implements FocusListener {
         /**
          * User selects the search bar, clear the search bar and change color
          */
@@ -493,7 +493,7 @@ public class DisplayStudentPanel extends JPanel {
      * @author Matthew Sun
      * @version 4/17/16
      */
-    class SearchBarKeyListener implements KeyListener {
+    private class SearchBarKeyListener implements KeyListener {
 
         public void keyPressed(KeyEvent arg0) {
 
