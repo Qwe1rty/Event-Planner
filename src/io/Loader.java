@@ -184,8 +184,20 @@ public final class Loader {
 		} else fileName += "." + FILE_EXTENSION;
 		File file = new File(fileName);
 		
-		// Checks if selected file already exists. If so, it is overriden
-		if (file.exists()) file.delete();
+		// Checks if selected file already exists. If so, prompt the user asking if they want to override it
+		if (file.exists()) {
+			
+			// Display "do u wanna overrite" prompt
+			try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception e) {}
+			int choice = JOptionPane.showConfirmDialog(EventPlanner.FRAME, "Are you sure you want to overrite this existing file?", "Existing file", JOptionPane.YES_NO_OPTION);
+			try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception e) {}
+
+			// If they say yes, it's overriden
+			if (choice == JOptionPane.YES_OPTION) file.delete();
+			
+			// Otherwise nothing will be done
+			else return;
+		}
 
 		// Writes program data into file
 		try {
