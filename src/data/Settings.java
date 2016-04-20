@@ -61,13 +61,7 @@ public final class Settings
 
 	public static int getNumStudents()
 	{
-		return numStudents;
+		return Student.listSize();
 	}
-
-	public static void setNumStudents(int numStudents)
-	{
-		Settings.numStudents = numStudents;
-	}
-	
 	
 }
