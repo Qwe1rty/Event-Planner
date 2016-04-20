@@ -3,8 +3,9 @@ package data;
 import java.util.Set;
 
 /**
- * Tables allow for the management of student seats. Table sizes and
- * quantity are contained in Settings.java
+ * Tables allow for the management of student seats. It contains a global table
+ * list that will store all tables and students within throughout the program. 
+ * Table sizes and quantity are not managed here, but contained in Settings.java
  *
  * @author Caleb Choi
  */

@@ -14,7 +14,6 @@ package data;
  * @param phoneNum  Stores the person's phone number
  * @param info      Stores extra information for a person
  * @author Caleb Choi
- * @throws InvalidStudentIDException Will be thrown if student ID contains letters or is not 9 characters long
  */
 public class Student {
 
