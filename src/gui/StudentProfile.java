@@ -600,108 +600,123 @@ public class StudentProfile extends JPanel {
     class FinishButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-			String missingComponents = "";
-			String invalidComponents = "";
+            String missingComponents = "";
+            String invalidComponents = "";
 
-			String firstName = firstNameTextField.getText();
-			if (firstName.length() > 0) {
-				student.setFirstname(firstName);
-			} else {
-				missingComponents += "First Name\n";
-			}
+            String firstName = firstNameTextField.getText();
+            if (firstName.length() > 0) {
+                student.setFirstname(firstName);
+            } else {
+                missingComponents += "First Name\n";
+            }
 
-			String lastName = lastNameTextField.getText();
-			if (lastName.length() > 0) {
-				student.setLastname(lastName);
-			} else {
-				missingComponents += "Last Name\n";
-			}
+            String lastName = lastNameTextField.getText();
+            if (lastName.length() > 0) {
+                student.setLastname(lastName);
+            } else {
+                missingComponents += "Last Name\n";
+            }
 
-			try {
-				String id = studentIdTextField.getText();
-				if (id.length() > 0) {
-					student.setStudentId(id);
-				} else {
-					missingComponents += "Student Number\n";
-				}
-			} catch (Student.InvalidStudentIDException ex) {
-				invalidComponents += "Student Number\n";
-			}
+            try {
+                String id = studentIdTextField.getText();
+                if (id.length() > 0) {
+                    student.setStudentId(id);
+                } else {
+                    missingComponents += "Student Number\n";
+                }
+            } catch (Student.InvalidStudentIDException ex) {
+                invalidComponents += "Student Number\n";
+            }
 
-			try {
-				String food = (String) foodChoiceComboBox.getSelectedItem();
-				if (food != null && food.length() > 0) {
-					student.setFood(food);
-				} else {
-					missingComponents += "FoodChoice\n";
-				}
-			} catch (Student.InvalidFoodException ex) {
-				invalidComponents += "Food Choice\n";
-			}
-			
-			if (formSubmittedCheckBox.isSelected())
-				student.setFormSubmitted(true);
-			
-			if (hasGuestCheckBox.isSelected())
-				student.setGuest(true);
-			
-			String initials = initialsTextField.getText();
-			if (initials.length() > 0)
-				student.setInitials(initials);
-			else
-				missingComponents += "Your Initials\n";
+            try {
+                String food = (String) foodChoiceComboBox.getSelectedItem();
+                if (food != null && food.length() > 0) {
+                    student.setFood(food);
+                } else {
+                    missingComponents += "FoodChoice\n";
+                }
+            } catch (Student.InvalidFoodException ex) {
+                invalidComponents += "Food Choice\n";
+            }
+
+            if (formSubmittedCheckBox.isSelected())
+                student.setFormSubmitted(true);
+            else
+                student.setFormSubmitted(false);
+
+            if (hasGuestCheckBox.isSelected())
+                student.setGuest(true);
+            else
+                student.setGuest(false);
+
+            String initials = initialsTextField.getText();
+            if (initials.length() > 0)
+                student.setInitials(initials);
+            else
+                missingComponents += "Your Initials\n";
+
+            String phoneNum = phoneNumTextField.getText();
+            //Remove any spacing, brackets or dashes from the phone number entered
+            phoneNum = phoneNum.replace("(", "").replace(")", "").replace("-", "").replace(" ", "").trim();
+            //Validate the phone number
+            if(phoneNum.length() == 0)
+            {
+                missingComponents += "Phone Number\n";
+            }
+            else if(phoneNum.length() != 10) {
+                invalidComponents += "Phone Number\n";
+            }
+            else {
+                student.setPhoneNum(phoneNum);
+            }
+
+            // These are not necessary so there is no need to check for validity
+            student.setPaidBy(paidByTextField.getText());
+            if (student.getPaidBy().equals(""))
+                student.setPaid(false);
+            else
+                student.setPaid(true);
+
+            try
+            {
+                int tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
+                // Table isn't full, add
+                if (!Table.getTable(tableNum - 1).isFull())
+                    student.setTableNum(tableNum);
+                    // Full table
+                else
+                {
+                    invalidComponents += "Table is Full\n";
+                }
+            }
+            catch(NumberFormatException ex)
+            {
+                //Unassigned table
+                student.setTableNum(0);
+            }
 
 
-			// Not necessary so dont check
-			student.setPhoneNum(phoneNumTextField.getText());
+            // These are not necessary so there is no need to check for validity
+            student.setAllergies(allergiesTextArea.getText());
+            student.setInfo(moreInfoTextArea.getText());
 
-			// These are not necessary so there is no need to check for validity
-			student.setPaidBy(paidByTextField.getText());
-			if (student.getPaidBy().equals(""))
-				student.setPaid(false);
-			else
-				student.setPaid(true);
-		
-			try
-			{
-				int tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
-				// Table isn't full, add
-				if (!Table.getTable(tableNum - 1).isFull())
-					student.setTableNum(tableNum);
-				// Full table
-				else
-				{
-					 invalidComponents += "Table is Full\n";
-				}
-			}
-			catch(NumberFormatException ex)
-			{
-				//Unassigned table
-				student.setTableNum(0);
-			}
-			
+            boolean valid = true;
+            // Ensure the student has at least the minimal information and
+            // display a warning if they are errors
+            if (missingComponents.length() > 0) {
+                valid = false;
+                JOptionPane.showMessageDialog(EventPlanner.FRAME, "Missing Entries: \n"
+                                + missingComponents + "Please go back and correct.",
+                        "Missing Entries", JOptionPane.ERROR_MESSAGE);
+            }
+            if (invalidComponents.length() > 0) {
+                valid = false;
+                JOptionPane.showMessageDialog(EventPlanner.FRAME, "Invalid Entries: \n"
+                                + invalidComponents + "Please go back and correct.",
+                        "Invalid Entries", JOptionPane.ERROR_MESSAGE);
+            }
 
-			// These are not necessary so there is no need to check for validity
-			student.setAllergies(allergiesTextArea.getText());
-			student.setInfo(moreInfoTextArea.getText());
-
-			boolean valid = true;
-			// Ensure the student has at least the minimal information and
-			// display a warning if they are errors
-			if (missingComponents.length() > 0) {
-				valid = false;
-				JOptionPane.showMessageDialog(EventPlanner.FRAME, "Missing Entries: \n"
-						+ missingComponents + "Please go back and correct.",
-						"Missing Entries", JOptionPane.ERROR_MESSAGE);
-			}
-			if (invalidComponents.length() > 0) {
-				valid = false;
-				JOptionPane.showMessageDialog(EventPlanner.FRAME, "Invalid Entries: \n"
-						+ invalidComponents + "Please go back and correct.",
-						"Invalid Entries", JOptionPane.ERROR_MESSAGE);
-			}
-
-			// Let the user confirm only if the info entered is valid
+           	// Let the user confirm only if the info entered is valid
 			if (valid) {
 				EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
 			}

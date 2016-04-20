@@ -4,6 +4,7 @@ import data.Food;
 import data.LinkedList;
 import data.Settings;
 import data.Student;
+import io.Loader;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -38,7 +39,7 @@ public class SettingsPanel extends JPanel
 	private final String SAVE_TEXT = "Save Data";
 
 	//The size of the text field
-	private static final int TEXT_FIELD_COLS = 3;
+	private static final int TEXT_FIELD_COLS = 12;
 
 	//Fonts used by the gui components
 	private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
@@ -171,7 +172,7 @@ public class SettingsPanel extends JPanel
 		};
 
 		//Set variables for the table
-		foodOptions.setPreferredScrollableViewportSize(new Dimension(760, 270));
+		foodOptions.setPreferredScrollableViewportSize(new Dimension(760, 300));
 		foodOptions.addMouseListener(new TableMouseListener());
 		foodOptions.setRowHeight(30);
 		foodOptions.setFont(FIELD_FONT);
@@ -230,26 +231,42 @@ public class SettingsPanel extends JPanel
 		c.insets = new Insets(5, 0, 5, 5);
 		c.anchor = GridBagConstraints.EAST;
 		c.gridwidth = 2;
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 5;
 		nestedPanel.add(numTables, c);
 
-		c.anchor = GridBagConstraints.EAST;
+		c.anchor = GridBagConstraints.WEST;
 		c.gridwidth = 1;
-		c.gridx = 4;
+		c.gridx = 3;
 		c.gridy = 5;
 		nestedPanel.add(numTablesField, c);
 
 		c.anchor = GridBagConstraints.EAST;
 		c.gridwidth = 2;
-		c.gridx = 2;
-		c.gridy = 6;
+		c.gridx = 4;
+		c.gridy = 5;
 		nestedPanel.add(pplPerTable, c);
 
 		c.gridwidth = 1;
-		c.gridx = 4;
-		c.gridy = 6;
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = 6;
+		c.gridy = 5;
 		nestedPanel.add(pplPerTableField, c);
+		
+		// Save button
+		saveButton = new JButton(SAVE_TEXT);
+		saveButton.addActionListener(new SaveButtonListener());
+		saveButton.setBackground(new Color(56, 186, 125));
+		saveButton.setForeground(Color.WHITE);
+		saveButton.setFont(SMALLER_BUTTON_FONT);
+		saveButton.setPreferredSize(new Dimension(200, 50));
+		
+		c.gridx = 0;
+		c.gridy = 7;
+		c.gridwidth = 4;
+		c.insets = new Insets(10, 10, 10, 10);
+		c.anchor = GridBagConstraints.EAST;
+		nestedPanel.add(saveButton, c);
 
 		// Clear Data
 		clearDataButton = new JButton(CLEAR_DATA_TEXT);
@@ -259,24 +276,13 @@ public class SettingsPanel extends JPanel
 		clearDataButton.setFont(SMALLER_BUTTON_FONT);
 		clearDataButton.setPreferredSize(new Dimension(200, 50));
 
-		c.gridx = 0;
-		c.gridy = 7;
-		c.gridwidth = 4;
-		c.anchor = GridBagConstraints.CENTER;
-		nestedPanel.add(clearDataButton, c);
-		
-		// Save button
-		saveButton = new JButton(SAVE_TEXT);
-		saveButton.addActionListener(new SaveButtonListener());
-		saveButton.setBackground(new Color(243, 69, 65));
-		saveButton.setForeground(Color.WHITE);
-		saveButton.setFont(SMALLER_BUTTON_FONT);
-		saveButton.setPreferredSize(new Dimension(200, 50));
-		
 		c.gridx = 4;
 		c.gridy = 7;
 		c.gridwidth = 3;
-		nestedPanel.add(saveButton, c);
+		c.anchor = GridBagConstraints.WEST;
+		nestedPanel.add(clearDataButton, c);
+		
+
 
 		// Add all panels to the main panel
 		add(nestedPanel);
@@ -309,13 +315,17 @@ public class SettingsPanel extends JPanel
 			//Edit the food item on a double click
 			if (e.getClickCount() == 2) {
 				String value = (String) foodOptions.getValueAt(selectedRow, col);
-				String result = JOptionPane.showInputDialog(null, "Edit Food:", "Edit", JOptionPane.PLAIN_MESSAGE);
-				foodOptions.setValueAt(result, selectedRow, col);
-
-				//Remove the old item and add the new item
-				int index = Food.indexOf(new Food(value));
-				Food.removeFood(value);
-				Food.insert(index, new Food(result));
+				String result = JOptionPane.showInputDialog(EventPlanner.FRAME, "Edit Food:", "Edit", JOptionPane.PLAIN_MESSAGE);
+				
+				// Edit item if OK/Enter if there is actually an edit
+				if (result != null)
+				{
+					foodOptions.setValueAt(result, selectedRow, col);
+					//Remove the old item and add the new item
+					int index = Food.indexOf(new Food(value));
+					Food.removeFood(value);
+					Food.insert(index, new Food(result));
+				}
 			}
 		}
 	}
@@ -459,8 +469,7 @@ public class SettingsPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			// TODO Auto-generated method stub
-			
+			Loader.saveFile();
 		}
 	}
 }

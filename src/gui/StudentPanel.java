@@ -581,9 +581,13 @@ public class StudentPanel extends JPanel {
 			
 			if (formSubmittedCheckBox.isSelected())
 				student.setFormSubmitted(true);
+			else
+				student.setFormSubmitted(false);
 			
 			if (hasGuestCheckBox.isSelected())
 				student.setGuest(true);
+			else
+				student.setGuest(false);
 			
 			String initials = initialsTextField.getText();
 			if (initials.length() > 0)
@@ -591,9 +595,20 @@ public class StudentPanel extends JPanel {
 			else
 				missingComponents += "Your Initials\n";
 
-
-			// Not necessary so dont check
-			student.setPhoneNum(phoneNumTextField.getText());
+			String phoneNum = phoneNumTextField.getText();
+			//Remove any spacing, brackets or dashes from the phone number entered
+			phoneNum = phoneNum.replace("(", "").replace(")", "").replace("-", "").replace(" ", "").trim();
+			//Validate the phone number
+			if(phoneNum.length() == 0)
+			{
+				missingComponents += "Phone Number\n";
+			}
+			else if(phoneNum.length() != 10) {
+				invalidComponents += "Phone Number\n";
+			}
+			else {
+				student.setPhoneNum(phoneNum);
+			}
 
 			// These are not necessary so there is no need to check for validity
 			student.setPaidBy(paidByTextField.getText());
