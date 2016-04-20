@@ -1,25 +1,38 @@
 package gui;
 
-import data.Food;
-import data.LinkedList;
-import data.Settings;
-import data.Student;
 import io.Loader;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.text.AbstractDocument;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import data.Food;
+import data.LinkedList;
+import data.Settings;
+import data.Student;
 
 /**
  * The settings panel is a panel in which to edit the global settings of the

@@ -2,7 +2,6 @@ package io;
 
 import gui.EventPlanner;
 
-import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,13 +17,12 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import data.Food;
-import data.LinkedList;
 import data.Parameter;
 import data.Settings;
 import data.Student;
-import data.Table;
 import data.Student.InvalidFoodException;
 import data.Student.InvalidStudentIDException;
+import data.Table;
 
 /**
  * A class that loads the data from the .event files saved by the program
@@ -137,6 +135,7 @@ public final class Loader {
 
 		catch (FileNotFoundException e) {return false;}
 		catch (IOException e) {return false;}
+		catch (NumberFormatException e) {return false;}
 	}
 
 	/**

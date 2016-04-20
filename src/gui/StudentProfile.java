@@ -13,7 +13,15 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import data.Food;
@@ -21,8 +29,6 @@ import data.LinkedList;
 import data.Settings;
 import data.Student;
 import data.Table;
-import data.Student.InvalidFoodException;
-import data.Student.InvalidStudentIDException;
 
 /**
  * Gives a in depth visual display of the student by listing its information in a similar way to the add student panel

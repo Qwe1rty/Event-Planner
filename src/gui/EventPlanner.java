@@ -8,20 +8,14 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.*;
-import java.net.URISyntaxException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import data.Food;
-import data.Settings;
-import data.Student;
-import data.Student.InvalidFoodException;
-import data.Student.InvalidStudentIDException;
-import data.Table;
+import javax.swing.UIManager;
 
 /**
  * Header class for the program.

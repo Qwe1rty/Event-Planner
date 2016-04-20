@@ -1,7 +1,5 @@
 package data;
 
-import java.util.Set;
-
 /**
  * Tables allow for the management of student seats. It contains a global table
  * list that will store all tables and students within throughout the program. 
