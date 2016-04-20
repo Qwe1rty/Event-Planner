@@ -64,10 +64,7 @@ public final class Loader {
 		// Read the global data
 		//Settings.setLocation(br.readLine());
 		Settings.setNumTables(Integer.parseInt(br.readLine()));
-		Settings.setNumTables(0);
-		Table.setLimit(Settings.getNumTables());
 		Settings.setTableSize(Integer.parseInt(br.readLine()));
-		Settings.setTicketCost(Double.parseDouble(br.readLine()));
 
 		// Foods
 		int numMealOptions = Integer.parseInt(br.readLine());
@@ -222,7 +219,6 @@ public final class Loader {
 		//bw.write(Settings.getLocation()); bw.newLine();
 		bw.write(String.valueOf(Settings.getNumTables())); bw.newLine();
 		bw.write(String.valueOf(Settings.getTableSize())); bw.newLine();
-		bw.write(String.valueOf(Settings.getTicketCost())); bw.newLine();
 
 		// Prints all foods
 		bw.write(String.valueOf(Food.listSize())); bw.newLine();

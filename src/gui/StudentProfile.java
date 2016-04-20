@@ -546,7 +546,7 @@ public class StudentProfile extends JPanel {
 		{
 			if (!student.hasGuest()) {
 				try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
-				JOptionPane.showMessageDialog(EventPlanner.FRAME, "This student doesn't have a guest.",
+				JOptionPane.showMessageDialog(EventPlanner.FRAME, "This student doesn't have a guest",
 						"No Guest", JOptionPane.ERROR_MESSAGE);
 				try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
 			} else {
