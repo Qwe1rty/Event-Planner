@@ -84,7 +84,7 @@ public class EventPlanner implements WindowListener {
 		FRAME.addWindowListener(this);
 		FRAME.setLocation(50, 0);
 		FRAME.setSize(WINDOW_WIDTH, WINDOW_HEIGHT + 27);
-		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		FRAME.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		FRAME.setMinimumSize(new Dimension(1240, 680));
 		FRAME.setVisible(true);
 
@@ -115,84 +115,7 @@ public class EventPlanner implements WindowListener {
 		studentDisplay = new DisplayStudentPanel();
 		tableDisplay = new TableDisplayPanel();
 		settingsPanel = new SettingsPanel();
-
-
-
-		/*
-        // Add food
-        for (int i = 0; i < 10; ++i) {
-            Food.appendFood(new Food(generateRandName(8)));
-        }
-
-        settingsPanel = new SettingsPanel();
-
-        // Add test students
-        for (int i = 0; i < 10; ++i) {
-            Random rand = new Random();
-
-            boolean paid = rand.nextBoolean();
-            boolean formSubmitted = rand.nextBoolean();
-            boolean guest = rand.nextBoolean();
-//            int tableNum = rand.nextInt(Settings.getNumTables() + 1);
-
-            Student student = null;
-
-            if (guest) {
-                try {
-                    student = new Student(generateRandNumberString(9),
-                            generateRandName(rand.nextInt(8)),
-                            generateRandName(rand.nextInt(8)),
-                            generateRandName(2),Food.get(
-                            rand.nextInt(Food.listSize())),
-                            paid, generateRandName(rand.nextInt(8)), formSubmitted,
-                            generateRandName(rand.nextInt(100)),
-                            0,
-                            generateRandNumberString(10),
-                            generateRandName(rand.nextInt(100)), false);
-                } catch (InvalidStudentIDException | InvalidFoodException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    student = new Student(generateRandNumberString(9),
-                            generateRandName(rand.nextInt(8)),
-                            generateRandName(rand.nextInt(8)),
-                            generateRandName(2),Food.get(
-                            rand.nextInt(Food.listSize())),
-                            paid, "", formSubmitted,
-                            generateRandName(rand.nextInt(100)),
-                            0,
-                            generateRandNumberString(10),
-                            generateRandName(rand.nextInt(100)), true);
-                } catch (InvalidStudentIDException | InvalidFoodException e) {
-                    e.printStackTrace();
-                }
-            }
-           // Table.addStudent(tableNum, student);
-            Student.addStudent(student);
-        }*/
 	}
-
-	private String generateRandName(int size) {
-		Random rand = new Random();
-		String name = "";
-		for (int i = 0; i < size + 1; ++i) {
-			name += (char) ('a' + rand.nextInt(26));
-		}
-		return name;
-	}
-
-	private String generateRandNumberString(int size) {
-		Random rand = new Random();
-		String id = "";
-		int[] nums = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-		for (int i = 0; i < size; ++i) {
-			id += nums[rand.nextInt(nums.length)];
-		}
-		return id;
-	}
-
 
 	/**
 	 * Used to change the panel currently displayed to the user.
@@ -257,11 +180,12 @@ public class EventPlanner implements WindowListener {
 	public void windowClosing(WindowEvent e) {
 		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
 		int result = JOptionPane.showConfirmDialog(FRAME,
-				"Do you want to save changes before exiting?", "Save",
+				"Are you sure you want to exit?", "Exit",
 				JOptionPane.YES_NO_OPTION);
 
 		if (result == JOptionPane.YES_OPTION) {
-			Loader.saveFile();
+			FRAME.dispose();
+			System.exit(0);
 		}
 		try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
 	}

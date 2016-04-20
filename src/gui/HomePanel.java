@@ -130,7 +130,6 @@ public class HomePanel extends JPanel {
 		public void actionPerformed(ActionEvent arg0)
 		{
 			EventPlanner.FRAME.dispatchEvent(new WindowEvent(EventPlanner.FRAME, WindowEvent.WINDOW_CLOSING));
-			EventPlanner.FRAME.dispose();		
 		}
 	}
 
