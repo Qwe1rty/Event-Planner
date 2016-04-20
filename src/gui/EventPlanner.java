@@ -55,11 +55,11 @@ public class EventPlanner implements WindowListener {
 
         //Load settings before frame appears
         // TODO: use actual loader methods
-		/*
-		 * try { Loader.parseFile(); } catch (FileNotFoundException fnf) {
-		 * JOptionPane.showMessageDialog(FRAME, "The file was not found",
-		 * "File Not Found", JOptionPane.ERROR_MESSAGE); }
-		 */
+/*
+		  try { Loader.parseFile(); } catch (FileNotFoundException fnf) {
+		  JOptionPane.showMessageDialog(FRAME, "The file was not found",
+		  "File Not Found", JOptionPane.ERROR_MESSAGE); }
+*/
 
         // Table
         Settings.setNumTables(10);
@@ -116,7 +116,7 @@ public class EventPlanner implements WindowListener {
         settingsPanel = new SettingsPanel();
 
         // Add test students
-        for (int i = 0; i < 1000; ++i) {
+        for (int i = 0; i < 10; ++i) {
             Random rand = new Random();
 
             boolean paid = rand.nextBoolean();
@@ -137,7 +137,7 @@ public class EventPlanner implements WindowListener {
                             generateRandName(rand.nextInt(100)),
                             0,
                             generateRandNumberString(10),
-                            generateRandName(rand.nextInt(100)));
+                            generateRandName(rand.nextInt(100)), false);
                 } catch (InvalidStudentIDException | InvalidFoodException e) {
                     e.printStackTrace();
                 }
@@ -152,7 +152,7 @@ public class EventPlanner implements WindowListener {
                             generateRandName(rand.nextInt(100)),
                             0,
                             generateRandNumberString(10),
-                            generateRandName(rand.nextInt(100)));
+                            generateRandName(rand.nextInt(100)), true);
                 } catch (InvalidStudentIDException | InvalidFoodException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

@@ -271,8 +271,7 @@ public class DisplayStudentPanel extends JPanel {
 
         if (updateFromGlobalStudentList) {
             // Remove students from displayed list
-            while (displayedStudents.size() > 0)
-                displayedStudents.remove(0);
+            displayedStudents.clear();
 
             // Add students to the list of displayed students
             for (int i = 0; i < Student.listSize(); ++i) {
@@ -434,8 +433,7 @@ public class DisplayStudentPanel extends JPanel {
                 }
             }
             // Update the displayed list
-            while (displayedStudents.size() > 0)
-                displayedStudents.remove(0);
+            displayedStudents.clear();
 
             for (int i = 0; i < Student.listSize(); ++i) {
                 displayedStudents.append(Student.getStudent(i));
@@ -523,7 +521,8 @@ public class DisplayStudentPanel extends JPanel {
                 LinkedList<Student> searchResults = new LinkedList<>();
                 // Find which parameter is selected and search by it
                 if (searchOptions.getSelectedItem().equals(ALL_SEARCH_OPTION)) {
-
+                    searchResults = Student.search(null,
+                            searchItem);
                 } else if (searchOptions.getSelectedItem().equals(
                         STUDENT_ID_SEARCH_OPTION)) {
                     searchResults = Student.search(Parameter.STUDENT_ID,
