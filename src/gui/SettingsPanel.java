@@ -55,15 +55,15 @@ public class SettingsPanel extends JPanel {
 	private final String LOAD_TEXT = "Load File";
 
 	//The size of the text field
-	private static final int TEXT_FIELD_COLS = 12;
+	private final int TEXT_FIELD_COLS = 12;
 
 	//Fonts used by the gui components
-	private static final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
-	private static final Font SMALLER_BUTTON_FONT = new Font("Tw Cen MT",
+	private final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
+	private final Font SMALLER_BUTTON_FONT = new Font("Tw Cen MT",
 			Font.BOLD, 22);
-	private static final Font TITLE_FONT = new Font("Tw Cen MT", Font.BOLD, 42);
-	private static final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 26);
-	private static final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 22);
+	private final Font TITLE_FONT = new Font("Tw Cen MT", Font.BOLD, 42);
+	private final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 26);
+	private final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 22);
 
 	//The size that buttons are
 	private final Dimension BUTTON_SIZE = new Dimension(375, 60);
@@ -147,7 +147,6 @@ public class SettingsPanel extends JPanel {
 		loadButton.setPreferredSize(new Dimension(200, 50));
 
 		c.gridx = 6;
-		c.gridy = 0;
 		c.insets = new Insets(0, 0, 0, 0);
 		c.anchor = GridBagConstraints.EAST;
 		nestedPanel.add(loadButton, c);
@@ -157,7 +156,7 @@ public class SettingsPanel extends JPanel {
 		title = new JLabel(TITLE_TEXT);
 		title.setFont(TITLE_FONT);
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy ++;
 		c.gridwidth = 7;
 		c.anchor = GridBagConstraints.CENTER;
 		nestedPanel.add(title, c);
@@ -199,8 +198,7 @@ public class SettingsPanel extends JPanel {
 		foodOptions.setTableHeader(null);
 		foodOptionsScrollPane = new JScrollPane(foodOptions);
 
-		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy ++;
 		c.gridwidth = 7;
 		c.insets = new Insets(15, 10, 0, 10);
 		c.anchor = GridBagConstraints.CENTER;
@@ -228,7 +226,6 @@ public class SettingsPanel extends JPanel {
 		removeFoodItemButton.setFont(SMALLER_BUTTON_FONT);
 		removeFoodItemButton.setPreferredSize(BUTTON_SIZE);
 		c.gridx = 4;
-		c.gridy = 4;
 		c.anchor = GridBagConstraints.WEST;
 		nestedPanel.add(removeFoodItemButton, c);
 
@@ -252,7 +249,7 @@ public class SettingsPanel extends JPanel {
 		c.anchor = GridBagConstraints.EAST;
 		c.gridwidth = 2;
 		c.gridx = 1;
-		c.gridy = 5;
+		c.gridy ++;
 		nestedPanel.add(numTables, c);
 
 		c.anchor = GridBagConstraints.WEST;
@@ -270,7 +267,6 @@ public class SettingsPanel extends JPanel {
 		c.gridwidth = 1;
 		c.anchor = GridBagConstraints.WEST;
 		c.gridx = 6;
-		c.gridy = 5;
 		nestedPanel.add(pplPerTableField, c);
 
 		// Save button
@@ -297,7 +293,6 @@ public class SettingsPanel extends JPanel {
 		clearDataButton.setPreferredSize(new Dimension(200, 50));
 
 		c.gridx = 4;
-		c.gridy = 7;
 		c.gridwidth = 3;
 		c.anchor = GridBagConstraints.WEST;
 		nestedPanel.add(clearDataButton, c);
@@ -320,7 +315,7 @@ public class SettingsPanel extends JPanel {
 	 * Listens for clicks on the food table and records which row is selected.  If the user clicks twice,
 	 * an edit dialog appears allowing the user to edit the selected food option
 	 */
-	class TableMouseListener extends MouseAdapter {
+	private class TableMouseListener extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			//Store the mouse selected row
@@ -352,7 +347,7 @@ public class SettingsPanel extends JPanel {
 	/**
 	 * Allows the user to go back to the home screen. It saves changes the user made to the global settings
 	 */
-	class BackButtonActionListener implements ActionListener {
+	private class BackButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// Get any integer values entered into the text fields
 			String numTables = numTablesField.getText();
@@ -390,7 +385,7 @@ public class SettingsPanel extends JPanel {
 	/**
 	 * Allows the user to add a food to the global list of foods
 	 */
-	class AddFoodButtonActionListener implements ActionListener {
+	private class AddFoodButtonActionListener implements ActionListener {
 		/**
 		 * Called when the user clicks the button
 		 *
@@ -428,7 +423,7 @@ public class SettingsPanel extends JPanel {
 	/**
 	 * Allos the user to remove a food from the global list of foods
 	 */
-	class RemoveFoodButtonActionListener implements ActionListener {
+	private class RemoveFoodButtonActionListener implements ActionListener {
 		/**
 		 * Removes the food at the selected row from the table and from the global
 		 * food list when this button is clicked
@@ -452,7 +447,7 @@ public class SettingsPanel extends JPanel {
 	 *
 	 * @author Connor Murphy
 	 */
-	class ClearDataButtonActionListener implements ActionListener {
+	private class ClearDataButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			DefaultTableModel model = (DefaultTableModel) foodOptions.getModel();
 
@@ -478,7 +473,7 @@ public class SettingsPanel extends JPanel {
 	/**
 	 * Saves the file when the user clicks the save button
 	 */
-	class SaveButtonListener implements ActionListener {
+	private class SaveButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
@@ -490,7 +485,7 @@ public class SettingsPanel extends JPanel {
 	/**
 	 * Loads when the user clicks the load button
 	 */
-	class LoadButtonListener implements ActionListener {
+	private class LoadButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//Clear the data
