@@ -88,28 +88,28 @@ public class EventPlanner implements WindowListener {
 		FRAME.setMinimumSize(new Dimension(1240, 680));
 		FRAME.setVisible(true);
 
-		try {
-			boolean success;
-			success = Loader.parseFile();
-
-			// Give a notification that the file was loaded if successful
-			// If success is false, it means the user just clicked the X or canceled
-			if(success) {
-				try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
-				JOptionPane.showMessageDialog(EventPlanner.FRAME, "File has been successfully loaded", "File loaded", JOptionPane.INFORMATION_MESSAGE);
-				try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
-			}
-		} catch (FileNotFoundException fnf) { // If file was not found
-			try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
-			JOptionPane.showMessageDialog(EventPlanner.FRAME, "The file was not found\nPlease try again",
-					"File Not Found", JOptionPane.ERROR_MESSAGE);
-			try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
-			
-		} catch (Exception exc) { // If there was a parsing error
-			try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
-			JOptionPane.showMessageDialog(EventPlanner.FRAME, "File is corrupted - file could not be loaded", "Corrupted file", JOptionPane.ERROR_MESSAGE);
-			try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
-		}
+//		try {
+//			boolean success;
+//			success = Loader.parseFile();
+//
+//			// Give a notification that the file was loaded if successful
+//			// If success is false, it means the user just clicked the X or canceled
+//			if(success) {
+//				try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
+//				JOptionPane.showMessageDialog(EventPlanner.FRAME, "File has been successfully loaded", "File loaded", JOptionPane.INFORMATION_MESSAGE);
+//				try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
+//			}
+//		} catch (FileNotFoundException fnf) { // If file was not found
+//			try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
+//			JOptionPane.showMessageDialog(EventPlanner.FRAME, "The file was not found\nPlease try again",
+//					"File Not Found", JOptionPane.ERROR_MESSAGE);
+//			try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
+//			
+//		} catch (Exception exc) { // If there was a parsing error
+//			try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
+//			JOptionPane.showMessageDialog(EventPlanner.FRAME, "File is corrupted - file could not be loaded", "Corrupted file", JOptionPane.ERROR_MESSAGE);
+//			try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
+//		}
 
 		studentPanel = new StudentPanel();
 		studentDisplay = new DisplayStudentPanel();
@@ -255,6 +255,7 @@ public class EventPlanner implements WindowListener {
 	 * Gives the user a chance to save before the program shuts down
 	 */
 	public void windowClosing(WindowEvent e) {
+		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
 		int result = JOptionPane.showConfirmDialog(FRAME,
 				"Do you want to save changes before exiting?", "Save",
 				JOptionPane.YES_NO_OPTION);
@@ -262,6 +263,7 @@ public class EventPlanner implements WindowListener {
 		if (result == JOptionPane.YES_OPTION) {
 			Loader.saveFile();
 		}
+		try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public final class Loader {
 	// Program file extension and filter
 	private static final String FILE_EXTENSION = "event";
 	private static final FileNameExtensionFilter FILE_FILTER = 
-			new FileNameExtensionFilter("Custom extension only", FILE_EXTENSION);
+			new FileNameExtensionFilter(".event files only", FILE_EXTENSION);
 
 	// Saves the current file location for later
 	private static File currentFile;
