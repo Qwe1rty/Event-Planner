@@ -416,6 +416,7 @@ public class StudentProfile extends JPanel {
 		allergiesTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
 		allergiesTextArea.setFont(FIELD_FONT);
 		allergiesTextArea.setBorder(textFieldBorder);
+		allergiesTextArea.setText(student.getAllergies());
 
 		c.gridx = 0;
 		c.gridy++;
@@ -426,6 +427,7 @@ public class StudentProfile extends JPanel {
 		moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
 		moreInfoTextArea.setFont(FIELD_FONT);
 		moreInfoTextArea.setBorder(textFieldBorder);
+		moreInfoTextArea.setText(student.getInfo());
 
 		c.gridx = 3;
 		fieldsPanel.add(moreInfoTextArea, c);
