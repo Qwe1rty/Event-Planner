@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import data.Food;
@@ -51,11 +52,10 @@ public final class Loader {
 	 */
 	public static void parseFile() throws FileNotFoundException {
 
-		currentFile = null;
-
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
 		int selection = fc.showOpenDialog(EventPlanner.FRAME);
+		System.out.println(selection);
 		if (selection != JFileChooser.APPROVE_OPTION) return;
 
 		// Sets the currently loaded file
@@ -139,11 +139,13 @@ public final class Loader {
 	 * @author Caleb Choi
 	 */
 	public static void saveFile() {
+		
 		//The user did not intially select a file to read from
 		if(currentFile == null) {
 			saveAsFile();
 			return;
 		}
+		
 		// Checks if currentFile exists and overwrites it
 		if (currentFile.exists()) currentFile.delete();
 		try {currentFile.createNewFile();} catch (Exception e) {} // Exception should never happen
@@ -166,6 +168,8 @@ public final class Loader {
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
 		int selection = fc.showOpenDialog(EventPlanner.FRAME);
+		System.out.println(selection);
+		System.out.println(JFileChooser.APPROVE_OPTION);
 		if (selection != JFileChooser.APPROVE_OPTION) return;
 
 		// Gets the path of the chosen file. Checks if file extension needs to be added
@@ -188,6 +192,7 @@ public final class Loader {
 		}
 
 	}
+	
 	/**
 	 * Writes all data into selected file.
 	 * 
@@ -268,6 +273,7 @@ public final class Loader {
 	 * @author Caleb Choi
 	 */
 	private static JFileChooser initializeFileChooser() {
+		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception e) {}
 		JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(FILE_FILTER);
 		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

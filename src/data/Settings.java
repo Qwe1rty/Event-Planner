@@ -1,5 +1,10 @@
 package data;
 
+/**
+ * This class holds all the global settings throughout the program
+ * 
+ * @author Connor Murphy
+ */
 public final class Settings
 {
 	private static String location;
