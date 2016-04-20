@@ -53,20 +53,13 @@ public class EventPlanner implements WindowListener {
      */
     public void run() {
 
-        //Load settings before frame appears
-        // TODO: use actual loader methods
-/*
-		  try { Loader.parseFile(); } catch (FileNotFoundException fnf) {
-		  JOptionPane.showMessageDialog(FRAME, "The file was not found",
-		  "File Not Found", JOptionPane.ERROR_MESSAGE); }
-*/
 
-        // Table
+ /*       // Table
         Settings.setNumTables(10);
         Settings.setTableSize(5);
-
+*/
         // System look and feel
-		/*
+        /*
 		 * try {
 		 * UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		 * } catch (ClassNotFoundException | InstantiationException |
@@ -90,10 +83,6 @@ public class EventPlanner implements WindowListener {
         // Create the panels
         homePanel = new HomePanel();
 
-        studentPanel = new StudentPanel();
-        studentDisplay = new DisplayStudentPanel();
-        tableDisplay = new TableDisplayPanel();
-
         // Adds home panel
         FRAME.getContentPane().add(homePanel);
 
@@ -105,14 +94,31 @@ public class EventPlanner implements WindowListener {
         FRAME.setMinimumSize(new Dimension(1240, 680));
         FRAME.setVisible(true);
 
+        boolean successful = false;
+        try {
+            successful= Loader.parseFile();
+        } catch (FileNotFoundException fnf) {
+            JOptionPane.showMessageDialog(FRAME, "The file was not found",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+        }
+        if(!successful)
+        {
+            JOptionPane.showMessageDialog(FRAME, "The file was corrupted",
+                    "File Corrupted", JOptionPane.ERROR_MESSAGE);
+        }
+
+        studentPanel = new StudentPanel();
+        studentDisplay = new DisplayStudentPanel();
+        tableDisplay = new TableDisplayPanel();
 
 
 
+/*
         // Add food
         for (int i = 0; i < 10; ++i) {
             Food.appendFood(new Food(generateRandName(8)));
         }
-        
+
         settingsPanel = new SettingsPanel();
 
         // Add test students
@@ -160,7 +166,7 @@ public class EventPlanner implements WindowListener {
             }
            // Table.addStudent(tableNum, student);
             Student.addStudent(student);
-        }
+        }*/
     }
 
     private String generateRandName(int size) {
@@ -175,20 +181,19 @@ public class EventPlanner implements WindowListener {
     private String generateRandNumberString(int size) {
         Random rand = new Random();
         String id = "";
-        int[] nums = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        int[] nums = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
         for (int i = 0; i < size; ++i) {
             id += nums[rand.nextInt(nums.length)];
         }
         return id;
     }
-    
+
 
     /**
      * Used to change the panel currently displayed to the user.
      *
-     * @param panel
-     *            the type of panel to change to
+     * @param panel the type of panel to change to
      */
     public static void setPanel(Panel panel) {
         FRAME.getContentPane().removeAll();
@@ -214,11 +219,9 @@ public class EventPlanner implements WindowListener {
      * Only used for the display student panel to ensure searched results are
      * not refreshed when returning to the student display
      *
-     * @param panel
-     *            the panel to change to (should be a DisplayStudentPanel)
-     * @param refreshWithMasterStudentList
-     *            if the displated students should be refreshed from the master
-     *            student list
+     * @param panel                        the panel to change to (should be a DisplayStudentPanel)
+     * @param refreshWithMasterStudentList if the displated students should be refreshed from the master
+     *                                     student list
      */
     public static void setPanel(Panel panel,
                                 boolean refreshWithMasterStudentList) {
@@ -235,8 +238,7 @@ public class EventPlanner implements WindowListener {
     /**
      * Used to change the currently selected panel to the student profile palen
      *
-     * @param panel
-     *            the panel of the profile to show
+     * @param panel the panel of the profile to show
      */
     public static void showStudentProfile(StudentProfile panel) {
         FRAME.getContentPane().removeAll();

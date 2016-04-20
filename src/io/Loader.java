@@ -37,7 +37,7 @@ public final class Loader {
 	private static final String FILE_EXTENSION = "event";
 	private static final FileNameExtensionFilter FILE_FILTER = 
 			new FileNameExtensionFilter("Custom extension only", FILE_EXTENSION);
-	
+
 	// Saves the current file location for later
 	private static File currentFile;
 
@@ -50,12 +50,12 @@ public final class Loader {
 	 * @throws FileNotFoundException 
 	 * @author Caleb Choi
 	 */
-	public static void parseFile() throws FileNotFoundException {
+	public static boolean parseFile() throws FileNotFoundException {
 
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
 		int selection = fc.showOpenDialog(EventPlanner.FRAME);
-		if (selection != JFileChooser.APPROVE_OPTION) return;
+		if (selection != JFileChooser.APPROVE_OPTION) return true;
 
 		// Sets the currently loaded file
 		currentFile = fc.getSelectedFile();
@@ -79,10 +79,10 @@ public final class Loader {
 			for (int option = 0; option < numMealOptions; ++option)
 				Food.appendFood(new Food(br.readLine()));
 
-			Settings.setNumStudents(Integer.parseInt(br.readLine()));
+			int numStudents = Integer.parseInt(br.readLine());
 
 			// Adds all students
-			for(int i = 0; i < Settings.getNumStudents(); ++i) {
+			for(int i = 0; i < numStudents; ++i) {
 
 				StringTokenizer st = new StringTokenizer(br.readLine(), ",");
 				Student s = new Student();
@@ -131,10 +131,12 @@ public final class Loader {
 
 			// Returns list of students. Default sorting order is by Firstname
 			Student.sort(Parameter.FIRSTNAME, true);
+
+			return true;
 		}
 
-		catch (FileNotFoundException e) {return;}
-		catch (IOException e) {return;}
+		catch (FileNotFoundException e) {return false;}
+		catch (IOException e) {return false;}
 	}
 
 	/**
@@ -142,23 +144,23 @@ public final class Loader {
 	 * @author Caleb Choi
 	 */
 	public static void saveFile() {
-		
+
 		//The user did not intially select a file to read from
 		if(currentFile == null) {
 			saveAsFile();
 			return;
 		}
-		
+
 		// Checks if currentFile exists and overwrites it
 		if (currentFile.exists()) currentFile.delete();
 		try {currentFile.createNewFile();} catch (Exception e) {} // Exception should never happen
-		
+
 		// Writes program data into file
 		try {writeFile(currentFile);} catch (IOException ioe) {
-			
+
 			// Displays error message saying file was not saved
 			JOptionPane.showMessageDialog(EventPlanner.FRAME, "Error occured in saving file - file was not saved", 
-			"File error", JOptionPane.ERROR_MESSAGE);
+					"File error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -189,11 +191,11 @@ public final class Loader {
 		} catch (IOException ioe) {
 			// Displays error message saying file was not saved
 			JOptionPane.showMessageDialog(EventPlanner.FRAME, "Error occured in saving file - file was not saved", 
-			"File error", JOptionPane.ERROR_MESSAGE);
+					"File error", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
-	
+
 	/**
 	 * Writes all data into selected file.
 	 * 
@@ -202,7 +204,7 @@ public final class Loader {
 	 * @throws IOException 
 	 */
 	private static void writeFile(File file) throws IOException {
-		
+
 		// Checks if file exists. If so, it is overriden
 		if (file.exists()) {file.delete();}
 		file.createNewFile();
