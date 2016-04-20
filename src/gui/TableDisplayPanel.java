@@ -167,8 +167,7 @@ public class TableDisplayPanel extends JPanel {
         addButton.setFont(BUTTON_FONT);
 
         // Position the add button right of the back button
-        c.gridx = 1;
-        c.gridy = 0;
+        c.gridx ++;
         nestedPanel.add(addButton, c);
 
         // Delete Button
@@ -180,8 +179,7 @@ public class TableDisplayPanel extends JPanel {
         deleteButton.setFont(BUTTON_FONT);
 
         // Position the delete button next to the add button
-        c.gridx = 2;
-        c.gridy = 0;
+        c.gridx ++;
         nestedPanel.add(deleteButton, c);
 
         // Advanced search options
@@ -189,8 +187,7 @@ public class TableDisplayPanel extends JPanel {
         searchOptions.setFont(FIELD_FONT);
 
         // Position the search options next to the search bar
-        c.gridx = 3;
-        c.gridy = 0;
+        c.gridx ++;
         c.insets = new Insets(0, 180, 0, 7);
         nestedPanel.add(searchOptions, c);
 
@@ -204,8 +201,7 @@ public class TableDisplayPanel extends JPanel {
         searchBar.setFont(SEARCH_FONT);
 
         // Position the search bar next to the search options
-        c.gridx = 4;
-        c.gridy = 0;
+        c.gridx ++;
         c.anchor = GridBagConstraints.WEST;
         c.insets = new Insets(2, 0, 0, 0);
         nestedPanel.add(searchBar, c);
@@ -279,7 +275,6 @@ public class TableDisplayPanel extends JPanel {
 
         // Position this table right of the table table
         c.gridx = 2;
-        c.gridy = 1;
         c.gridwidth = 3;
         c.gridheight = 1;
         nestedPanel.add(studentDisplayScrollPane, c);
@@ -308,8 +303,7 @@ public class TableDisplayPanel extends JPanel {
         tableDisplayScrollPane = new JScrollPane(tableDisplay);
 
         // Position this table below the unassigned students
-        c.gridx = 2;
-        c.gridy = 2;
+        c.gridy ++;
         nestedPanel.add(tableDisplayScrollPane, c);
 
         add(nestedPanel);
@@ -391,7 +385,7 @@ public class TableDisplayPanel extends JPanel {
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
     }
 
-	public void indicateFullTables ()
+	private void indicateFullTables ()
 	{
 		// Remove all the availible tables from the table
 		DefaultTableModel tableTableModel = (DefaultTableModel) availableTables
@@ -415,61 +409,7 @@ public class TableDisplayPanel extends JPanel {
 		}
 	}
 
-    /**
-     * Refreshes everything on the page except for the table display
-     */
-    public void refreshEveryThingButTableDisplay() {
-        // Remove all students from the unassigned students table
-        DefaultTableModel studentTableModel = (DefaultTableModel) studentDisplay
-                .getModel();
-        while (studentDisplay.getRowCount() > 0) {
-            studentTableModel.removeRow(0);
-        }
-
-        // Add the updated students to the table (only unassigned students)
-        for (int i = 0; i < Student.listSize(); ++i) {
-            Student student = Student.getStudent(i);
-
-            // Only add a student to the unassigned panel if they are unassigned
-            if (student.getTableNum() == 0) {
-
-                String paid = student.isPaid() ? "Yes" : "No";
-                int tableNumber = student.getTableNum();
-                String table = tableNumber == 0 ? "Unassigned" : Integer
-                        .toString(tableNumber);
-                studentTableModel.addRow(new Object[]{student.getID(),
-                        student.getFirstname(), student.getLastname(), paid,
-                        student.getFood().toString(), table});
-            }
-        }
-
-        // Remove all students from the current table display
-        DefaultTableModel currentStudentsTableModel = (DefaultTableModel) tableDisplay
-                .getModel();
-        while (tableDisplay.getRowCount() > 0) {
-            currentStudentsTableModel.removeRow(0);
-        }
-
-        // Add the updated students to the table (only unassigned students)
-        for (int i = 0; i < Student.listSize(); ++i) {
-            Student student = Student.getStudent(i);
-
-            // Only add a student to the unassigned panel if they are unassigned
-            if (student.getTableNum() == currentSelectedTable) {
-
-                String paid = student.isPaid() ? "Yes" : "No";
-                int tableNumber = student.getTableNum();
-                String table = tableNumber == 0 ? "Unassigned" : Integer
-                        .toString(tableNumber);
-                currentStudentsTableModel.addRow(new Object[]{
-                        student.getID(),
-                        student.getFirstname(), student.getLastname(), paid,
-                        student.getFood().toString(), table});
-            }
-        }
-    }
-
-    class StudentTableModel extends DefaultTableModel {
+    private class StudentTableModel extends DefaultTableModel {
         public StudentTableModel(Vector rows, Vector columnNames) {
             super(rows, columnNames);
         }
@@ -490,7 +430,7 @@ public class TableDisplayPanel extends JPanel {
      * @author Matthew Sun
      * @version 4/14/16
      */
-    class AvailableTableMouseListener extends MouseAdapter {
+    private class AvailableTableMouseListener extends MouseAdapter {
         /**
          * Actions to take when the mouse clicks on a table (left JTable)
          */
@@ -524,7 +464,7 @@ public class TableDisplayPanel extends JPanel {
         }
     }
 
-    class BackButtonActionListener implements ActionListener {
+    private class BackButtonActionListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
             EventPlanner.setPanel(EventPlanner.Panel.HOME);
         }
@@ -536,7 +476,7 @@ public class TableDisplayPanel extends JPanel {
      * @author Matthew Sun
      * @version 4/14/16
      */
-    class AddButtonActionListener implements ActionListener {
+    private class AddButtonActionListener implements ActionListener {
         /**
          * Adds the selected student to the table if the table is not full
          */
@@ -582,7 +522,7 @@ public class TableDisplayPanel extends JPanel {
      *
      * @author Matthew Sun, Connor Murphy
      */
-    class DeleteButtonActionListener implements ActionListener {
+    private class DeleteButtonActionListener implements ActionListener {
         /**
          * Actions to take when delete is pressed
          */
@@ -628,7 +568,7 @@ public class TableDisplayPanel extends JPanel {
      * @author Matthew Sun
      * @version 4/17/16
      */
-    class SearchBarFocusListener implements FocusListener {
+    private class SearchBarFocusListener implements FocusListener {
         /**
          * User selects the search bar, clear the search bar and change color
          */
@@ -652,7 +592,7 @@ public class TableDisplayPanel extends JPanel {
      * @author Matthew Sun
      * @version 4/17/16
      */
-    class SearchBarKeyListener implements KeyListener {
+    private class SearchBarKeyListener implements KeyListener {
 
         public void keyPressed(KeyEvent arg0) {
 
@@ -720,7 +660,7 @@ public class TableDisplayPanel extends JPanel {
      *
      * @author Connor Murphy
      */
-    class TableColumnMouseListener extends MouseAdapter {
+    private class TableColumnMouseListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
             // Find the String representation of wich column header was clicked
