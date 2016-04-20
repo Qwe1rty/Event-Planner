@@ -310,6 +310,28 @@ public class SettingsPanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 	}
+	
+	/**
+	 * Refreshes all food options, table details
+	 * @author Matthew Sun
+	 */
+	private void refresh ()
+	{
+		// Set field values
+		numTablesField.setText(Integer.toString(Settings.getNumTables()));
+		pplPerTableField.setText(Integer.toString(Settings.getTableSize()));
+		
+//		// Remove all food options
+		DefaultTableModel food = (DefaultTableModel) foodOptions.getModel();
+        while (foodOptions.getRowCount() > 0) {
+        	food.removeRow(0);
+        }
+        
+        for (int n = 0 ; n < Food.listSize() ; n ++)
+        {
+        	food.addRow(new Object[] {Food.get(n)});
+        }
+	}
 
 	/**
 	 * Listens for clicks on the food table and records which row is selected.  If the user clicks twice,
@@ -501,6 +523,7 @@ public class SettingsPanel extends JPanel {
 					try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
 					JOptionPane.showMessageDialog(EventPlanner.FRAME, "File has been successfully loaded", "File loaded", JOptionPane.INFORMATION_MESSAGE);
 					try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
+					refresh();
 				}
 			} catch (FileNotFoundException fnf) { // If file was not found
 				try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
