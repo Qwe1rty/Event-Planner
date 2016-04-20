@@ -110,6 +110,7 @@ public class EventPlanner implements WindowListener {
         studentPanel = new StudentPanel();
         studentDisplay = new DisplayStudentPanel();
         tableDisplay = new TableDisplayPanel();
+        settingsPanel = new SettingsPanel();
 
 
 
