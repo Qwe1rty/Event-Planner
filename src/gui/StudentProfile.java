@@ -13,16 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import data.Food;
@@ -32,679 +23,577 @@ import data.Student;
 import data.Table;
 
 /**
- * Gives a in depth visual display of the student by listing its information in a similar way to the add student panel
+ * The student panel is a panel in which new students are added
  *
- * @author Connor Murphy, Matthew Sun
+ * @author Matthew Sun, Connor Murphy
+ * @version 1.3
  */
-public class StudentProfile extends JPanel {
-
-    //Constant values for labels' and buttons' text
-    private final String BACK_BUTTON_TEXT = "Back";
+// TODO: change the class to be able to be used to add and edit students
+public class StudentPanel extends JPanel {
+	private final String BACK_BUTTON_TEXT = "Back";
 	private final String GUEST_BUTTON_TEXT = "Show Guest";
-    private final String FIRST_NAME_LABEL_TEXT = "First Name: ";
-    private final String LAST_NAME_LABEL_TEXT = "Last Name: ";
-    private final String STUDENT_ID_LABEL_TEXT = "Student Number: ";
-    private final String FOOD_CHOICE_LABEL_TEXT = "    Food Choice: ";
-    private final String PHONE_NUM_LABEL_TEXT = "Phone Number: ";
-    private final String PAID_BY_LABEL_TEXT = "Paid By: ";
-    private final String TABLE_NUM_LABEL_TEXT = "Table Number: ";
+	private final String FIRST_NAME_LABEL_TEXT = "First Name: ";
+	private final String LAST_NAME_LABEL_TEXT = "Last Name: ";
+	private final String STUDENT_ID_LABEL_TEXT = "Student Number: ";
+	private final String FOOD_CHOICE_LABEL_TEXT = "    Food Choice: ";
+	private final String PHONE_NUM_LABEL_TEXT = "Phone Number: ";
+	private final String PAID_BY_LABEL_TEXT = "Paid By: ";
+	private final String INITIALS_LABEL_TEXT = "Initials: ";
+	private final String FORM_SUBMITTED_LABEL_TEXT = "Form Submitted: ";
+	private final String TABLE_NUM_LABEL_TEXT = "Table Number: ";
 	private final String GUEST_LABEL_TEXT = "Has Guest: ";
-    private final String ALLERGIES_LABEL_TEXT = "Allergies";
-    private final String MORE_INFO_LABEL_TEXT = "Additional Information";
-    private final String CANCEL_BUTTON_TEXT = "Cancel";
-    private final String CONFIRM_BUTTON_TEXT = "Confirm";
-    private final String INITIALS_LABEL_TEXT = "Initials: ";
-    private final String FORM_SUBMITTED_LABEL_TEXT = "Form Submitted: ";
+	private final String ALLERGIES_LABEL_TEXT = "Allergies";
+	private final String MORE_INFO_LABEL_TEXT = "Additional Information";
+	private final String CANCEL_BUTTON_TEXT = "Cancel";
+	private final String CONFIRM_BUTTON_TEXT = "Confirm";
 
-    //Size of text areas
-    private final int TEXT_AREA_ROWS = 8;
-    private final int TEXT_AREA_COLS = 35;
+	private final int TEXT_AREA_ROWS = 8;
+	private final int TEXT_AREA_COLS = 35;
 
-    //Size of text fields
-    private final int TEXT_FIELD_ROWS = 21;
+	private final int TEXT_FIELD_ROWS = 21;
+	private final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
+	private final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
+	private final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
 
-    //Fonts for all the gui elements shown
-    private final Font BUTTON_FONT = new Font("Tw Cen MT", Font.BOLD, 22);
-    private final Font TEXT_FONT = new Font("Tw Cen MT", Font.BOLD, 28);
-    private final Font FIELD_FONT = new Font("Tw Cen MT", Font.PLAIN, 24);
+	private final Dimension COMBO_SIZE = new Dimension(340, 30);
+	private final Dimension BUTTON_SIZE = new Dimension(108, 50);
 
-    //Sizes for combo boxes and buttons
-    private final Dimension COMBO_SIZE = new Dimension(340, 30);
-    private final Dimension BUTTON_SIZE = new Dimension(108, 50);
-
-    //Gui elements that display and get information about the student to the user
-    private JTextField firstNameTextField;
-    private JTextField lastNameTextField;
-    private JTextField studentIdTextField;
-    private JComboBox<String> foodChoiceComboBox;
-    private JTextField phoneNumTextField;
-    private JTextField paidByTextField;
-    private JComboBox<String> tableNumComboBox;
-    private JTextField initialsTextField;
-    private JCheckBox formSubmittedCheckBox;
-    private JTextArea allergiesTextArea;
-    private JTextArea moreInfoTextArea;
+	private JTextField firstNameTextField;
+	private JTextField lastNameTextField;
+	private JTextField studentIdTextField;
+	private JComboBox<String> foodChoiceComboBox;
+	private JTextField phoneNumTextField;
+	private JTextField paidByTextField;
+	private JComboBox<String> tableNumComboBox;
+	private JTextField initialsTextField;
+	private JCheckBox formSubmittedCheckBox;
 	private JCheckBox hasGuestCheckBox;
-
-    //Labels to define what each gui element shows
-    private JLabel firstNameLabel;
-    private JLabel lastNameLabel;
-    private JLabel studentIdLabel;
-    private JLabel foodChoiceLabel;
-    private JLabel phoneNumLabel;
-    private JLabel paidByLabel;
-    private JLabel tableNumLabel;
-    private JLabel initialsLabel;
-    private JLabel formSubmittedLabel;
-    private JLabel allergiesLabel;
-    private JLabel moreInfoLabel;
+	
+	private JLabel firstNameLabel;
+	private JLabel lastNameLabel;
+	private JLabel studentIdLabel;
+	private JLabel foodChoiceLabel;
+	private JLabel phoneNumLabel;
+	private JLabel paidByLabel;
+	private JLabel tableNumLabel;
+	private JLabel initialsLabel;
+	private JLabel formSubmittedLabel;
 	private JLabel hasGuestLabel;
 
-    //Buttons the user can press to navigate away from this screen.
-    //Cancel and back buttons go to the previous screen without saving changes
-    //The confirm button goes to the previous screen and saves changes
-    private JButton cancelButton;
-    private JButton confirmButton;
-    private JButton backButton;
-	private JButton showGuest;
+	private JLabel allergiesLabel;
+	private JLabel moreInfoLabel;
 
-    //Elements that make the screen more visually pleasing
-    private Image background;
-    private JPanel fieldsPanel;
-    private Border textFieldBorder;
+	private JTextArea allergiesTextArea;
+	private JTextArea moreInfoTextArea;
 
-    //The studen whose information is shown
-    private Student student;
+	private JButton cancelButton;
+	private JButton confirmButton;
+	private JButton backButton;
 
-    /**
-     * Creates a new screen that shows detailed information about the given student. Users can view and edit
-     * information about the student.
-     *
-     * @param student the student to display and edit
-     */
-    public StudentProfile(Student student) {
-        this.student = student;
+	private Image background;
+	private JPanel fieldsPanel;
+	private Border textFieldBorder;
 
-        setLayout(new GridBagLayout());
+	public StudentPanel() {
+		setLayout(new GridBagLayout());
 
-        // Get the background image
-        try {
-            background = ImageIO.read(getClass().getResource("/images/bg.png"));
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+		// Get the bg image
+		try {
+			background = ImageIO.read(getClass().getResource("/images/bg.png"));
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
-        // Set the layout of the nested panel to follow grid bag layotu
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        fieldsPanel = new JPanel(layout);
+		// Set the layout of the nested panel to follow grid bag layotu
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		fieldsPanel = new JPanel(layout);
 
-        // Background color to a light grey with slightly raised borders
-        fieldsPanel.setBackground(new Color(238, 238, 238));
-        fieldsPanel.setBorder(BorderFactory.createRaisedBevelBorder());
+		// Background color to a light grey with slightly raised borders
+		fieldsPanel.setBackground(new Color(238, 238, 238));
+		fieldsPanel.setBorder(BorderFactory.createRaisedBevelBorder());
 
-        // Set size of nested to slightly smaller (static value)
-        fieldsPanel.setPreferredSize(new Dimension(1206, 626));
+		// Set size of nested to slightly smaller (static value)
+		fieldsPanel.setPreferredSize(new Dimension(1206, 626));
 
-        // Back button
-        backButton = new JButton(BACK_BUTTON_TEXT);
-        backButton.addActionListener(new BackButtonActionListener());
-        backButton.setBackground(new Color(3, 159, 244));
-        backButton.setForeground(Color.WHITE);
-        backButton.setFont(BUTTON_FONT);
-        backButton.setPreferredSize(BUTTON_SIZE);
+		// Back button
+		backButton = new JButton(BACK_BUTTON_TEXT);
+		backButton.addActionListener(new BackButtonActionListener());
+		backButton.setBackground(new Color(3, 159, 244));
+		backButton.setForeground(Color.WHITE);
+		backButton.setFont(BUTTON_FONT);
+		backButton.setPreferredSize(BUTTON_SIZE);
 
-        // Position the back button west of screen
-        c.gridx = 0;
-        c.gridy = 0;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(0, 0, 0, 100);
-        fieldsPanel.add(backButton, c);
-        
-    	// Show guest button
-		showGuest = new JButton(GUEST_BUTTON_TEXT);
-		showGuest.addActionListener(new ShowGuestButtonActionListener());
-		showGuest.setBackground(new Color(3, 159, 244));
-		showGuest.setForeground(Color.WHITE);
-		showGuest.setFont(BUTTON_FONT);
-		showGuest.setPreferredSize(new Dimension (150, 50));
+		// Position the back button west of screen
+		c.gridx = 0;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.WEST;
+		c.insets = new Insets(0, 0, 0, 100);
+		fieldsPanel.add(backButton, c);
+
+		// Set all field labels and fonts
+		firstNameLabel = new JLabel(FIRST_NAME_LABEL_TEXT);
+		firstNameLabel.setFont(TEXT_FONT);
+
+		firstNameTextField = new JTextField(TEXT_FIELD_ROWS);
+		firstNameTextField.setFont(FIELD_FONT);
+
+		lastNameLabel = new JLabel(LAST_NAME_LABEL_TEXT);
+		lastNameLabel.setFont(TEXT_FONT);
+
+		lastNameTextField = new JTextField(TEXT_FIELD_ROWS);
+		lastNameTextField.setFont(FIELD_FONT);
+
+		studentIdLabel = new JLabel(STUDENT_ID_LABEL_TEXT);
+		studentIdLabel.setFont(TEXT_FONT);
+
+		studentIdTextField = new JTextField(TEXT_FIELD_ROWS);
+		studentIdTextField.setFont(FIELD_FONT);
+
+		LinkedList<String> foodChoices = Food.getMealOptions();
+		String[] choices;
+		if (foodChoices != null) {
+			choices = new String[foodChoices.size()];
+			try {
+				for (int i = 0; i < foodChoices.size(); ++i) {
+					choices[i] = foodChoices.get(i);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			foodChoiceLabel = new JLabel(FOOD_CHOICE_LABEL_TEXT);
+			foodChoiceComboBox = new JComboBox<String>(choices);
+		} else {
+			choices = new String[0];
+			foodChoiceLabel = new JLabel(FOOD_CHOICE_LABEL_TEXT);
+			foodChoiceComboBox = new JComboBox<String>(choices);
+		}
+
+		foodChoiceLabel.setFont(TEXT_FONT);
+		foodChoiceComboBox.setPreferredSize(COMBO_SIZE);
+		foodChoiceComboBox.setFont(FIELD_FONT);
+
+		phoneNumLabel = new JLabel(PHONE_NUM_LABEL_TEXT);
+		phoneNumLabel.setFont(TEXT_FONT);
+
+		phoneNumTextField = new JTextField(TEXT_FIELD_ROWS);
+		phoneNumTextField.setFont(FIELD_FONT);
+
+		paidByLabel = new JLabel(PAID_BY_LABEL_TEXT);
+		paidByLabel.setFont(TEXT_FONT);
+
+		paidByTextField = new JTextField(TEXT_FIELD_ROWS);
+		paidByTextField.setFont(FIELD_FONT);
+
+		int numTables = Settings.getNumTables();
+		String[] tables = new String[numTables + 1];
+		try {
+			// The unassigned table
+			tables[0] = "Unassigned";
+			for (int i = 1; i < numTables + 1; ++i) {
+				if (!Table.getTable( i - 1).isFull())
+					tables[i] = Integer.toString(i);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		tableNumLabel = new JLabel(TABLE_NUM_LABEL_TEXT);
+		tableNumLabel.setFont(TEXT_FONT);
+
+		tableNumComboBox = new JComboBox<String>(tables);
+		tableNumComboBox.setPreferredSize(COMBO_SIZE);
+		tableNumComboBox.setFont(FIELD_FONT);
 		
-		// Position the show guest button, east on screen
-		c.gridx = 4;
-		c.gridwidth = 2;
-		c.insets = new Insets (0, 0,0,0);
-		c.anchor = GridBagConstraints.EAST;
-		fieldsPanel.add(showGuest, c);
-		c.gridwidth = 1;
-
-        // Set all field labels and fonts
-        firstNameLabel = new JLabel(FIRST_NAME_LABEL_TEXT);
-        firstNameLabel.setFont(TEXT_FONT);
-
-        firstNameTextField = new JTextField(TEXT_FIELD_ROWS);
-        firstNameTextField.setFont(FIELD_FONT);
-        String firstName = student.getFirstname();
-        if (firstName != null) {
-            firstNameTextField.setText(firstName);
-        }
-
-        lastNameLabel = new JLabel(LAST_NAME_LABEL_TEXT);
-        lastNameLabel.setFont(TEXT_FONT);
-
-        lastNameTextField = new JTextField(TEXT_FIELD_ROWS);
-        lastNameTextField.setFont(FIELD_FONT);
-        String lastName = student.getLastname();
-        if (lastName != null) {
-            lastNameTextField.setText(lastName);
-        }
-
-        studentIdLabel = new JLabel(STUDENT_ID_LABEL_TEXT);
-        studentIdLabel.setFont(TEXT_FONT);
-
-        studentIdTextField = new JTextField(TEXT_FIELD_ROWS);
-        studentIdTextField.setFont(FIELD_FONT);
-        String id = student.getID();
-        if (id != null) {
-            studentIdTextField.setText(id);
-        }
-
-        //Read in all the food choices and add them to the combo box for food choices
-        //If there are no food choices, add an empty set of options to the combo box
-        LinkedList<String> foodChoices = Food.getMealOptions();
-        String[] choices;
-        if (foodChoices != null) {
-            choices = new String[foodChoices.size()];
-            try {
-                for (int i = 0; i < foodChoices.size(); ++i) {
-                    choices[i] = foodChoices.get(i);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            foodChoiceLabel = new JLabel(FOOD_CHOICE_LABEL_TEXT);
-            foodChoiceComboBox = new JComboBox<String>(choices);
-        } else {
-            choices = new String[0];
-            foodChoiceLabel = new JLabel(FOOD_CHOICE_LABEL_TEXT);
-            foodChoiceComboBox = new JComboBox<String>(choices);
-        }
-
-        foodChoiceLabel.setFont(TEXT_FONT);
-        foodChoiceComboBox.setPreferredSize(COMBO_SIZE);
-        foodChoiceComboBox.setFont(FIELD_FONT);
-        String foodChoice = student.getFood().toString();
-        if (foodChoice != null) {
-            foodChoiceComboBox.setSelectedItem(foodChoice);
-        }
-
-        phoneNumLabel = new JLabel(PHONE_NUM_LABEL_TEXT);
-        phoneNumLabel.setFont(TEXT_FONT);
-
-        phoneNumTextField = new JTextField(TEXT_FIELD_ROWS);
-        phoneNumTextField.setFont(FIELD_FONT);
-        String phoneNum = student.getPhoneNum();
-        if (phoneNum != null) {
-            phoneNumTextField.setText(phoneNum);
-        }
-
-        paidByLabel = new JLabel(PAID_BY_LABEL_TEXT);
-        paidByLabel.setFont(TEXT_FONT);
-
-        paidByTextField = new JTextField(TEXT_FIELD_ROWS);
-        paidByTextField.setFont(FIELD_FONT);
-        String paidBy = student.getPaidBy();
-        if (paidBy != null) {
-            paidByTextField.setText(paidBy);
-        }
-
-        //Add each table to a combo box of tables
-        int numTables = Settings.getNumTables();
-        String[] tables = new String[numTables + 1];
-        try {
-            //0 stands for an unassigned table and that is what the user should see
-            tables[0] = "Unassigned";
-            for (int i = 1; i < numTables + 1; ++i) {
-                tables[i] = Integer.toString(i);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        tableNumLabel = new JLabel(TABLE_NUM_LABEL_TEXT);
-        tableNumLabel.setFont(TEXT_FONT);
-
-        tableNumComboBox = new JComboBox<String>(tables);
-        tableNumComboBox.setPreferredSize(COMBO_SIZE);
-        tableNumComboBox.setFont(FIELD_FONT);
-        int tableNum = student.getTableNum();
-        //Since tables start at 0, tables can be selected like an index in an array
-        tableNumComboBox.setSelectedIndex(tableNum);
-
-        initialsLabel = new JLabel(INITIALS_LABEL_TEXT);
-        initialsLabel.setFont(TEXT_FONT);
-
-        initialsTextField = new JTextField(TEXT_FIELD_ROWS);
-        initialsTextField.setFont(FIELD_FONT);
-        initialsTextField.setText(student.getInitials());
-
-        formSubmittedLabel = new JLabel(FORM_SUBMITTED_LABEL_TEXT);
-        formSubmittedLabel.setFont(TEXT_FONT);
-
-        formSubmittedCheckBox = new JCheckBox();
-        formSubmittedCheckBox.setSelected(student.isFormSubmitted());
-        
+		initialsLabel = new JLabel(INITIALS_LABEL_TEXT);
+		initialsLabel.setFont(TEXT_FONT);
+		
+		initialsTextField = new JTextField(TEXT_FIELD_ROWS);
+		initialsTextField.setFont(FIELD_FONT);
+		
+		formSubmittedLabel = new JLabel(FORM_SUBMITTED_LABEL_TEXT);
+		formSubmittedLabel.setFont(TEXT_FONT);
+		
+		formSubmittedCheckBox = new JCheckBox();
+		
 		hasGuestLabel = new JLabel (GUEST_LABEL_TEXT);
 		hasGuestLabel.setFont(TEXT_FONT);
 		
 		hasGuestCheckBox = new JCheckBox();
-		hasGuestCheckBox.setSelected(student.hasGuest());
+		
 
-        // All label components are right aligned with some vertical spacing
-        // between them
-        c.anchor = GridBagConstraints.EAST;
-        c.insets = new Insets(10, 0, 0, 0);
+		// All label components are right aligned with some vertical spacing
+		// between them
+		c.anchor = GridBagConstraints.EAST;
+		c.insets = new Insets(10, 0, 0, 0);
 
-        // Add all wider components first
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridwidth = 2;
-        fieldsPanel.add(firstNameLabel, c);
+		// Add all wider components first
+		c.gridy = 1;
+		fieldsPanel.add(firstNameLabel, c);
 
-        c.gridy ++;
-        fieldsPanel.add(studentIdLabel, c);
+		c.gridy ++;
+		fieldsPanel.add(studentIdLabel, c);
 
-        c.gridy ++;
-        fieldsPanel.add(phoneNumLabel, c);
+		c.gridy ++;
+		fieldsPanel.add(phoneNumLabel, c);
 
-        c.gridy ++;
-        fieldsPanel.add(tableNumLabel, c);
-        
-        c.gridy ++;
-        fieldsPanel.add(formSubmittedLabel, c);
+		c.gridy ++;
+		fieldsPanel.add(tableNumLabel, c);
+		
+		c.gridy ++;
+		fieldsPanel.add(formSubmittedLabel, c);
 
-        // Add all smaller components
-        // All field components are left aligned
-        c.anchor = GridBagConstraints.WEST;
-        c.gridx = 2;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        fieldsPanel.add(firstNameTextField, c);
+		// Add all smaller components
+		// All field components are left aligned
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = 2;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		fieldsPanel.add(firstNameTextField, c);
 
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx ++;
-        fieldsPanel.add(lastNameLabel, c);
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx ++;
+		fieldsPanel.add(lastNameLabel, c);
 
-        c.anchor = GridBagConstraints.WEST;
-        c.gridx ++;
-        fieldsPanel.add(lastNameTextField, c);
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx ++;
+		fieldsPanel.add(lastNameTextField, c);
 
-        c.gridx = 2;
-        c.gridy ++;
-        fieldsPanel.add(studentIdTextField, c);
+		c.gridx = 2;
+		c.gridy ++;
+		fieldsPanel.add(studentIdTextField, c);
 
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx ++;
-        c.gridy = 2;
-        fieldsPanel.add(foodChoiceLabel, c);
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx ++;
+		fieldsPanel.add(foodChoiceLabel, c);
 
-        c.anchor = GridBagConstraints.WEST;
-        c.gridx ++;
-        fieldsPanel.add(foodChoiceComboBox, c);
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx ++;
+		fieldsPanel.add(foodChoiceComboBox, c);
 
-        c.gridx = 2;
-        c.gridy ++;
-        fieldsPanel.add(phoneNumTextField, c);
+		c.gridx = 2;
+		c.gridy = 3;
+		fieldsPanel.add(phoneNumTextField, c);
 
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx ++;
-        fieldsPanel.add(paidByLabel, c);
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx ++;
+		fieldsPanel.add(paidByLabel, c);
 
-        c.anchor = GridBagConstraints.WEST;
-        c.gridx ++;
-        fieldsPanel.add(paidByTextField, c);
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx ++;
+		fieldsPanel.add(paidByTextField, c);
+		
+		c.gridx = 2;
+		c.gridy = 4;
+		fieldsPanel.add(tableNumComboBox, c);
+		
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx ++;
+		fieldsPanel.add(initialsLabel, c);
+		
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx ++;
+		fieldsPanel.add(initialsTextField, c);
 
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx = 3;
-        c.gridy ++;
-        fieldsPanel.add(initialsLabel, c);
-
-        c.anchor = GridBagConstraints.WEST;
-        c.gridx ++;
-        fieldsPanel.add(initialsTextField, c);
-
-        c.gridx = 2;
-        fieldsPanel.add(tableNumComboBox, c);
-        
+		c.gridx = 2;
 		c.gridy ++;
 		c.insets = new Insets(10, 0, 0, 0);
 		fieldsPanel.add(formSubmittedCheckBox, c);
 		
 		c.anchor = GridBagConstraints.EAST;
-		c.gridx = 3;
+		c.gridx ++;
 		fieldsPanel.add(hasGuestLabel, c);
 		
 		c.anchor = GridBagConstraints.WEST;
 		c.gridx ++;
 		fieldsPanel.add(hasGuestCheckBox, c);
 
-        // Titles for the allergies and additional information text areas
-        allergiesLabel = new JLabel(ALLERGIES_LABEL_TEXT);
-        allergiesLabel.setFont(TEXT_FONT);
 
-        // Position allergy and extra-info components centered, each taking up 2
-        // grid spaces
-        c.gridwidth = 3;
-        c.anchor = GridBagConstraints.CENTER;
 
-        c.gridx = 0;
-        c.gridy = 6;
-        fieldsPanel.add(allergiesLabel, c);
+		// Titles for the allergies and additional information text areas
+		allergiesLabel = new JLabel(ALLERGIES_LABEL_TEXT);
+		allergiesLabel.setFont(TEXT_FONT);
 
-        moreInfoLabel = new JLabel(MORE_INFO_LABEL_TEXT);
-        moreInfoLabel.setFont(TEXT_FONT);
-        c.gridx = 3;
-        fieldsPanel.add(moreInfoLabel, c);
+		// Position allergy and extra-info components centered, each taking up 2
+		// grid spaces
+		c.gridwidth = 3;
+		c.anchor = GridBagConstraints.CENTER;
 
-        textFieldBorder = BorderFactory.createLineBorder(Color.GRAY, 1, true);
-        // The allergies and the additional information areas
-        allergiesTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
-        allergiesTextArea.setFont(FIELD_FONT);
-        allergiesTextArea.setBorder(textFieldBorder);
+		c.gridx = 0;
+		c.gridy = 6;
+		fieldsPanel.add(allergiesLabel, c);
 
-        c.gridx = 0;
-        c.gridy++;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(10, 0, 0, 15);
-        fieldsPanel.add(allergiesTextArea, c);
+		moreInfoLabel = new JLabel(MORE_INFO_LABEL_TEXT);
+		moreInfoLabel.setFont(TEXT_FONT);
+		c.gridx = 3;
+		fieldsPanel.add(moreInfoLabel, c);
 
-        moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
-        moreInfoTextArea.setFont(FIELD_FONT);
-        moreInfoTextArea.setBorder(textFieldBorder);
+		textFieldBorder = BorderFactory.createLineBorder(Color.GRAY, 1, true);
+		// The allergies and the additional information areas
+		allergiesTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
+		allergiesTextArea.setFont(FIELD_FONT);
+		allergiesTextArea.setBorder(textFieldBorder);
 
-        c.gridx = 3;
-        fieldsPanel.add(moreInfoTextArea, c);
+		c.gridx = 0;
+		c.gridy++;
+		c.anchor = GridBagConstraints.WEST;
+		c.insets = new Insets(10, 0, 0, 15);
+		fieldsPanel.add(allergiesTextArea, c);
 
-        // The cancel and confirm buttons
-        cancelButton = new JButton(CANCEL_BUTTON_TEXT);
-        cancelButton.addActionListener(new BackButtonActionListener());
-        cancelButton.setBackground(new Color(243, 69, 65));
-        cancelButton.setForeground(Color.WHITE);
-        cancelButton.setFont(BUTTON_FONT);
-        cancelButton.setPreferredSize(BUTTON_SIZE);
+		moreInfoTextArea = new JTextArea(TEXT_AREA_ROWS, TEXT_AREA_COLS);
+		moreInfoTextArea.setFont(FIELD_FONT);
+		moreInfoTextArea.setBorder(textFieldBorder);
 
-        confirmButton = new JButton(CONFIRM_BUTTON_TEXT);
-        confirmButton.addActionListener(new FinishButtonActionListener());
-        confirmButton.setBackground(new Color(56, 186, 125));
-        confirmButton.setForeground(Color.WHITE);
-        confirmButton.setFont(BUTTON_FONT);
-        confirmButton.setPreferredSize(BUTTON_SIZE);
+		c.gridx = 3;
+		fieldsPanel.add(moreInfoTextArea, c);
 
-        // Position the cancel and confirm buttons with some spacing
-        c.insets = new Insets(12, 0, 0, 10);
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx = 0;
-        c.gridy++;
-        fieldsPanel.add(cancelButton, c);
+		// The cancel and confirm buttons
+		cancelButton = new JButton(CANCEL_BUTTON_TEXT);
+		cancelButton.addActionListener(new BackButtonActionListener());
+		cancelButton.setBackground(new Color(243, 69, 65));
+		cancelButton.setForeground(Color.WHITE);
+		cancelButton.setFont(BUTTON_FONT);
+		cancelButton.setPreferredSize(BUTTON_SIZE);
 
-        c.gridx = 3;
-        c.anchor = GridBagConstraints.WEST;
-        fieldsPanel.add(confirmButton, c);
+		confirmButton = new JButton(CONFIRM_BUTTON_TEXT);
+		confirmButton.addActionListener(new ConfirmButtonActionListener());
+		confirmButton.setBackground(new Color(56, 186, 125));
+		confirmButton.setForeground(Color.WHITE);
+		confirmButton.setFont(BUTTON_FONT);
+		confirmButton.setPreferredSize(BUTTON_SIZE);
 
-        // Add all components to the panel
-        add(fieldsPanel);
-    }
+		// Position the cancel and confirm buttons with some spacing
+		c.insets = new Insets(12, 0, 0, 10);
+		c.anchor = GridBagConstraints.EAST;
+		c.gridx = 0;
+		c.gridy++;
+		fieldsPanel.add(cancelButton, c);
 
-    /**
-     * Draws the background image onto main panel
-     */
-    public void paintComponent(Graphics g) {
-        g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
-    }
+		c.gridx = 3;
+		c.anchor = GridBagConstraints.WEST;
+		fieldsPanel.add(confirmButton, c);
 
-    /**
-     * When the user clicks the back or cancel button this class is called.  It checks if any
-     * of the student's information changed and if it did warns the user that they have unsaved
-     * changes made. If the user wants to leave, the screen is set to the display student panel
-     *
-     * @author Connor Murphy
-     */
-     private class BackButtonActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            //Get what is in the text fields
-            String firstName = firstNameTextField.getText();
-            String lastName = lastNameTextField.getText();
-            String id = studentIdTextField.getText();
-            String foodChoice = (String) foodChoiceComboBox.getSelectedItem();
-            String phoneNumber = phoneNumTextField.getText();
-            String paidBy = paidByTextField.getText();
-            int tableNum;
-            try {
-                tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
-            } catch (NumberFormatException nfe) {
-                //Tried to parse the string "Unassigned" which is stored as table number 0
-                tableNum = 0;
-            }
-            String allergies = allergiesTextArea.getText();
-            String moreInfo = moreInfoTextArea.getText();
-            String initials = initialsTextField.getText();
-            boolean formSubmitted = formSubmittedCheckBox.isSelected();
-            boolean hasGuest = hasGuestCheckBox.isSelected();
-
-            //Compare what is in with what the student has to see if something has changed
-            boolean changed = false;
-            if (!firstName.equals(student.getFirstname())) {
-                changed = true;
-            } else if (!lastName.equals(student.getLastname())) {
-                changed = true;
-            } else if (!id.equals(student.getID())) {
-                changed = true;
-            } else if (!foodChoice.equals(student.getFood().toString())) {
-                changed = true;
-            } else if (!phoneNumber.equals(student.getPhoneNum())) {
-                changed = true;
-            } else if (!paidBy.equals(student.getPaidBy())) {
-                changed = true;
-            } else if (tableNum != student.getTableNum()) {
-                changed = true;
-            } else if (!allergies.equals(student.getAllergies())) {
-                changed = true;
-            } else if (!moreInfo.equals(student.getInfo())) {
-                changed = true;
-            } else if (formSubmitted != student.isFormSubmitted()) {
-                changed = true;
-            } else if (hasGuest != student.hasGuest()){
-            	changed = true;
-            } else if (!initials.equals(student.getInitials())) {
-            	changed = true;
-            }
-            
-            // Show a confirm exit dialog if something has changed
-            if (changed) {
-                Object[] options = {"Yes", "No"};
-                try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
-                int result = JOptionPane.showOptionDialog(null,
-                        "Are you sure you want to leave without saving?", "Exit confirmation",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-                        null, options, options[1]);
-                try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
-                if (result == JOptionPane.YES_OPTION)
-                    EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT, false);
-            } else {
-                //Nothing changed so the user can go back without consequences
-                EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT, false);
-            }
-        }
-    }
-    
-	/**
-	 * Shows a guest of the current student
-	 * @author Matthew Sun
-	 */
-	private class ShowGuestButtonActionListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			if (!student.hasGuest()) {
-				try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
-				JOptionPane.showMessageDialog(EventPlanner.FRAME, "This student doesn't have a guest.",
-						"No Guest", JOptionPane.ERROR_MESSAGE);
-				try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
-			} else {
-				boolean guestFound = false;
-				// Look for the guest (same student number)
-				for (int n = 0 ; n < Student.listSize() ; n ++)
-				{
-					Student guest = Student.getStudent(n);
-					// Guest is found
-					if (guest.getID().equals(studentIdTextField.getText()) && !guest.hasGuest())
-					{
-						System.out.println("GUEST FOUND");
-						guestFound = true;
-						EventPlanner.showStudentProfile(new StudentProfile(guest));
-					}
-				}
-				// No guest found
-				if (!guestFound) {
-					try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}	
-					JOptionPane.showMessageDialog(EventPlanner.FRAME, "No guest was found. Please try again",
-						"No guest", JOptionPane.ERROR_MESSAGE);
-					try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
-				}
-			}
-				
-		}
-		
+		// Add all components to the panel
+		add(fieldsPanel);
 	}
 
-    /**
-     * When the user selects that they are finished viewing this students
-     * profile, this class updates the new data for the student
-     *
-     * @author Connor Murphy, Matthew Sun
-     */
-	private class FinishButtonActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String missingComponents = "";
-            String invalidComponents = "";
+	/**
+	 * Draws the background image onto main panel
+	 */
+	public void paintComponent(Graphics g) {
+		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+	}
 
-            String firstName = firstNameTextField.getText();
-            if (firstName.length() > 0) {
-                student.setFirstname(firstName);
-            } else {
-                missingComponents += "First Name\n";
-            }
+	/**
+	 * Call before changing this panel to the main frame. Refreshes the items in
+	 * the food drop down box
+	 */
+	public void refresh() {
+		// Remove all the items from the combo box
+		while (foodChoiceComboBox.getItemCount() > 0) {
+			foodChoiceComboBox.removeItemAt(0);
+		}
 
-            String lastName = lastNameTextField.getText();
-            if (lastName.length() > 0) {
-                student.setLastname(lastName);
-            } else {
-                missingComponents += "Last Name\n";
-            }
+		LinkedList<String> foodChoices = Food.getMealOptions();
+		if (foodChoices != null) {
+			// Add all the items the combo box
+			for (int i = 0; i < foodChoices.size(); ++i) {
+				foodChoiceComboBox.addItem(foodChoices.get(i));
+			}
+		}
+		
+		//Remove old data from the table combo box
+		while(tableNumComboBox.getItemCount() > 0)
+		{
+			System.out.println("count " + tableNumComboBox.getItemCount());
+			tableNumComboBox.removeItemAt(0);
+		}
+		//Update the table numbers
+		int numTables = Settings.getNumTables();
+		String[] tables = new String[numTables + 1];
+		try {
+			// The unassigned table
+			tableNumComboBox.addItem("Unassigned");
+			for (int i = 1; i < numTables + 1; ++i) {
+				if (!Table.getTable(i - 1).isFull())
+					tableNumComboBox.addItem(Integer.toString(i));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for (int n = 0 ; n < Table.listSize() ; n ++)
+		{
+			if (!Table.getTable(n).isFull())
+				System.out.println("TABLE " + (n + 1) + " NOT FULL");
+		}
+	}
 
-            try {
-                String id = studentIdTextField.getText();
-                if (id.length() > 0) {
-                    student.setStudentId(id);
-                } else {
-                    missingComponents += "Student Number\n";
-                }
-            } catch (Student.InvalidStudentIDException ex) {
-                invalidComponents += "Student Number\n";
-            }
+	/**
+	 * Clears all the entered data from the last use of the panel
+	 */
+	private void clearText() {
+		firstNameTextField.setText("");
+		lastNameTextField.setText("");
+		studentIdTextField.setText("");
+		phoneNumTextField.setText("");
+		paidByTextField.setText("");
+		allergiesTextArea.setText("");
+		moreInfoTextArea.setText("");
+		initialsTextField.setText("");
+		formSubmittedCheckBox.setSelected(false);
+		hasGuestCheckBox.setSelected(false);
+	}
 
-            try {
-                String food = (String) foodChoiceComboBox.getSelectedItem();
-                if (food != null && food.length() > 0) {
-                    student.setFood(food);
-                } else {
-                    missingComponents += "FoodChoice\n";
-                }
-            } catch (Student.InvalidFoodException ex) {
-                invalidComponents += "Food Choice\n";
-            }
+	/**
+	 * Goes back to the main screen that displays students when clicked
+	 */
+	private class BackButtonActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			clearText();
+			EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
+		}
+	}
 
-            if (formSubmittedCheckBox.isSelected())
-                student.setFormSubmitted(true);
-            else
-                student.setFormSubmitted(false);
+	/**
+	 * Saves all the entered data into a new Student. Checks to ensure all the
+	 * entered data is valid and the minimum information for a student is
+	 * provided.
+	 */
+	private class ConfirmButtonActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			Student student = new Student();
+			String missingComponents = "";
+			String invalidComponents = "";
 
-            if (hasGuestCheckBox.isSelected())
-                student.setGuest(true);
-            else
-                student.setGuest(false);
+			String firstName = firstNameTextField.getText();
+			if (firstName.length() > 0) {
+				student.setFirstname(firstName);
+			} else {
+				missingComponents += "First Name\n";
+			}
 
-            String initials = initialsTextField.getText();
-            if (initials.length() > 0)
-                student.setInitials(initials);
-            else
-                missingComponents += "Your Initials\n";
+			String lastName = lastNameTextField.getText();
+			if (lastName.length() > 0) {
+				student.setLastname(lastName);
+			} else {
+				missingComponents += "Last Name\n";
+			}
 
-            String phoneNum = phoneNumTextField.getText();
-            //Remove any spacing, brackets or dashes from the phone number entered
-            phoneNum = phoneNum.replace("(", "").replace(")", "").replace("-", "").replace(" ", "").trim();
-            //Validate the phone number
-            if(phoneNum.length() == 0)
-            {
-                missingComponents += "Phone Number\n";
-            }
-            else if(phoneNum.length() != 10) {
-                invalidComponents += "Phone Number\n";
-            }
-            else {
-                student.setPhoneNum(phoneNum);
-            }
+			try {
+				String id = studentIdTextField.getText();
+				if (id.length() > 0) {
+					student.setStudentId(id);
+				} else {
+					missingComponents += "Student Number\n";
+				}
+			} catch (Student.InvalidStudentIDException ex) {
+				invalidComponents += "Student Number\n";
+			}
 
-            // These are not necessary so there is no need to check for validity
-            student.setPaidBy(paidByTextField.getText());
-            if (student.getPaidBy().equals(""))
-                student.setPaid(false);
-            else
-                student.setPaid(true);
+			try {
+				String food = (String) foodChoiceComboBox.getSelectedItem();
+				if (food != null && food.length() > 0) {
+					student.setFood(food);
+				} else {
+					missingComponents += "FoodChoice\n";
+				}
+			} catch (Student.InvalidFoodException ex) {
+				invalidComponents += "Food Choice\n";
+			}
+			
+			if (formSubmittedCheckBox.isSelected())
+				student.setFormSubmitted(true);
+			else
+				student.setFormSubmitted(false);
+			
+			if (hasGuestCheckBox.isSelected())
+				student.setGuest(true);
+			else
+				student.setGuest(false);
+			
+			String initials = initialsTextField.getText();
+			if (initials.length() > 0)
+				student.setInitials(initials);
+			else
+				missingComponents += "Your Initials\n";
 
-            try
-            {
-                int tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
-                // Table isn't full, add
-                if (!Table.getTable(tableNum - 1).isFull())
-                    student.setTableNum(tableNum);
-                    // Full table
-                else
-                {
-                    invalidComponents += "Table is Full\n";
-                }
-            }
-            catch(NumberFormatException ex)
-            {
-                //Unassigned table
-                student.setTableNum(0);
-            }
+			String phoneNum = phoneNumTextField.getText();
+			// Remove any spacing, brackets or dashes from the phone number
+			// entered
+			phoneNum = phoneNum.replace("(", "").replace(")", "")
+					.replace("-", "").replace(" ", "").replace(".", "").trim();
+			// Validate the phone number
+			boolean valid = true;
+			for (int i = 0; i < phoneNum.length(); ++i) {
+				char letter = phoneNum.charAt(i);
+				if (!Character.isDigit(letter)) {
+					valid = false;
+					break;
+				}
+			}
+			if (!valid) {
+				invalidComponents += "Phone Number\n";
+			} else {
+				student.setPhoneNum(phoneNum);
+			}
 
+			// These are not necessary so there is no need to check for validity
+			student.setPaidBy(paidByTextField.getText());
+			if (student.getPaidBy().equals(""))
+				student.setPaid(false);
+			else
+				student.setPaid(true);
+		
+			try
+			{
+				int tableNum = Integer.parseInt((String) tableNumComboBox.getSelectedItem());
+				// Table isn't full, add
+				if (!Table.getTable(tableNum - 1).isFull())
+					student.setTableNum(tableNum);
+				// Full table
+				else
+				{
+					 invalidComponents += "Table is Full\n";
+				}
+			}
+			catch(NumberFormatException ex)
+			{
+				//Unassigned table
+				student.setTableNum(0);
+			}
+			
 
-            // These are not necessary so there is no need to check for validity
-            student.setAllergies(allergiesTextArea.getText());
-            student.setInfo(moreInfoTextArea.getText());
+			// These are not necessary so there is no need to check for validity
+			student.setAllergies(allergiesTextArea.getText());
+			student.setInfo(moreInfoTextArea.getText());
 
-            boolean valid = true;
-            // Ensure the student has at least the minimal information and
-            // display a warning if they are errors
-            if (missingComponents.length() > 0) {
-                valid = false;
-                JOptionPane.showMessageDialog(EventPlanner.FRAME, "Missing Entries: \n"
-                                + missingComponents + "Please go back and correct.",
-                        "Missing Entries", JOptionPane.ERROR_MESSAGE);
-            }
-            if (invalidComponents.length() > 0) {
-                valid = false;
-                JOptionPane.showMessageDialog(EventPlanner.FRAME, "Invalid Entries: \n"
-                                + invalidComponents + "Please go back and correct.",
-                        "Invalid Entries", JOptionPane.ERROR_MESSAGE);
-            }
+			valid = true;
+			// Ensure the student has at least the minimal information and
+			// display a warning if they are errors
+			if (missingComponents.length() > 0) {
+				valid = false;
+				try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
+				JOptionPane.showMessageDialog(EventPlanner.FRAME, "Missing Entries: \n"
+						+ missingComponents + "Please go back and correct.",
+						"Missing Entries", JOptionPane.ERROR_MESSAGE);
+				try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
+			}
+			if (invalidComponents.length() > 0) {
+				valid = false;
+				try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
+				JOptionPane.showMessageDialog(EventPlanner.FRAME, "Invalid Entries: \n"
+						+ invalidComponents + "Please go back and correct.",
+						"Invalid Entries", JOptionPane.ERROR_MESSAGE);
+				try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
+			}
 
-           	// Let the user confirm only if the info entered is valid
+			// Let the user confirm only if the info entered is valid
 			if (valid) {
+				Student.addStudent(student);
+				clearText();
 				EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT);
 			}
-        }
-    }
+		}
+	}
+
 }
