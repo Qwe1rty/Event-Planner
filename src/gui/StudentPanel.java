@@ -518,17 +518,22 @@ public class StudentPanel extends JPanel {
 				missingComponents += "Your Initials\n";
 
 			String phoneNum = phoneNumTextField.getText();
-			//Remove any spacing, brackets or dashes from the phone number entered
-			phoneNum = phoneNum.replace("(", "").replace(")", "").replace("-", "").replace(" ", "").trim();
-			//Validate the phone number
-			if(phoneNum.length() == 0)
-			{
-				missingComponents += "Phone Number\n";
+			// Remove any spacing, brackets or dashes from the phone number
+			// entered
+			phoneNum = phoneNum.replace("(", "").replace(")", "")
+					.replace("-", "").replace(" ", "").replace(".", "").trim();
+			// Validate the phone number
+			boolean valid = true;
+			for (int i = 0; i < phoneNum.length(); ++i) {
+				char letter = phoneNum.charAt(i);
+				if (!Character.isDigit(letter)) {
+					valid = false;
+					break;
+				}
 			}
-			else if(phoneNum.length() != 10) {
+			if (!valid) {
 				invalidComponents += "Phone Number\n";
-			}
-			else {
+			} else {
 				student.setPhoneNum(phoneNum);
 			}
 
@@ -562,7 +567,7 @@ public class StudentPanel extends JPanel {
 			student.setAllergies(allergiesTextArea.getText());
 			student.setInfo(moreInfoTextArea.getText());
 
-			boolean valid = true;
+			valid = true;
 			// Ensure the student has at least the minimal information and
 			// display a warning if they are errors
 			if (missingComponents.length() > 0) {
