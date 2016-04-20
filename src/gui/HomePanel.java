@@ -75,15 +75,14 @@ public class HomePanel extends JPanel {
 		c.gridy = 0;
 		add(studentButton, c);
 
-		c.gridx = 1;
-		c.gridy = 0;
+		c.gridx ++;
 		add(tableButton, c);
 
 		c.gridx = 0;
 		c.gridy = 1;
 		add(settingsButton, c);
 
-		c.gridx = 1;
+		c.gridx ++;
 		c.gridy = 1;
 		add(exitButton, c);
 	}	
@@ -92,7 +91,7 @@ public class HomePanel extends JPanel {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 	}
 
-	class StudentButtonListener implements ActionListener
+	private class StudentButtonListener implements ActionListener
 	{
 		/**
 		 * When student button is pressed
@@ -103,7 +102,7 @@ public class HomePanel extends JPanel {
 		}
 	}
 
-	class TableButtonListener implements ActionListener
+	private class TableButtonListener implements ActionListener
 	{
 		/**
 		 * When table button is pressed
@@ -113,7 +112,7 @@ public class HomePanel extends JPanel {
 			EventPlanner.setPanel(EventPlanner.Panel.TABLE_DISPLAY);
 		}
 	}
-	class SettingsButtonListener implements ActionListener
+	private class SettingsButtonListener implements ActionListener
 	{
 		/**
 		 * When settings button is pressed
@@ -123,7 +122,7 @@ public class HomePanel extends JPanel {
 			EventPlanner.setPanel(EventPlanner.Panel.SETTINGS);
 		}
 	}
-	class ExitButtonListener implements ActionListener
+	private class ExitButtonListener implements ActionListener
 	{
 		/**
 		 * When exit button is pressed, exit application
