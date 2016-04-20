@@ -181,9 +181,12 @@ public final class Loader {
 		// Gets the path of the chosen file. Checks if file extension needs to be added
 		String fileName = fc.getSelectedFile().getAbsolutePath();
 		if (fileName.indexOf(".") != -1) {
-			fileName = fileName.substring(0, fileName.indexOf(".")) + FILE_EXTENSION;
+			fileName = fileName.substring(0, fileName.indexOf(".") + 1) + FILE_EXTENSION;
 		} else fileName += "." + FILE_EXTENSION;
 		File file = new File(fileName);
+		
+		// Checks if selected file already exists. If so, it is overriden
+		if (file.exists()) file.delete();
 
 		// Writes program data into file
 		try {
