@@ -48,94 +48,87 @@ public final class Loader {
 	 * @throws FileNotFoundException 
 	 * @author Caleb Choi
 	 */
-	public static boolean parseFile() throws FileNotFoundException {
+	public static boolean parseFile() throws FileNotFoundException, IOException, NumberFormatException {
 
 		// Shows file selection dialog for user, and keeps selected file 
 		JFileChooser fc = initializeFileChooser();
 		int selection = fc.showOpenDialog(EventPlanner.FRAME);
-		if (selection != JFileChooser.APPROVE_OPTION) return true;
+		if (selection != JFileChooser.APPROVE_OPTION) return false;
 
 		// Sets the currently loaded file
 		currentFile = fc.getSelectedFile();
 
-		// Creates input stream
-		try (BufferedReader br = new BufferedReader(new FileReader(currentFile))) {
+		// Open input stream
+		BufferedReader br = new BufferedReader(new FileReader(currentFile));
 
-			// Read the global data
-			//Settings.setLocation(br.readLine());
-			try {
-				Settings.setNumTables(Integer.parseInt(br.readLine()));
-			} catch (NumberFormatException nfe) {
-				Settings.setNumTables(0);
+		// Read the global data
+		//Settings.setLocation(br.readLine());
+		Settings.setNumTables(Integer.parseInt(br.readLine()));
+		Settings.setNumTables(0);
+		Table.setLimit(Settings.getNumTables());
+		Settings.setTableSize(Integer.parseInt(br.readLine()));
+		Settings.setTicketCost(Double.parseDouble(br.readLine()));
+
+		// Foods
+		int numMealOptions = Integer.parseInt(br.readLine());
+		for (int option = 0; option < numMealOptions; ++option)
+			Food.appendFood(new Food(br.readLine()));
+
+		int numStudents = Integer.parseInt(br.readLine());
+
+		// Adds all students
+		for(int i = 0; i < numStudents; ++i) {
+
+			StringTokenizer st = new StringTokenizer(br.readLine(), ",");
+			Student s = new Student();
+
+			// ID
+			try {s.setStudentId(st.nextToken());
+			} catch (InvalidStudentIDException e) {
+				try {s.setStudentId("000000000");} catch (Exception e1) {}
 			}
-			Table.setLimit(Settings.getNumTables());
-			Settings.setTableSize(Integer.parseInt(br.readLine()));
-			Settings.setTicketCost(Double.parseDouble(br.readLine()));
+			// Firstname
+			s.setFirstname(st.nextToken());
+			// Lastname
+			s.setLastname(st.nextToken());
+			// Initials
+			s.setInitials(st.nextToken());
+			// Food
+			try {s.setFood(st.nextToken());
+			} catch (InvalidFoodException e) {
+				try {s.setFood((Food) null);} catch (Exception e1) {}
+			}
+			// Paid?
+			boolean paid = st.nextToken().equals("true");
+			s.setPaid(paid);
+			// Paid by
+			s.setPaidBy(st.nextToken());
+			// Form submitted
+			boolean form = st.nextToken().equals("true");
+			s.setFormSubmitted(form);
 
-			// Foods
-			int numMealOptions = Integer.parseInt(br.readLine());
-			for (int option = 0; option < numMealOptions; ++option)
-				Food.appendFood(new Food(br.readLine()));
-
-			int numStudents = Integer.parseInt(br.readLine());
-
-			// Adds all students
-			for(int i = 0; i < numStudents; ++i) {
-
-				StringTokenizer st = new StringTokenizer(br.readLine(), ",");
-				Student s = new Student();
-
-				// ID
-				try {s.setStudentId(st.nextToken());
-				} catch (InvalidStudentIDException e) {
-					try {s.setStudentId("000000000");} catch (Exception e1) {}
-				}
-				// Firstname
-				s.setFirstname(st.nextToken());
-				// Lastname
-				s.setLastname(st.nextToken());
-				// Initials
-				s.setInitials(st.nextToken());
-				// Food
-				try {s.setFood(st.nextToken());
-				} catch (InvalidFoodException e) {
-					try {s.setFood((Food) null);} catch (Exception e1) {}
-				}
-				// Paid?
-				boolean paid = st.nextToken().equals("true");
-				s.setPaid(paid);
-				// Paid by
-				s.setPaidBy(st.nextToken());
-				// Form submitted
-				boolean form = st.nextToken().equals("true");
-				s.setFormSubmitted(form);
-
-				// Allergies and table number
-				while (st.hasMoreTokens()) {
-					String nextToken = st.nextToken();
-					if (nextToken.indexOf("A") == 0) s.setAllergies(nextToken.substring(1, nextToken.length()));
-					else if (nextToken.indexOf("T") == 0) s.setTableNum(Integer.parseInt(nextToken.substring(1, nextToken.length())));
-					else if (nextToken.indexOf("P") == 0) s.setPhoneNum(nextToken.substring(1, nextToken.length()));
-					else if (nextToken.indexOf("I") == 0) s.setInfo(nextToken.substring(1, nextToken.length()));
-				}
-
-				// Add student to global student list
-				Student.addStudent(s);
-
-				// Adds student to table list if appropriate
-				if (s.getTableNum() != 0) Table.addStudent(s.getTableNum() - 1, s);
-
+			// Allergies and table number
+			while (st.hasMoreTokens()) {
+				String nextToken = st.nextToken();
+				if (nextToken.indexOf("A") == 0) s.setAllergies(nextToken.substring(1, nextToken.length()));
+				else if (nextToken.indexOf("T") == 0) s.setTableNum(Integer.parseInt(nextToken.substring(1, nextToken.length())));
+				else if (nextToken.indexOf("P") == 0) s.setPhoneNum(nextToken.substring(1, nextToken.length()));
+				else if (nextToken.indexOf("I") == 0) s.setInfo(nextToken.substring(1, nextToken.length()));
 			}
 
-			// Returns list of students. Default sorting order is by Firstname
-			Student.sort(Parameter.FIRSTNAME, true);
+			// Add student to global student list
+			Student.addStudent(s);
 
-			return true;
+			// Adds student to table list if appropriate
+			if (s.getTableNum() != 0) Table.addStudent(s.getTableNum() - 1, s);
+
 		}
 
-		catch (FileNotFoundException e) {return false;}
-		catch (IOException e) {return false;}
-		catch (NumberFormatException e) {return false;}
+		// Returns list of students. Default sorting order is by Firstname
+		Student.sort(Parameter.FIRSTNAME, true);
+
+		return true;
+
 	}
 
 	/**
@@ -154,13 +147,24 @@ public final class Loader {
 		if (currentFile.exists()) currentFile.delete();
 		try {currentFile.createNewFile();} catch (Exception e) {} // Exception should never happen
 
-		// Writes program data into file
-		try {writeFile(currentFile);} catch (IOException ioe) {
+		try {
+			// Tries to write program data into file
+			writeFile(currentFile);
+
+			// Gives a notification that the file was saved
+			try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception e) {}
+			JOptionPane.showMessageDialog(EventPlanner.FRAME, "Event has been successfully saved", "File saved", JOptionPane.INFORMATION_MESSAGE);
+			try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception e) {}
+
+		} catch (IOException ioe) {
 
 			// Displays error message saying file was not saved
+			try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception e) {}
 			JOptionPane.showMessageDialog(EventPlanner.FRAME, "Error occured in saving file - file was not saved", 
 					"File error", JOptionPane.ERROR_MESSAGE);
+			try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception e) {}
 		}
+
 	}
 
 	/**
@@ -266,6 +270,7 @@ public final class Loader {
 
 		// Close stream
 		bw.close();
+
 	}
 
 	/**
@@ -279,6 +284,7 @@ public final class Loader {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(FILE_FILTER);
 		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception e) {}
 		return fc;
 	}
 

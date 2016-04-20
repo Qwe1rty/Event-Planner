@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import data.Food;
@@ -284,7 +285,6 @@ public class StudentProfile extends JPanel {
 
         initialsTextField = new JTextField(TEXT_FIELD_ROWS);
         initialsTextField.setFont(FIELD_FONT);
-        //TODO: add student initals
         initialsTextField.setText(student.getInitials());
 
         formSubmittedLabel = new JLabel(FORM_SUBMITTED_LABEL_TEXT);
@@ -543,15 +543,15 @@ public class StudentProfile extends JPanel {
             	changed = true;
             }
             
-            //TODO: add initials to the list of checks
-
             // Show a confirm exit dialog if something has changed
             if (changed) {
                 Object[] options = {"Yes", "No"};
+                try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
                 int result = JOptionPane.showOptionDialog(null,
-                        "Are you sure you want to leave without saving?", "Back",
+                        "Are you sure you want to leave without saving?", "Exit confirmation",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                         null, options, options[1]);
+                try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
                 if (result == JOptionPane.YES_OPTION)
                     EventPlanner.setPanel(EventPlanner.Panel.DISPLAY_STUDENT, false);
             } else {
@@ -569,11 +569,12 @@ public class StudentProfile extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (!student.hasGuest())
+			if (!student.hasGuest()) {
+				try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
 				JOptionPane.showMessageDialog(EventPlanner.FRAME, "This student doesn't have a guest.",
 						"No Guest", JOptionPane.ERROR_MESSAGE);
-			else
-			{
+				try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
+			} else {
 				boolean guestFound = false;
 				// Look for the guest (same student number)
 				for (int n = 0 ; n < Student.listSize() ; n ++)
@@ -588,9 +589,12 @@ public class StudentProfile extends JPanel {
 					}
 				}
 				// No guest found
-				if (!guestFound)
-					JOptionPane.showMessageDialog(EventPlanner.FRAME, "No guest found.",
-						"No Guest", JOptionPane.ERROR_MESSAGE);
+				if (!guestFound) {
+					try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}	
+					JOptionPane.showMessageDialog(EventPlanner.FRAME, "No guest was found. Please try again",
+						"No guest", JOptionPane.ERROR_MESSAGE);
+					try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
+				}
 			}
 				
 		}

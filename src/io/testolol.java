@@ -1,6 +1,7 @@
 package io;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import gui.EventPlanner;
 
@@ -8,6 +9,10 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * testolol
+ * @author Caleb Choi
+ */
 public class testolol {
 
 	public static void main(String[] args) throws Exception {
@@ -17,7 +22,7 @@ public class testolol {
 
 	}
 	
-	private static void fileTester() throws FileNotFoundException {
+	private static void fileTester() throws NumberFormatException, IOException {
 		Loader.parseFile();
 		Loader.saveAsFile();
 	}

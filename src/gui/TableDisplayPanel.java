@@ -30,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 import data.LinkedList;
@@ -361,12 +362,10 @@ public class TableDisplayPanel extends JPanel {
         while (tableDisplay.getRowCount() > 0) {
             currentStudentsTableModel.removeRow(0);
         }
-        //TODO: remove sysouts
 
         // Add the updated students to the table (only unassigned students)
         for (int i = 0; i < Student.listSize(); ++i) {
             Student student = Student.getStudent(i);
-            //TODO: remove sysout
 
             // Only add a student to the unassigned panel if they are unassigned
             if (student.getTableNum() == currentSelectedTable) {
@@ -426,7 +425,6 @@ public class TableDisplayPanel extends JPanel {
         while (studentDisplay.getRowCount() > 0) {
             studentTableModel.removeRow(0);
         }
-        //TODO: remove sysouts
 
         // Add the updated students to the table (only unassigned students)
         for (int i = 0; i < Student.listSize(); ++i) {
@@ -451,13 +449,11 @@ public class TableDisplayPanel extends JPanel {
         while (tableDisplay.getRowCount() > 0) {
             currentStudentsTableModel.removeRow(0);
         }
-        //TODO: remove sysouts
 
         // Add the updated students to the table (only unassigned students)
         for (int i = 0; i < Student.listSize(); ++i) {
             Student student = Student.getStudent(i);
-            //TODO: remove sysout
-            //System.out.println(student.getTableNum());
+
             // Only add a student to the unassigned panel if they are unassigned
             if (student.getTableNum() == currentSelectedTable) {
 
@@ -507,11 +503,9 @@ public class TableDisplayPanel extends JPanel {
             }
 
             currentSelectedTable = availableTables.rowAtPoint(e.getPoint()) + 1;
-            //TODO: remove sysouts
 
             // Add all table members at the current selected table
             for (int i = 0; i < Student.listSize(); ++i) {
-                //TODO: remove sysouts
                 Student student = Student.getStudent(i);
                // System.out.println(student.getTableNum());
                 // Only add a student to the current seated if they are at the
@@ -576,7 +570,9 @@ public class TableDisplayPanel extends JPanel {
 
             } else {
                 //Show a warning message
-                JOptionPane.showMessageDialog(EventPlanner.FRAME, "The table is full!", "Full Table", JOptionPane.WARNING_MESSAGE);
+          	 try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception ex) {}
+                JOptionPane.showMessageDialog(EventPlanner.FRAME, "This table is full. Student cannot be added", "Full table", JOptionPane.WARNING_MESSAGE);
+                try {UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());} catch (Exception ex) {}
             }
         }
     }
@@ -715,8 +711,6 @@ public class TableDisplayPanel extends JPanel {
 
         @Override
         public void keyTyped(KeyEvent e) {
-            // TODO Auto-generated method stub
-
         }
     }
 
